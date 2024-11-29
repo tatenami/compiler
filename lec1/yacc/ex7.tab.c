@@ -67,14 +67,14 @@
 
 
 /* First part of user prologue.  */
-#line 1 "define.y"
+#line 1 "ex7.y"
 
-  #include <stdio.h>
-  #include "define.tab.h"
-  extern int yylex();
-  extern int yyerror();
+ #include <stdio.h>
+ #include "ex7.tab.h"
+ extern int yylex();
+ extern int yyerror();
 
-#line 78 "define.tab.c"
+#line 78 "ex7.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -97,7 +97,7 @@
 #  endif
 # endif
 
-#include "define.tab.h"
+#include "ex7.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -106,10 +106,15 @@ enum yysymbol_kind_t
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_DEFINE = 3,                     /* DEFINE  */
-  YYSYMBOL_IDENT = 4,                      /* IDENT  */
-  YYSYMBOL_SEMIC = 5,                      /* SEMIC  */
-  YYSYMBOL_YYACCEPT = 6,                   /* $accept  */
-  YYSYMBOL_statement = 7                   /* statement  */
+  YYSYMBOL_ASSIGN = 4,                     /* ASSIGN  */
+  YYSYMBOL_IDENT = 5,                      /* IDENT  */
+  YYSYMBOL_NUMBER = 6,                     /* NUMBER  */
+  YYSYMBOL_COMMA = 7,                      /* COMMA  */
+  YYSYMBOL_SEMIC = 8,                      /* SEMIC  */
+  YYSYMBOL_YYACCEPT = 9,                   /* $accept  */
+  YYSYMBOL_statement = 10,                 /* statement  */
+  YYSYMBOL_idents = 11,                    /* idents  */
+  YYSYMBOL_assign = 12                     /* assign  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -435,21 +440,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  4
+#define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   4
+#define YYLAST   9
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  6
+#define YYNTOKENS  9
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  2
+#define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  2
+#define YYNRULES  7
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  6
+#define YYNSTATES  14
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   260
+#define YYMAXUTOK   263
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -489,14 +494,14 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5
+       5,     6,     7,     8
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    13,    13
+       0,    17,    17,    23,    24,    25,    26,    30
 };
 #endif
 
@@ -512,8 +517,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "DEFINE", "IDENT",
-  "SEMIC", "$accept", "statement", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "DEFINE", "ASSIGN",
+  "IDENT", "NUMBER", "COMMA", "SEMIC", "$accept", "statement", "idents",
+  "assign", YY_NULLPTR
 };
 
 static const char *
@@ -523,7 +529,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-4)
+#define YYPACT_NINF (-7)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -537,7 +543,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -2,     1,    -1,    -4,    -4
+      -2,     0,     6,    -4,    -1,     1,    -7,     3,     0,    -7,
+       0,    -7,    -7,    -7
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -545,19 +552,20 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     1,     2
+       0,     0,     0,     5,     0,     6,     1,     0,     0,     2,
+       0,     7,     3,     4
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4
+      -7,    -7,    -6,    -7
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2
+       0,     2,     4,     5
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -565,31 +573,32 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     4,     3,     0,     5
+       7,     1,    12,     8,    13,     3,     6,     9,    10,    11
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     0,     4,    -1,     5
+       4,     3,     8,     7,    10,     5,     0,     8,     7,     6
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     7,     4,     0,     5
+       0,     3,    10,     5,    11,    12,     0,     4,     7,     8,
+       7,     6,    11,    11
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     6,     7
+       0,     9,    10,    11,    11,    11,    11,    12
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     3
+       0,     2,     3,     3,     3,     1,     1,     3
 };
 
 
@@ -1052,16 +1061,24 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* statement: DEFINE IDENT SEMIC  */
-#line 13 "define.y"
-                      {
-    printf("OK!\n");
+  case 2: /* statement: DEFINE idents SEMIC  */
+#line 17 "ex7.y"
+                       {
+    printf("ALL OK!\n");
+ }
+#line 1070 "ex7.tab.c"
+    break;
+
+  case 7: /* assign: IDENT ASSIGN NUMBER  */
+#line 30 "ex7.y"
+                        {
+    printf("OK! ident=%s, num=%d\n", (yyvsp[-2].var), (yyvsp[0].value));
   }
-#line 1061 "define.tab.c"
+#line 1078 "ex7.tab.c"
     break;
 
 
-#line 1065 "define.tab.c"
+#line 1082 "ex7.tab.c"
 
       default: break;
     }
@@ -1254,10 +1271,10 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 18 "define.y"
+#line 35 "ex7.y"
 
 
-int main() {
+int main(void) {
   if (yyparse()) {
     fprintf(stderr, "Error!\n");
     return 1;

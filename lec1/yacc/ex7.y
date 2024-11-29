@@ -1,6 +1,6 @@
 %{
  #include <stdio.h>
- #include "assign_num.tab.h"
+ #include "ex7.tab.h"
  extern int yylex();
  extern int yyerror();
 %}
@@ -10,11 +10,24 @@
   int   value;
 }
 
-%token ASSIGN <var>IDENT <value>NUMBER SEMIC
+%token DEFINE ASSIGN <var>IDENT <value>NUMBER COMMA SEMIC
 
 %%
 statement
- : IDENT ASSIGN NUMBER SEMIC {
+ : DEFINE idents SEMIC {
+    printf("ALL OK!\n");
+ }
+;
+
+idents
+  : IDENT COMMA idents
+  | assign COMMA idents 
+  | IDENT
+  | assign
+;
+
+assign
+  : IDENT ASSIGN NUMBER {
     printf("OK! ident=%s, num=%d\n", $1, $3);
   }
 ;

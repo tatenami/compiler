@@ -1,4 +1,4 @@
-TARGET=define
+TARGET=lang
 LEX=${TARGET}.l
 YACC=${TARGET}.y
 

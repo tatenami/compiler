@@ -23,7 +23,6 @@ idents
 %%
 
 int main() {
-  printf("parse!");
   if (yyparse()) {
     fprintf(stderr, "Error!\n");
     return 1;
