@@ -13,10 +13,12 @@ statement
   :DEFINE IDENT SEMIC {
     printf("OK!\n");
   }
+  ;
 
 %%
 
 int main() {
+  printf("parse!");
   if (yyparse()) {
     fprintf(stderr, "Error!\n");
     return 1;
