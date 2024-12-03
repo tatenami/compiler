@@ -80,29 +80,11 @@
   return DIV;
 }
 
-  /* REM */
-"%" {
-  return REM;
-}
-
-  /* INCREM */
-"++" {
-  return INCREM;
-}
-
-  /* DECREM */
-"--" {
-  return DECREM;
-}
+  /*  */
 
   /* EQ */
 "==" {
   return EQ;
-}
-
-  /* NE */
-"!=" {
-  return NE;
 }
 
   /* LT */
@@ -113,47 +95,6 @@
   /* GT */
 ">" {
   return GT;
-}
-
-  /* LET */
-"<=" {
-  return LTE;
-}
-
-  /* GET */
-">=" {
-  return GTE;
-}
-
-  /* AND */
-"&" {
-  return AND;
-}
-
-  /* OR */
-"|" {
-  return OR;
-}
-
-  /* XOR */
-"^" {
-  return XOR;
-}
-
-  /* NOT */
-"~" {
-  return NOT;
-}
-
-
-  /* L_SHIFT */
-"<<" {
-  return L_SHIFT;
-}
-
-  /* R_SHIFT */
-">>" {
-  return R_SHIFT;
 }
 
   /* WHILE */
@@ -169,16 +110,6 @@
   /* ELSE */
 "else" {
   return ELSE;
-}
-
-  /* FUNC */
-"func" {
-  return FUNCDECL;
-}
-
-  /* FUNCCALL */
-"funccall" {
-  return FUNCCALL;
 }
 
   /* IDENT */

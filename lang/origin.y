@@ -14,12 +14,8 @@
 
 %token DEFINE ASSIGN ARRAY 
        L_BRACKET R_BRACKET L_PARAN R_PARAN L_BRACE R_BRACE
-       SEMIC COMMA ADD SUB MUL DIV REM INCREM DECREM EQ NE LT GT LTE GTE
-       AND OR XOR NOT L_SHIFT R_SHIFT
-       FUNCDECL FUNCCALL
+       SEMIC COMMA ADD SUB MUL DIV EQ LT GT
        WHILE IF ELSE <var>IDENT <value>NUMBER 
-
-%define parse.error verbose
 
 %%
 
@@ -28,60 +24,26 @@ program
 ;
 
 declarations
-  : decl_statement declarations 
-  | decl_statement                           
+  : decl_statement declarations { printf("[DECLARATIONS]\n"); }
+  | decl_statement              
+;
 
-// ex2
 array_part
   : L_BRACKET expression R_BRACKET  // ex1
 ;
 
-decl_part
-  : DEFINE idents {
-    printf("[DEFINE] \n");
-    define_count++;
-  }
-  | ARRAY IDENT array_part {
-    printf("[DEFINE] (array1) \n");
-    define_count++;
-  }
-  | ARRAY IDENT array_part array_part { //ex2
-    printf("[DEFINE] (array2)\n");
-    define_count++;
-  }
-;
-
-fun_arg_part
-  : DEFINE IDENT {
-    printf("[DEFINE] \n");
-    define_count++;
-  }
-  | ARRAY IDENT array_part {
-    printf("[DEFINE] (array1) \n");
-    define_count++;
-  }
-  | ARRAY IDENT array_part array_part { //ex2
-    printf("[DEFINE] (array2)\n");
-    define_count++;
-  }
-;
-
 decl_statement
-  : decl_part SEMIC
-  | func_define
-;
-
-func_var_decl
-  : decl_part
-  | decl_part COMMA func_var_decl
-;
-
-func_define
-  : FUNCDECL IDENT L_PARAN func_var_decl R_PARAN L_BRACE declarations statements R_BRACE { 
-    printf("[FUNC DECLARATION]\n"); 
+  : DEFINE idents SEMIC {
+    printf("[DEFINE] \n");
+    define_count++;
   }
-  | FUNCDECL IDENT L_PARAN R_PARAN L_BRACE declarations statements R_BRACE { 
-    printf("[FUNC DECLARATION]\n"); 
+  | ARRAY IDENT array_part SEMIC {
+    printf("[DEFINE] (array1) \n");
+    define_count++;
+  }
+  | ARRAY IDENT array_part array_part SEMIC {
+    printf("[DEFINE] (array2)\n");
+    define_count++;
   }
 ;
 
@@ -105,11 +67,10 @@ assignment_stmt
     printf("[ASSIGN] (array1)\n");
     assign_count++;
   }
-  | IDENT array_part array_part ASSIGN expression SEMIC { //ex2
+  | IDENT array_part array_part ASSIGN expression SEMIC {
     printf("[ASSIGN] (array2)\n");
     assign_count++;
   }
-  | unary_factor SEMIC // ex4
 ;
 
 expression
@@ -119,19 +80,11 @@ expression
 
 term
   : term mul_op factor
-  | term bit_op factor
   | factor
-;
-
-unary_factor
-  : IDENT unary_op // ex4 
-  | unary_op IDENT // ex4 
 ;
 
 factor
   : var 
-  | unary_factor
-  | NOT IDENT
   | L_PARAN expression R_PARAN
 ; 
 
@@ -143,22 +96,6 @@ add_op
 mul_op
   : MUL
   | DIV
-  | REM // ex4
-;
-
-// ex4
-unary_op
-  : INCREM
-  | DECREM
-;
-
-// ex4 
-bit_op
-  : AND
-  | OR
-  | XOR
-  | L_SHIFT
-  | R_SHIFT
 ;
 
 var
@@ -189,11 +126,8 @@ condition
 
 cond_op
   : EQ
-  | NE
   | LT
   | GT
-  | LTE
-  | GTE
 ;
 
 idents

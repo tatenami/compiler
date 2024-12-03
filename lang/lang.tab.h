@@ -64,18 +64,33 @@ extern int yydebug;
     L_BRACE = 265,                 /* L_BRACE  */
     R_BRACE = 266,                 /* R_BRACE  */
     SEMIC = 267,                   /* SEMIC  */
-    ADD = 268,                     /* ADD  */
-    SUB = 269,                     /* SUB  */
-    MUL = 270,                     /* MUL  */
-    DIV = 271,                     /* DIV  */
-    EQ = 272,                      /* EQ  */
-    LT = 273,                      /* LT  */
-    GT = 274,                      /* GT  */
-    WHILE = 275,                   /* WHILE  */
-    IF = 276,                      /* IF  */
-    ELSE = 277,                    /* ELSE  */
-    IDENT = 278,                   /* IDENT  */
-    NUMBER = 279                   /* NUMBER  */
+    COMMA = 268,                   /* COMMA  */
+    ADD = 269,                     /* ADD  */
+    SUB = 270,                     /* SUB  */
+    MUL = 271,                     /* MUL  */
+    DIV = 272,                     /* DIV  */
+    REM = 273,                     /* REM  */
+    INCREM = 274,                  /* INCREM  */
+    DECREM = 275,                  /* DECREM  */
+    EQ = 276,                      /* EQ  */
+    NE = 277,                      /* NE  */
+    LT = 278,                      /* LT  */
+    GT = 279,                      /* GT  */
+    LTE = 280,                     /* LTE  */
+    GTE = 281,                     /* GTE  */
+    AND = 282,                     /* AND  */
+    OR = 283,                      /* OR  */
+    XOR = 284,                     /* XOR  */
+    NOT = 285,                     /* NOT  */
+    L_SHIFT = 286,                 /* L_SHIFT  */
+    R_SHIFT = 287,                 /* R_SHIFT  */
+    FUNCDECL = 288,                /* FUNCDECL  */
+    FUNCCALL = 289,                /* FUNCCALL  */
+    WHILE = 290,                   /* WHILE  */
+    IF = 291,                      /* IF  */
+    ELSE = 292,                    /* ELSE  */
+    IDENT = 293,                   /* IDENT  */
+    NUMBER = 294                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -84,12 +99,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 8 "lang.y"
+#line 10 "lang.y"
 
   char* var;
   int   value;
 
-#line 93 "lang.tab.h"
+#line 108 "lang.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
