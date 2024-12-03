@@ -3,9 +3,9 @@ define b, f;
 array c[100];
 array d[10][10];
 
-func add(define a, define b) {
+func add(define a, define b, array c[50]) {
   define b;
-  a = a + b;
+  a = a + b + c;
 }
 
 b = 50;
@@ -20,15 +20,25 @@ if (a == 0) {
 }
 
 if (b != 0) {
-  c[10 - a] = 1;
+  c[10 - a++] = 1.0123;
 }
 else {
   b--;
   c[0] = a++;
-  c[1] = --a;
+  c[--a] = b--;
 }
 
 while (a >= 0) {
   d[a][0] = c[100];
 }
 
+funccall add(a, b, 0);
+
+for (a = 0; a < 10; a++) {
+  for (b = 0; b < 10; b++) {
+    funccall add(1, 10); 
+  }
+}
+
+c = ' ';
+str = "hello world!";

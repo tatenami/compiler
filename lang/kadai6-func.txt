@@ -1,0 +1,22 @@
+func quicksort(array a[100], define l, define r){
+  define v, i, j, t;
+  define ii;
+  if (r > l){
+  v = a[r]; i = l - 1; j = r;
+  for(;;){
+    while(a[i] < v) {
+      ++i;
+    }
+    while(a[j] > v) {
+      --j;
+    }
+    if (i >= j) {
+      break;
+    }
+    t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  t = a[i]; a[i] = a[r]; a[r] = t;
+  funccall quicksort(a, l, i-1);
+  funccall quicksort(a, i+1, r);
+ }
+}

@@ -86,11 +86,16 @@ extern int yydebug;
     R_SHIFT = 287,                 /* R_SHIFT  */
     FUNCDECL = 288,                /* FUNCDECL  */
     FUNCCALL = 289,                /* FUNCCALL  */
-    WHILE = 290,                   /* WHILE  */
-    IF = 291,                      /* IF  */
-    ELSE = 292,                    /* ELSE  */
-    IDENT = 293,                   /* IDENT  */
-    NUMBER = 294                   /* NUMBER  */
+    BREAK = 290,                   /* BREAK  */
+    FOR = 291,                     /* FOR  */
+    WHILE = 292,                   /* WHILE  */
+    IF = 293,                      /* IF  */
+    ELSE = 294,                    /* ELSE  */
+    IDENT = 295,                   /* IDENT  */
+    CHAR = 296,                    /* CHAR  */
+    STRING = 297,                  /* STRING  */
+    NUMBER = 298,                  /* NUMBER  */
+    FLOAT = 299                    /* FLOAT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -102,9 +107,12 @@ union YYSTYPE
 #line 10 "lang.y"
 
   char* var;
-  int   value;
+  char  chara;
+  char* str;
+  int   ival;
+  float fval;
 
-#line 108 "lang.tab.h"
+#line 116 "lang.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

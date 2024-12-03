@@ -5,181 +5,114 @@
 %%
 
   /* DEFINE */
-"define" {
-  return DEFINE;
-}
+"define" { return DEFINE; }
 
   /* ASSIGN */
-"=" {
-  return ASSIGN;
-}
+"=" { return ASSIGN; }
   /* ARRAY */
-"array" {
-  return ARRAY;
-}
+"array" { return ARRAY; }
 
   /* L_BRACKET */
-"[" {
-  return L_BRACKET;
-}
+"[" { return L_BRACKET; }
 
   /* R_BRACKET */
-"]" {
-  return R_BRACKET;
-}
+"]" { return R_BRACKET; }
 
   /* L_PARAN */
-"(" {
-  return L_PARAN;
-}
+"(" { return L_PARAN; }
 
   /* R_PARAN */
-")" {
-  return R_PARAN;
-}
-
+")" { return R_PARAN; }
 
   /* L_BRACE */
-"{" {
-  return L_BRACE;
-}
+"{" { return L_BRACE; }
 
   /* R_BRACE */
-"}" {
-  return R_BRACE;
-}
+"}" { return R_BRACE; }
 
   /* SEMIC */
-";" {
-  return SEMIC;
-}
+";" { return SEMIC; }
 
   /* COMMA */
-"," {
-  return COMMA;
-}
+"," { return COMMA; }
 
   /* ADD */
-"+" {
-  return ADD;
-}
-
+"+" { return ADD; }
 
   /* SUB */
-"-" {
-  return SUB;
-}
+"-" { return SUB; }
 
   /* MUL */
-"*" {
-  return MUL;
-}
+"*" { return MUL; }
 
   /* DIV */
-"/" {
-  return DIV;
-}
+"/" { return DIV; }
 
   /* REM */
-"%" {
-  return REM;
-}
+"%" { return REM; }
 
   /* INCREM */
-"++" {
-  return INCREM;
-}
+"++" { return INCREM; }
 
   /* DECREM */
-"--" {
-  return DECREM;
-}
+"--" { return DECREM; }
 
   /* EQ */
-"==" {
-  return EQ;
-}
+"==" { return EQ; }
 
   /* NE */
-"!=" {
-  return NE;
-}
+"!=" { return NE; }
 
   /* LT */
-"<" {
-  return LT;
-}
+"<" { return LT; }
 
   /* GT */
-">" {
-  return GT;
-}
+">" { return GT; }
 
   /* LET */
-"<=" {
-  return LTE;
-}
+"<=" { return LTE; }
 
   /* GET */
-">=" {
-  return GTE;
-}
+">=" { return GTE; }
 
   /* AND */
-"&" {
-  return AND;
-}
+"&" { return AND; }
 
   /* OR */
-"|" {
-  return OR;
-}
+"|" { return OR; }
 
   /* XOR */
-"^" {
-  return XOR;
-}
+"^" { return XOR; }
 
   /* NOT */
-"~" {
-  return NOT;
-}
-
+"~" { return NOT; }
 
   /* L_SHIFT */
-"<<" {
-  return L_SHIFT;
-}
+"<<" { return L_SHIFT; }
 
   /* R_SHIFT */
-">>" {
-  return R_SHIFT;
-}
+">>" { return R_SHIFT; }
+
+  /* FOR */
+"for" { return FOR; }
 
   /* WHILE */
-"while" {
-  return WHILE;
-}
+"while" { return WHILE; }
 
   /* IF */
-"if" {
-  return IF;
-}
+"if" { return IF; }
 
   /* ELSE */
-"else" {
-  return ELSE;
-}
+"else" { return ELSE; }
 
   /* FUNC */
-"func" {
-  return FUNCDECL;
-}
+"func" { return FUNCDECL; }
 
   /* FUNCCALL */
-"funccall" {
-  return FUNCCALL;
-}
+"funccall" { return FUNCCALL; }
+
+  /* BREAK */
+"break" { return BREAK; }
 
   /* IDENT */
 [a-zA-Z][a-zA-Z0-9]* {
@@ -190,8 +123,26 @@
 
   /* NUMBER */
 [0-9]+ {
-  yylval.value = atoi(yytext); 
+  yylval.ival = atoi(yytext); 
   return NUMBER;
+}
+
+  /* char */
+\'[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]\' {
+  yylval.chara = yytext[0];
+  return CHAR;
+}
+
+  /* str */
+\"[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]+\" {
+  yylval.var = (char*)malloc(sizeof(char) * yyleng);
+  strncpy(yylval.var, yytext, yyleng);
+  return STRING;
+}
+
+[0-9]+[.][0-9]+ {
+  yylval.fval = atof(yytext); 
+  return FLOAT;
 }
 
 [ \t]+

@@ -1,5 +1,5 @@
 make clean
 make 
-echo "----- RUN MY LANG -----"
-make run
+echo "----------< RUN MY LANG >----------"
+make run SAMPLE=$1
 

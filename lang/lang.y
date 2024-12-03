@@ -9,15 +9,18 @@
 
 %union {
   char* var;
-  int   value;
+  char  chara;
+  char* str;
+  int   ival;
+  float fval;
 }
 
 %token DEFINE ASSIGN ARRAY 
        L_BRACKET R_BRACKET L_PARAN R_PARAN L_BRACE R_BRACE
        SEMIC COMMA ADD SUB MUL DIV REM INCREM DECREM EQ NE LT GT LTE GTE
        AND OR XOR NOT L_SHIFT R_SHIFT
-       FUNCDECL FUNCCALL
-       WHILE IF ELSE <var>IDENT <value>NUMBER 
+       FUNCDECL FUNCCALL BREAK
+       FOR WHILE IF ELSE <var>IDENT <chara>CHAR <str>STRING <ival>NUMBER <fval>FLOAT
 
 %define parse.error verbose
 
@@ -25,6 +28,7 @@
 
 program
   : declarations statements { printf("[PROGRAM]\n"); }
+  | func_define             { printf("[PROGRAM]\n"); }
 ;
 
 declarations
@@ -36,33 +40,30 @@ array_part
   : L_BRACKET expression R_BRACKET  // ex1
 ;
 
+array
+  : IDENT array_part
+  | IDENT array_part array_part
+;
+
 decl_part
   : DEFINE idents {
-    printf("[DEFINE] \n");
     define_count++;
+    printf("[DEFINE]<%d> \n", define_count);
   }
-  | ARRAY IDENT array_part {
-    printf("[DEFINE] (array1) \n");
+  | ARRAY array {
     define_count++;
-  }
-  | ARRAY IDENT array_part array_part { //ex2
-    printf("[DEFINE] (array2)\n");
-    define_count++;
+    printf("[DEFINE]<%d> (array) \n", define_count);
   }
 ;
 
-fun_arg_part
+func_arg_part
   : DEFINE IDENT {
-    printf("[DEFINE] \n");
     define_count++;
+    printf("[DEFINE]<%d> \n", define_count);
   }
-  | ARRAY IDENT array_part {
-    printf("[DEFINE] (array1) \n");
+  | ARRAY array {
     define_count++;
-  }
-  | ARRAY IDENT array_part array_part { //ex2
-    printf("[DEFINE] (array2)\n");
-    define_count++;
+    printf("[DEFINE]<%d> (array) \n", define_count);
   }
 ;
 
@@ -71,9 +72,10 @@ decl_statement
   | func_define
 ;
 
+/* ex3 */
 func_var_decl
-  : decl_part
-  | decl_part COMMA func_var_decl
+  : func_arg_part
+  | func_arg_part COMMA func_var_decl
 ;
 
 func_define
@@ -85,6 +87,17 @@ func_define
   }
 ;
 
+func_call
+  : FUNCCALL IDENT L_PARAN expressions R_PARAN SEMIC {
+    printf("[FUNC CALL]\n");
+  }
+  | FUNCCALL IDENT L_PARAN  R_PARAN SEMIC {
+    printf("[FUNC CALL]\n");
+  }
+;
+
+/* ex3 */
+
 statements
   : statement statements
   | statement
@@ -93,28 +106,43 @@ statements
 statement
   : assignment_stmt
   | loop_stmt       
-  | cond_stmt       
+  | cond_stmt      
+  | func_call 
+  | BREAK SEMIC
+;
+
+assignment
+  : IDENT ASSIGN expression {
+    assign_count++;
+    printf("[ASSIGN]<%d>\n", assign_count);
+  }
+  | array ASSIGN expression  {
+    assign_count++;
+    printf("[ASSIGN]<%d> (array)\n", assign_count);
+  }
+  | unary_factor // ex4
+  | IDENT ASSIGN CHAR {
+    assign_count++;
+    printf("[ASSIGN]<%d> (char)\n", assign_count);
+  }
+  | IDENT ASSIGN STRING {
+    assign_count++;
+    printf("[ASSIGN]<%d> (str)\n", assign_count);
+  }
 ;
 
 assignment_stmt
-  : IDENT ASSIGN expression SEMIC {
-    printf("[ASSIGN] \n");
-    assign_count++;
-  }
-  | IDENT array_part ASSIGN expression SEMIC {
-    printf("[ASSIGN] (array1)\n");
-    assign_count++;
-  }
-  | IDENT array_part array_part ASSIGN expression SEMIC { //ex2
-    printf("[ASSIGN] (array2)\n");
-    assign_count++;
-  }
-  | unary_factor SEMIC // ex4
+  : assignment SEMIC
 ;
 
 expression
   : expression add_op term 
   | term                  
+;
+
+expressions
+  : expressions COMMA expression
+  | expression
 ;
 
 term
@@ -164,6 +192,7 @@ bit_op
 var
   : IDENT
   | NUMBER
+  | FLOAT // ex6
   | IDENT array_part
   | IDENT array_part array_part
 ;
@@ -172,6 +201,12 @@ loop_stmt
   : WHILE L_PARAN condition R_PARAN L_BRACE statements R_BRACE {
     printf("> [LOOP]\n");
   }
+  | FOR L_PARAN assignment SEMIC condition SEMIC assignment R_PARAN L_BRACE statements R_BRACE {
+    printf("> [LOOP]\n");
+  } // ex5
+  | FOR L_PARAN SEMIC SEMIC R_PARAN L_BRACE statements R_BRACE {
+    printf("> [LOOP]\n");
+  } // ex5
 ;
 
 cond_stmt
@@ -209,5 +244,6 @@ int main(void) {
     return 1;
   }
   printf("assign: %d, define: %d\n", assign_count, define_count);
+  printf("OK!\n");
   return 0;
 }
