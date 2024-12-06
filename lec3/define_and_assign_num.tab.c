@@ -71,10 +71,13 @@
 
     #include <stdio.h>
     #include "define_and_assign_num.tab.h"
+    #include "ast.h"
     extern int yylex();
     extern int yyerror();
 
-#line 78 "define_and_assign_num.tab.c"
+    extern Node *top;
+
+#line 81 "define_and_assign_num.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -501,7 +504,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    18,    18,    19,    22,    23,    26,    27
+       0,    26,    26,    27,    30,    31,    34,    35
 };
 #endif
 
@@ -1063,32 +1066,44 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 2: /* statements: statement statements  */
+#line 26 "define_and_assign_num.y"
+                                 { top = build_node2(STATEMENTS_AST, (yyvsp[-1].np), top); }
+#line 1073 "define_and_assign_num.tab.c"
+    break;
+
+  case 3: /* statements: statement  */
+#line 27 "define_and_assign_num.y"
+                                 { top = build_node1(STATEMENTS_AST, (yyvsp[0].np)); }
+#line 1079 "define_and_assign_num.tab.c"
+    break;
+
   case 4: /* statement: DEFINE idents SEMIC  */
-#line 22 "define_and_assign_num.y"
-                                {printf("Define OK!\n");}
-#line 1070 "define_and_assign_num.tab.c"
+#line 30 "define_and_assign_num.y"
+                                      { (yyval.np) = build_node1(STATEMENT_AST, (yyvsp[-1].np)); }
+#line 1085 "define_and_assign_num.tab.c"
     break;
 
   case 5: /* statement: IDENT ASSIGN NUMBER SEMIC  */
-#line 23 "define_and_assign_num.y"
-                                      {printf("OK! ident=%s, num=%d\n", (yyvsp[-3].sp), (yyvsp[-1].ival));}
-#line 1076 "define_and_assign_num.tab.c"
+#line 31 "define_and_assign_num.y"
+                                      { (yyval.np) = build_node2(STATEMENT_AST, build_node0(IDENT_AST), build_node0(NUMBER_AST)); }
+#line 1091 "define_and_assign_num.tab.c"
     break;
 
   case 6: /* idents: IDENT COMMA idents  */
-#line 26 "define_and_assign_num.y"
-                               {printf("OK! new ident=%s\n", (yyvsp[-2].sp));}
-#line 1082 "define_and_assign_num.tab.c"
+#line 34 "define_and_assign_num.y"
+                               { (yyval.np) = build_node2(IDENTS_AST, build_node0(IDENT_AST), (yyvsp[0].np)); }
+#line 1097 "define_and_assign_num.tab.c"
     break;
 
   case 7: /* idents: IDENT  */
-#line 27 "define_and_assign_num.y"
-                               {printf("OK! new ident=%s\n", (yyvsp[0].sp));}
-#line 1088 "define_and_assign_num.tab.c"
+#line 35 "define_and_assign_num.y"
+                               { (yyval.np) = build_node1(IDENTS_AST, build_node0(IDENT_AST)); }
+#line 1103 "define_and_assign_num.tab.c"
     break;
 
 
-#line 1092 "define_and_assign_num.tab.c"
+#line 1107 "define_and_assign_num.tab.c"
 
       default: break;
     }
@@ -1281,13 +1296,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 30 "define_and_assign_num.y"
+#line 38 "define_and_assign_num.y"
 
-
-int main(void) {
-    if (yyparse()) {
-        fprintf(stderr, "Error!\n");
-        return 1;
-    }
-    return 0;
-}

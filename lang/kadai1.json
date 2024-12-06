@@ -1,0 +1,163 @@
+{"PROGRAM_AST_0": {
+"DECLARATIONS_AST_1": {
+"DECL_STATEMENT_AST_2": {
+"DECL_PART_AST_3": {
+"IDENTS_AST_4": {
+"IDENT_AST_5": {
+}
+}
+}
+}
+, "DECLARATIONS_AST_6": {
+"DECL_STATEMENT_AST_7": {
+"DECL_PART_AST_8": {
+"IDENTS_AST_9": {
+"IDENT_AST_10": {
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_11": {
+"STATEMENT_AST_12": {
+"ASSIGNMENT_STMT_AST_13": {
+"ASSIGNMENT_AST_14": {
+"IDENT_AST_15": {
+}
+, "EXPRESSION_AST_16": {
+"TERM_AST_17": {
+"FACTOR_AST_18": {
+"VAR_AST_19": {
+"NUMBER_AST_20": {
+}
+}
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_21": {
+"STATEMENT_AST_22": {
+"ASSIGNMENT_STMT_AST_23": {
+"ASSIGNMENT_AST_24": {
+"IDENT_AST_25": {
+}
+, "EXPRESSION_AST_26": {
+"TERM_AST_27": {
+"FACTOR_AST_28": {
+"VAR_AST_29": {
+"NUMBER_AST_30": {
+}
+}
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_31": {
+"STATEMENT_AST_32": {
+"LOOP_STMT_AST_33": {
+"CONDITION_AST_34": {
+"EXPRESSION_AST_35": {
+"TERM_AST_36": {
+"FACTOR_AST_37": {
+"VAR_AST_38": {
+"IDENT_AST_39": {
+}
+}
+}
+}
+}
+, "COND_OP_AST_40": {
+"LT_AST_41": {
+}
+}
+, "EXPRESSION_AST_42": {
+"TERM_AST_43": {
+"FACTOR_AST_44": {
+"VAR_AST_45": {
+"NUMBER_AST_46": {
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_47": {
+"STATEMENT_AST_48": {
+"ASSIGNMENT_STMT_AST_49": {
+"ASSIGNMENT_AST_50": {
+"IDENT_AST_51": {
+}
+, "EXPRESSION_AST_52": {
+"EXPRESSION_AST_53": {
+"TERM_AST_54": {
+"FACTOR_AST_55": {
+"VAR_AST_56": {
+"IDENT_AST_57": {
+}
+}
+}
+}
+}
+, "ADD_OP_AST_58": {
+"ADD_AST_59": {
+}
+}
+, "TERM_AST_60": {
+"FACTOR_AST_61": {
+"VAR_AST_62": {
+"IDENT_AST_63": {
+}
+}
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_64": {
+"STATEMENT_AST_65": {
+"ASSIGNMENT_STMT_AST_66": {
+"ASSIGNMENT_AST_67": {
+"IDENT_AST_68": {
+}
+, "EXPRESSION_AST_69": {
+"EXPRESSION_AST_70": {
+"TERM_AST_71": {
+"FACTOR_AST_72": {
+"VAR_AST_73": {
+"IDENT_AST_74": {
+}
+}
+}
+}
+}
+, "ADD_OP_AST_75": {
+"ADD_AST_76": {
+}
+}
+, "TERM_AST_77": {
+"FACTOR_AST_78": {
+"VAR_AST_79": {
+"NUMBER_AST_80": {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

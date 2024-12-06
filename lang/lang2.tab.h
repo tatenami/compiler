@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_LANG_TAB_H_INCLUDED
-# define YY_YY_LANG_TAB_H_INCLUDED
+#ifndef YY_YY_LANG2_TAB_H_INCLUDED
+# define YY_YY_LANG2_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -56,7 +56,7 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     DEFINE = 258,                  /* DEFINE  */
     ASSIGN = 259,                  /* ASSIGN  */
-    ARRAY = 260,                   /* ARRAY  */
+    ARRAY_DEF = 260,               /* ARRAY_DEF  */
     L_BRACKET = 261,               /* L_BRACKET  */
     R_BRACKET = 262,               /* R_BRACKET  */
     L_PARAN = 263,                 /* L_PARAN  */
@@ -104,15 +104,16 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "lang.y"
+#line 11 "lang2.y"
 
+  struct node *np;
   char* var;
   char  chara;
   char* str;
   int   ival;
   float fval;
 
-#line 116 "lang.tab.h"
+#line 117 "lang2.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -127,4 +128,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_LANG_TAB_H_INCLUDED  */
+#endif /* !YY_YY_LANG2_TAB_H_INCLUDED  */

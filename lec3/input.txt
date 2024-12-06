@@ -1,0 +1,2 @@
+define sum1, sum2;
+sum1 = 100;

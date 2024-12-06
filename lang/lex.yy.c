@@ -496,9 +496,9 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lang.l"
-#line 2 "lang.l"
-  #include "lang.tab.h"
+#line 1 "lang2.l"
+#line 2 "lang2.l"
+  #include "lang2.tab.h"
 #line 503 "lex.yy.c"
 #line 504 "lex.yy.c"
 
@@ -717,10 +717,10 @@ YY_DECL
 		}
 
 	{
-#line 5 "lang.l"
+#line 5 "lang2.l"
 
 
-#line 8 "lang.l"
+#line 8 "lang2.l"
   /* DEFINE */
 #line 726 "lex.yy.c"
 
@@ -781,229 +781,229 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "lang.l"
+#line 9 "lang2.l"
 { return DEFINE; }
 	YY_BREAK
 /* ASSIGN */
 case 2:
 YY_RULE_SETUP
-#line 12 "lang.l"
+#line 12 "lang2.l"
 { return ASSIGN; }
 	YY_BREAK
 /* ARRAY */
 case 3:
 YY_RULE_SETUP
-#line 14 "lang.l"
-{ return ARRAY; }
+#line 14 "lang2.l"
+{ return ARRAY_DEF; }
 	YY_BREAK
 /* L_BRACKET */
 case 4:
 YY_RULE_SETUP
-#line 17 "lang.l"
+#line 17 "lang2.l"
 { return L_BRACKET; }
 	YY_BREAK
 /* R_BRACKET */
 case 5:
 YY_RULE_SETUP
-#line 20 "lang.l"
+#line 20 "lang2.l"
 { return R_BRACKET; }
 	YY_BREAK
 /* L_PARAN */
 case 6:
 YY_RULE_SETUP
-#line 23 "lang.l"
+#line 23 "lang2.l"
 { return L_PARAN; }
 	YY_BREAK
 /* R_PARAN */
 case 7:
 YY_RULE_SETUP
-#line 26 "lang.l"
+#line 26 "lang2.l"
 { return R_PARAN; }
 	YY_BREAK
 /* L_BRACE */
 case 8:
 YY_RULE_SETUP
-#line 29 "lang.l"
+#line 29 "lang2.l"
 { return L_BRACE; }
 	YY_BREAK
 /* R_BRACE */
 case 9:
 YY_RULE_SETUP
-#line 32 "lang.l"
+#line 32 "lang2.l"
 { return R_BRACE; }
 	YY_BREAK
 /* SEMIC */
 case 10:
 YY_RULE_SETUP
-#line 35 "lang.l"
+#line 35 "lang2.l"
 { return SEMIC; }
 	YY_BREAK
 /* COMMA */
 case 11:
 YY_RULE_SETUP
-#line 38 "lang.l"
+#line 38 "lang2.l"
 { return COMMA; }
 	YY_BREAK
 /* ADD */
 case 12:
 YY_RULE_SETUP
-#line 41 "lang.l"
+#line 41 "lang2.l"
 { return ADD; }
 	YY_BREAK
 /* SUB */
 case 13:
 YY_RULE_SETUP
-#line 44 "lang.l"
+#line 44 "lang2.l"
 { return SUB; }
 	YY_BREAK
 /* MUL */
 case 14:
 YY_RULE_SETUP
-#line 47 "lang.l"
+#line 47 "lang2.l"
 { return MUL; }
 	YY_BREAK
 /* DIV */
 case 15:
 YY_RULE_SETUP
-#line 50 "lang.l"
+#line 50 "lang2.l"
 { return DIV; }
 	YY_BREAK
 /* REM */
 case 16:
 YY_RULE_SETUP
-#line 53 "lang.l"
+#line 53 "lang2.l"
 { return REM; }
 	YY_BREAK
 /* INCREM */
 case 17:
 YY_RULE_SETUP
-#line 56 "lang.l"
+#line 56 "lang2.l"
 { return INCREM; }
 	YY_BREAK
 /* DECREM */
 case 18:
 YY_RULE_SETUP
-#line 59 "lang.l"
+#line 59 "lang2.l"
 { return DECREM; }
 	YY_BREAK
 /* EQ */
 case 19:
 YY_RULE_SETUP
-#line 62 "lang.l"
+#line 62 "lang2.l"
 { return EQ; }
 	YY_BREAK
 /* NE */
 case 20:
 YY_RULE_SETUP
-#line 65 "lang.l"
+#line 65 "lang2.l"
 { return NE; }
 	YY_BREAK
 /* LT */
 case 21:
 YY_RULE_SETUP
-#line 68 "lang.l"
+#line 68 "lang2.l"
 { return LT; }
 	YY_BREAK
 /* GT */
 case 22:
 YY_RULE_SETUP
-#line 71 "lang.l"
+#line 71 "lang2.l"
 { return GT; }
 	YY_BREAK
 /* LET */
 case 23:
 YY_RULE_SETUP
-#line 74 "lang.l"
+#line 74 "lang2.l"
 { return LTE; }
 	YY_BREAK
 /* GET */
 case 24:
 YY_RULE_SETUP
-#line 77 "lang.l"
+#line 77 "lang2.l"
 { return GTE; }
 	YY_BREAK
 /* AND */
 case 25:
 YY_RULE_SETUP
-#line 80 "lang.l"
+#line 80 "lang2.l"
 { return AND; }
 	YY_BREAK
 /* OR */
 case 26:
 YY_RULE_SETUP
-#line 83 "lang.l"
+#line 83 "lang2.l"
 { return OR; }
 	YY_BREAK
 /* XOR */
 case 27:
 YY_RULE_SETUP
-#line 86 "lang.l"
+#line 86 "lang2.l"
 { return XOR; }
 	YY_BREAK
 /* NOT */
 case 28:
 YY_RULE_SETUP
-#line 89 "lang.l"
+#line 89 "lang2.l"
 { return NOT; }
 	YY_BREAK
 /* L_SHIFT */
 case 29:
 YY_RULE_SETUP
-#line 92 "lang.l"
+#line 92 "lang2.l"
 { return L_SHIFT; }
 	YY_BREAK
 /* R_SHIFT */
 case 30:
 YY_RULE_SETUP
-#line 95 "lang.l"
+#line 95 "lang2.l"
 { return R_SHIFT; }
 	YY_BREAK
 /* FOR */
 case 31:
 YY_RULE_SETUP
-#line 98 "lang.l"
+#line 98 "lang2.l"
 { return FOR; }
 	YY_BREAK
 /* WHILE */
 case 32:
 YY_RULE_SETUP
-#line 101 "lang.l"
+#line 101 "lang2.l"
 { return WHILE; }
 	YY_BREAK
 /* IF */
 case 33:
 YY_RULE_SETUP
-#line 104 "lang.l"
+#line 104 "lang2.l"
 { return IF; }
 	YY_BREAK
 /* ELSE */
 case 34:
 YY_RULE_SETUP
-#line 107 "lang.l"
+#line 107 "lang2.l"
 { return ELSE; }
 	YY_BREAK
 /* FUNC */
 case 35:
 YY_RULE_SETUP
-#line 110 "lang.l"
+#line 110 "lang2.l"
 { return FUNCDECL; }
 	YY_BREAK
 /* FUNCCALL */
 case 36:
 YY_RULE_SETUP
-#line 113 "lang.l"
+#line 113 "lang2.l"
 { return FUNCCALL; }
 	YY_BREAK
 /* BREAK */
 case 37:
 YY_RULE_SETUP
-#line 116 "lang.l"
+#line 116 "lang2.l"
 { return BREAK; }
 	YY_BREAK
 /* IDENT */
 case 38:
 YY_RULE_SETUP
-#line 119 "lang.l"
+#line 119 "lang2.l"
 {
   yylval.var = (char*)malloc(sizeof(char) * yyleng);
   strncpy(yylval.var, yytext, yyleng);
@@ -1013,7 +1013,7 @@ YY_RULE_SETUP
 /* NUMBER */
 case 39:
 YY_RULE_SETUP
-#line 126 "lang.l"
+#line 126 "lang2.l"
 {
   yylval.ival = atoi(yytext); 
   return NUMBER;
@@ -1022,7 +1022,7 @@ YY_RULE_SETUP
 /* char */
 case 40:
 YY_RULE_SETUP
-#line 132 "lang.l"
+#line 132 "lang2.l"
 {
   yylval.chara = yytext[0];
   return CHAR;
@@ -1031,7 +1031,7 @@ YY_RULE_SETUP
 /* str */
 case 41:
 YY_RULE_SETUP
-#line 138 "lang.l"
+#line 138 "lang2.l"
 {
   yylval.var = (char*)malloc(sizeof(char) * yyleng);
   strncpy(yylval.var, yytext, yyleng);
@@ -1040,7 +1040,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 144 "lang.l"
+#line 144 "lang2.l"
 {
   yylval.fval = atof(yytext); 
   return FLOAT;
@@ -1048,18 +1048,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 149 "lang.l"
+#line 149 "lang2.l"
 
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 151 "lang.l"
+#line 151 "lang2.l"
 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 153 "lang.l"
+#line 153 "lang2.l"
 ECHO;
 	YY_BREAK
 #line 1066 "lex.yy.c"
@@ -2067,5 +2067,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 153 "lang.l"
+#line 153 "lang2.l"
 

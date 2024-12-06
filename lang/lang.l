@@ -10,7 +10,7 @@
   /* ASSIGN */
 "=" { return ASSIGN; }
   /* ARRAY */
-"array" { return ARRAY; }
+"array" { return ARRAY_DEF; }
 
   /* L_BRACKET */
 "[" { return L_BRACKET; }

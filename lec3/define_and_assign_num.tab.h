@@ -68,12 +68,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 8 "define_and_assign_num.y"
+#line 11 "define_and_assign_num.y"
 
+    struct node *np;
     char* sp;
     int ival;
 
-#line 77 "define_and_assign_num.tab.h"
+#line 78 "define_and_assign_num.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

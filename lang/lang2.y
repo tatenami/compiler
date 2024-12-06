@@ -1,7 +1,7 @@
 %{
   #include <stdio.h>
-  #include "lang.tab.h"
-  #include "ast.h"
+  #include "lang2.tab.h"
+  #include "ast2.h"
   extern int yylex();
 
   int assign_count = 0, define_count = 0;
@@ -20,7 +20,9 @@
 %type <np> program declarations func_define decl_statement decl_part statements statement
            func_var_decl func_arg_part
            break_stmt assignment_stmt assignment loop_stmt cond_stmt func_call expressions expression 
-           condition array array_part term factor unary_factor cond_op unary_op bit_op mul_op add_op var idents
+           while_stmt if_stmt elif_stmt for_stmt
+           condition array array_index term factor unary_factor unary_op bit_op mul_op div_op rem_op add_op sub_op var idents
+           eq_op ne_op lt_op lte_op gt_op gte_op
 
 %token DEFINE ASSIGN ARRAY_DEF 
        L_BRACKET R_BRACKET L_PARAN R_PARAN L_BRACE R_BRACE
@@ -43,41 +45,29 @@ declarations
   | decl_statement              { $$ = build_node1(DECLARATIONS_AST, $1); }
 
 // ex2
-array_part
-  : L_BRACKET expression R_BRACKET { $$ = build_node1(ARRAY_PART_AST, $2); } // ex1
+array_index
+  : L_BRACKET expression R_BRACKET {} // ex1
+  | L_BRACKET expression R_BRACKET L_BRACKET expression R_BRACKET {} // ex1
 ;
 
 array
-  : IDENT array_part            { $$ = build_node2(ARRAY_AST, build_node0(IDENT_AST), $2); }
-  | IDENT array_part array_part { $$ = build_node3(ARRAY_AST, build_node0(IDENT_AST), $2, $3); }
+  : IDENT array_index { $$ = build_node2(ARRAY_AST, build_node0(IDENT_AST), $2); }
 ;
 
 decl_part
   : DEFINE idents {
-    // define_count++;
-    // printf("[DEFINE]<%d> \n", define_count);
-    // $$ = build_node2(DECL_PART_AST, build_node0(DEFINE_AST), $2);
     $$ = build_node1(DECL_PART_AST, $2);
   }
   | ARRAY_DEF array {
-    // define_count++;
-    // printf("[DEFINE]<%d> (array) \n", define_count);
-    // $$ = build_node2(DECL_PART_AST, build_node0(ARRAY_AST), $2);
     $$ = build_node1(DECL_PART_AST, $2);
   }
 ;
 
 func_arg_part
   : DEFINE IDENT {
-    // define_count++;
-    // printf("[DEFINE]<%d> \n", define_count);
-    // $$ = build_node2(FUNC_ARG_PART_AST, build_node0(DEFINE_AST), build_node0(IDENT_AST));
     $$ = build_node1(FUNC_ARG_PART_AST, build_node0(IDENT_AST));
   }
   | ARRAY_DEF array {
-    // define_count++;
-    // printf("[DEFINE]<%d> (array) \n", define_count);
-    // $$ = build_node2(FUNC_ARG_PART_AST, build_node0(ARRAY_DEF_AST), $2);
     $$ = build_node1(FUNC_ARG_PART_AST, $2);
   }
 ;
@@ -95,22 +85,18 @@ func_var_decl
 
 func_define
   : FUNCDECL IDENT L_PARAN func_var_decl R_PARAN L_BRACE declarations statements R_BRACE { 
-    // printf("[FUNC DECLARATION]\n"); 
     $$ = build_node4(FUNC_DEFINE_AST, build_node0(IDENT_AST), $4, $7, $8);
   }
   | FUNCDECL IDENT L_PARAN R_PARAN L_BRACE declarations statements R_BRACE { 
-    // printf("[FUNC DECLARATION]\n"); 
     $$ = build_node3(FUNC_DEFINE_AST, build_node0(IDENT_AST), $6, $7);
   }
 ;
 
 func_call
   : FUNCCALL IDENT L_PARAN expressions R_PARAN SEMIC {
-    // printf("[FUNC CALL]\n");
     $$ = build_node2(FUNC_CALL_AST, build_node0(IDENT_AST), $4);
   }
   | FUNCCALL IDENT L_PARAN  R_PARAN SEMIC {
-    // printf("[FUNC CALL]\n");
     $$ = build_node1(FUNC_CALL_AST, build_node0(IDENT_AST));
   }
 ;
@@ -136,26 +122,14 @@ break_stmt
 
 assignment
   : IDENT ASSIGN expression {
-    // assign_count++;
-    // printf("[ASSIGN]<%d>\n", assign_count);
     $$ = build_node2(ASSIGNMENT_AST, build_node0(IDENT_AST), $3);
-    // $$ = build_node3(ASSIGNMENT_AST, build_node0(IDENT_AST), build_node0(ASSIGN_AST), $3);
   }
   | array ASSIGN expression  {
-    // assign_count++;
-    // printf("[ASSIGN]<%d> (array)\n", assign_count);
     $$ = build_node2(ASSIGNMENT_AST, $1, $3);
-    // $$ = build_node3(ASSIGNMENT_AST, $1, build_node0(ASSIGN_AST), $3);
   }
   | unary_factor { $$ = build_node1(ASSIGNMENT_AST, $1); }// ex4
-  | IDENT ASSIGN CHAR {
-    // assign_count++;
-    // printf("[ASSIGN]<%d> (char)\n", assign_count);
-  }
-  | IDENT ASSIGN STRING {
-    // assign_count++;
-    // printf("[ASSIGN]<%d> (str)\n", assign_count);
-  }
+  | IDENT ASSIGN CHAR {}
+  | IDENT ASSIGN STRING {}
 ;
 
 assignment_stmt
@@ -163,19 +137,22 @@ assignment_stmt
 ;
 
 expression
-  : expression add_op term { $$ = build_node3(EXPRESSION_AST, $1, $2, $3); }
-  | term                   { $$ = build_node1(EXPRESSION_AST, $1); }
+  : add_op 
+  | sub_op
+  | term                   
 ;
 
 expressions
-  : expressions COMMA expression { $$ = build_node2(EXPRESSIONS_AST, $1, $3); }
-  | expression                   { $$ = build_node1(EXPRESSIONS_AST, $1); }
+  : expressions COMMA expression 
+  | expression                   
 ;
 
 term
-  : term mul_op factor { $$ = build_node3(TERM_AST, $1, $2 ,$3); }
+  : mul_op
+  | div_op
+  | rem_op
   | term bit_op factor { $$ = build_node3(TERM_AST, $1, $2, $3); }
-  | factor             { $$ = build_node1(TERM_AST, $1); }
+  | factor             
 ;
 
 unary_factor
@@ -184,21 +161,31 @@ unary_factor
 ;
 
 factor
-  : var                         { $$ = build_node1(FACTOR_AST, $1); }
+  : var                         
   | unary_factor                { $$ = build_node1(FACTOR_AST, $1); }
   | NOT IDENT                   { $$ = build_node1(FACTOR_AST, build_node0(IDENT_AST)); }
-  | L_PARAN expression R_PARAN  { $$ = build_node1(FACTOR_AST, $2); }
+  | L_PARAN expression R_PARAN  
 ; 
 
+
 add_op
-  : ADD { $$ = build_node1(ADD_OP_AST, build_node0(ADD_AST)); }
-  | SUB { $$ = build_node1(ADD_OP_AST, build_node0(SUB_AST)); }
+  : expression ADD term { $$ = build_node2(ADD_AST, $1, $3); }
+;
+
+sub_op
+  : expression SUB term { $$ = build_node2(SUB_AST, $1, $3); }
 ;
 
 mul_op
-  : MUL { $$ = build_node1(MUL_OP_AST, build_node0(MUL_AST));}
-  | DIV { $$ = build_node1(MUL_OP_AST, build_node0(DIV_AST));}
-  | REM { $$ = build_node1(MUL_OP_AST, build_node0(REM_AST));}// ex4
+  : term MUL factor { $$ = build_node2(MUL_AST, $1, $3); }
+;
+
+div_op
+  : term DIV factor { $$ = build_node2(DIV_AST, $1, $3); }
+;
+
+rem_op
+  : term REM factor { $$ = build_node2(REM_AST, $1, $3); }
 ;
 
 // ex4
@@ -217,54 +204,86 @@ bit_op
 ;
 
 var
-  : IDENT                       { $$ = build_node1(VAR_AST, build_node0(IDENT_AST));}
-  | NUMBER                      { $$ = build_node1(VAR_AST, build_node0(NUMBER_AST)); }
-  | FLOAT                       { $$ = build_node1(VAR_AST, build_node0(FLOAT_AST)); } // ex6
-  | IDENT array_part            { $$ = build_node2(VAR_AST, build_node0(IDENT_AST), $2); }
-  | IDENT array_part array_part { $$ = build_node3(VAR_AST, build_node0(IDENT_AST), $2, $3); }
+  : IDENT                       { $$ = build_node0(IDENT_AST);}
+  | NUMBER                      { $$ = build_node0(NUMBER_AST); }
+  | FLOAT                       { $$ = build_node0(FLOAT_AST); } // ex6
+  | IDENT array_index           { $$ = build_node2(ARRAY_AST, build_node0(IDENT_AST), $2); }
 ;
 
 loop_stmt
+  : while_stmt
+  | for_stmt
+;
+
+while_stmt
   : WHILE L_PARAN condition R_PARAN L_BRACE statements R_BRACE {
-    // printf("> [LOOP]\n");
-    $$ = build_node2(LOOP_STMT_AST, $3, $6);
+    $$ = build_node2(WHILE_STMT_AST, $3, $6);
   }
-  | FOR L_PARAN assignment SEMIC condition SEMIC assignment R_PARAN L_BRACE statements R_BRACE {
-    // printf("> [LOOP]\n");
-    $$ = build_node4(LOOP_STMT_AST, $3, $5, $7, $10);
+;
+
+for_stmt
+  : FOR L_PARAN assignment SEMIC condition SEMIC assignment R_PARAN L_BRACE statements R_BRACE {
+    $$ = build_node4(FOR_STMT_AST, $3, $5, $7, $10);
   } // ex5
   | FOR L_PARAN SEMIC SEMIC R_PARAN L_BRACE statements R_BRACE {
-    // printf("> [LOOP]\n");
-    $$ = build_node1(LOOP_STMT_AST, $7);
+    $$ = build_node1(FOR_STMT_AST, $7);
   } // ex5
 ;
 
 cond_stmt
+  : if_stmt
+  | elif_stmt
+;
+
+if_stmt
   : IF L_PARAN condition R_PARAN L_BRACE statements R_BRACE { 
-    // printf("> [IF]\n"); 
     $$ = build_node2(COND_STMT_AST, $3, $6);
   }
-  | IF L_PARAN condition R_PARAN L_BRACE statements R_BRACE ELSE L_BRACE statements R_BRACE { 
-    // printf("> [IF ELSE]\n"); 
+;
+
+elif_stmt
+  : IF L_PARAN condition R_PARAN L_BRACE statements R_BRACE ELSE L_BRACE statements R_BRACE { 
     $$ = build_node3(COND_STMT_AST, $3, $6, $10);
   }
 ;
 
 condition
-  : expression cond_op expression { $$ = build_node3(CONDITION_AST, $1, $2, $3); }
+  : eq_op
+  | ne_op
+  | lt_op
+  | gt_op
+  | lte_op
+  | gte_op
 ;
 
-cond_op
-  : EQ  { $$ = build_node1(COND_OP_AST, build_node0(EQ_AST));}
-  | NE  { $$ = build_node1(COND_OP_AST, build_node0(NE_AST));}
-  | LT  { $$ = build_node1(COND_OP_AST, build_node0(LT_AST));}
-  | GT  { $$ = build_node1(COND_OP_AST, build_node0(GT_AST));}
-  | LTE { $$ = build_node1(COND_OP_AST, build_node0(LTE_AST));}
-  | GTE { $$ = build_node1(COND_OP_AST, build_node0(GTE_AST));}
+eq_op
+  : expression EQ expression { $$ = build_node2(EQ_AST, $1, $3); }
+;
+
+ne_op
+  : expression NE expression { $$ = build_node2(NE_AST, $1, $3); }
+;
+
+lt_op
+  : expression LT expression { $$ = build_node2(LT_AST, $1, $3); }
+;
+
+gt_op
+  : expression GT expression { $$ = build_node2(GT_AST, $1, $3); }
+;
+
+lte_op
+  : expression LTE expression { $$ = build_node2(LTE_AST, $1, $3); }
+;
+
+gte_op
+  : expression GTE expression { $$ = build_node2(GTE_AST, $1, $3); }
 ;
 
 idents
-  : IDENT COMMA idents { $$ = build_node2(IDENTS_AST, build_node0(IDENT_AST), $3); }
+  : IDENT COMMA idents { 
+    $$ = build_node2(IDENTS_AST, build_node0(IDENT_AST), $3); 
+  }
   | IDENT              { $$ = build_node1(IDENTS_AST, build_node0(IDENT_AST)); }
 ;
 

@@ -1,0 +1,91 @@
+{"„(­û_0": {
+"FUNC_DEFINE_AST_1": {
+"DECLARATIONS_AST_2": {
+"DECL_STATEMENT_AST_3": {
+"NUMBER_AST_4": {
+"IDENTS_AST_5": {
+}
+}
+}
+}
+, "FUNC_DEFINE_AST_6": {
+"DECLARATIONS_AST_7": {
+"DECL_STATEMENT_AST_8": {
+"NUMBER_AST_9": {
+"IDENTS_AST_10": {
+}
+}
+}
+}
+}
+}
+, "DECL_PART_AST_11": {
+"STATEMENTS_AST_12": {
+"STATEMENT_AST_13": {
+"FUNC_ARG_PART_AST_14": {
+"IDENTS_AST_15": {
+}
+, "FLOAT_AST_16": {
+}
+}
+}
+}
+, "DECL_PART_AST_17": {
+"STATEMENTS_AST_18": {
+"STATEMENT_AST_19": {
+"FUNC_ARG_PART_AST_20": {
+"IDENTS_AST_21": {
+}
+, "FLOAT_AST_22": {
+}
+}
+}
+}
+, "DECL_PART_AST_23": {
+"STATEMENTS_AST_24": {
+"FOR_STMT_AST_25": {
+"GT_AST_26": {
+"IDENTS_AST_27": {
+}
+, "FLOAT_AST_28": {
+}
+}
+, "DECL_PART_AST_29": {
+"STATEMENTS_AST_30": {
+"STATEMENT_AST_31": {
+"FUNC_ARG_PART_AST_32": {
+"IDENTS_AST_33": {
+}
+, "SUB_AST_34": {
+"IDENTS_AST_35": {
+}
+, "IDENTS_AST_36": {
+}
+}
+}
+}
+}
+, "DECL_PART_AST_37": {
+"STATEMENTS_AST_38": {
+"STATEMENT_AST_39": {
+"FUNC_ARG_PART_AST_40": {
+"IDENTS_AST_41": {
+}
+, "SUB_AST_42": {
+"IDENTS_AST_43": {
+}
+, "FLOAT_AST_44": {
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
