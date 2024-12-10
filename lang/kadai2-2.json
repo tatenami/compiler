@@ -12,7 +12,7 @@
 "DECL_STATEMENT_AST_7": {
 "DECL_PART_AST_8": {
 "IDENTS_AST_9": {
-"IDENT_AST(sum)_10": {
+"IDENT_AST(fact)_10": {
 }
 }
 }
@@ -23,9 +23,9 @@
 "STATEMENT_AST_12": {
 "ASSIGNMENT_STMT_AST_13": {
 "ASSIGNMENT_AST_14": {
-"IDENT_AST(sum)_15": {
+"IDENT_AST(fact)_15": {
 }
-, "NUMBER_AST(0)_16": {
+, "NUMBER_AST(1)_16": {
 }
 }
 }
@@ -47,17 +47,17 @@
 "LT_AST_26": {
 "IDENT_AST(i)_27": {
 }
-, "NUMBER_AST(11)_28": {
+, "NUMBER_AST(6)_28": {
 }
 }
 , "STATEMENTS_AST_29": {
 "STATEMENT_AST_30": {
 "ASSIGNMENT_STMT_AST_31": {
 "ASSIGNMENT_AST_32": {
-"IDENT_AST(sum)_33": {
+"IDENT_AST(fact)_33": {
 }
-, "ADD_AST_34": {
-"IDENT_AST(sum)_35": {
+, "MUL_AST_34": {
+"IDENT_AST(fact)_35": {
 }
 , "IDENT_AST(i)_36": {
 }

@@ -91,11 +91,11 @@ extern int yydebug;
     WHILE = 292,                   /* WHILE  */
     IF = 293,                      /* IF  */
     ELSE = 294,                    /* ELSE  */
-    IDENT = 295,                   /* IDENT  */
-    CHAR = 296,                    /* CHAR  */
-    STRING = 297,                  /* STRING  */
-    NUMBER = 298,                  /* NUMBER  */
-    FLOAT = 299                    /* FLOAT  */
+    CHAR = 295,                    /* CHAR  */
+    STRING = 296,                  /* STRING  */
+    FLOAT = 297,                   /* FLOAT  */
+    IDENT = 298,                   /* IDENT  */
+    NUMBER = 299                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -104,10 +104,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "lang2.y"
+#line 12 "lang2.y"
 
   struct node *np;
-  char* var;
+  char* sp;
   char  chara;
   char* str;
   int   ival;

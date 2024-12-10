@@ -1005,8 +1005,8 @@ case 38:
 YY_RULE_SETUP
 #line 119 "lang2.l"
 {
-  yylval.var = (char*)malloc(sizeof(char) * yyleng);
-  strncpy(yylval.var, yytext, yyleng);
+  yylval.sp = (char*)malloc(sizeof(char) * yyleng);
+  strncpy(yylval.sp, yytext, yyleng);
   return IDENT;
 }
 	YY_BREAK
@@ -1024,7 +1024,7 @@ case 40:
 YY_RULE_SETUP
 #line 132 "lang2.l"
 {
-  yylval.chara = yytext[0];
+  yylval.chara = yytext[1];
   return CHAR;
 }
 	YY_BREAK
@@ -1033,14 +1033,15 @@ case 41:
 YY_RULE_SETUP
 #line 138 "lang2.l"
 {
-  yylval.var = (char*)malloc(sizeof(char) * yyleng);
-  strncpy(yylval.var, yytext, yyleng);
+  yylval.str = (char*)malloc(sizeof(char) * (yyleng - 2));
+  strncpy(yylval.str, &yytext[1], yyleng);
+  yylval.str[yyleng - 2] = 0;
   return STRING;
 }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 144 "lang2.l"
+#line 145 "lang2.l"
 {
   yylval.fval = atof(yytext); 
   return FLOAT;
@@ -1048,21 +1049,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 149 "lang2.l"
+#line 150 "lang2.l"
 
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 151 "lang2.l"
+#line 152 "lang2.l"
 
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 153 "lang2.l"
+#line 154 "lang2.l"
 ECHO;
 	YY_BREAK
-#line 1066 "lex.yy.c"
+#line 1067 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2067,5 +2068,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 153 "lang2.l"
+#line 154 "lang2.l"
 

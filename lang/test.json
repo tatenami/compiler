@@ -1,0 +1,57 @@
+{"PROGRAM_AST_0": {
+"DECLARATIONS_AST_1": {
+"DECL_STATEMENT_AST_2": {
+"DECL_PART_AST_3": {
+"IDENTS_AST_4": {
+"IDENT_AST(a)_5": {
+}
+, "IDENTS_AST_6": {
+"IDENT_AST(b)_7": {
+}
+, "IDENTS_AST_8": {
+"IDENT_AST(c)_9": {
+}
+}
+}
+}
+}
+}
+}
+, "STATEMENTS_AST_10": {
+"STATEMENT_AST_11": {
+"ASSIGNMENT_STMT_AST_12": {
+"ASSIGNMENT_AST_13": {
+"IDENT_AST(a)_14": {
+}
+, "NUMBER_AST(1)_15": {
+}
+}
+}
+}
+, "STATEMENTS_AST_16": {
+"STATEMENT_AST_17": {
+"ASSIGNMENT_STMT_AST_18": {
+"ASSIGNMENT_AST_19": {
+"IDENT_AST(b)_20": {
+}
+, "NUMBER_AST(2)_21": {
+}
+}
+}
+}
+, "STATEMENTS_AST_22": {
+"STATEMENT_AST_23": {
+"ASSIGNMENT_STMT_AST_24": {
+"ASSIGNMENT_AST_25": {
+"IDENT_AST(c)_26": {
+}
+, "NUMBER_AST(3)_27": {
+}
+}
+}
+}
+}
+}
+}
+}
+}

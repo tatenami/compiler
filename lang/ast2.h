@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+extern char* yytext;
 extern int yyparse();
 extern int yyerror(const char *msg);
 
@@ -8,17 +10,18 @@ extern int yyerror(const char *msg);
 typedef enum {
   DEFINE_AST = 0,
   ARRAY_DEF_AST,
-  ARRAY_INDEX,
+  ARRAY_INDEX_AST,
   ASSIGN_AST,
   IDENT_AST,
   IDENTS_AST,
   NUMBER_AST,
   FLOAT_AST,
+  CHAR_AST,
+  STR_AST,
   FOR_AST,
   WHILR_AST,
   IF_AST,
   ELSE_AST,
-
   BREAK_AST,
   ADD_AST,
   SUB_AST,
@@ -36,12 +39,23 @@ typedef enum {
   GT_AST,
   LTE_AST,
   GTE_AST,
-
+  OP_ADD,
+  OP_SUB,
+  OP_MUL,
+  OP_DIV,
+  OP_REM,
+  OP_AND,
+  OP_OR,
+  OP_XOR,
+  OP_L_SHIFT,
+  OP_R_SHIFT,
+  OP_EQ,
+  OP_NE, 
+  OP_LT,
+  OP_GT,
+  OP_LTE,
+  OP_GTE,
   VAR_AST,
-  ADD_OP_AST,
-  MUL_OP_AST,
-  BIT_OP_AST,
-  COND_OP_AST,
   INCREM_AST,
   DECREM_AST,
   UNARY_OP_AST,
@@ -60,6 +74,7 @@ typedef enum {
   CONDITION_AST,
   COND_STMT_AST,
   IF_STMT_AST,
+  ELSE_STMT_AST,
   ELIF_STMT_AST,
   LOOP_STMT_AST,
   WHILE_STMT_AST,
@@ -78,11 +93,27 @@ typedef enum {
 // 抽象構文木のノードのデータ構造
 typedef struct node {
   Ntype type;
+  int    ival;
+  float  fval;
+  char   cval;
+  char*  sval;
+  char*  variable;
   struct node *child;
   struct node *brother;  
 } Node;
 
+typedef struct symbols {
+  int symno;
+  char *symbolname;
+  struct symbols* next;
+} Symbols;
+
 // 抽象構文木のノードの生成
+Node *build_num_node(Ntype t, int n);
+Node *build_float_node(Ntype t, float n);
+Node *build_char_node(Ntype t, char c);
+Node *build_str_node(Ntype t, char *s);
+Node *build_ident_node(Ntype t, char *s);
 Node *build_node0(Ntype t);
 Node *build_node1(Ntype t, Node *p1);
 Node *build_node2(Ntype t, Node *p1, Node *p2);

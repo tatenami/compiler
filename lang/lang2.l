@@ -116,8 +116,8 @@
 
   /* IDENT */
 [a-zA-Z][a-zA-Z0-9]* {
-  yylval.var = (char*)malloc(sizeof(char) * yyleng);
-  strncpy(yylval.var, yytext, yyleng);
+  yylval.sp = (char*)malloc(sizeof(char) * yyleng);
+  strncpy(yylval.sp, yytext, yyleng);
   return IDENT;
 }
 
@@ -129,14 +129,15 @@
 
   /* char */
 \'[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]\' {
-  yylval.chara = yytext[0];
+  yylval.chara = yytext[1];
   return CHAR;
 }
 
   /* str */
 \"[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]+\" {
-  yylval.var = (char*)malloc(sizeof(char) * yyleng);
-  strncpy(yylval.var, yytext, yyleng);
+  yylval.str = (char*)malloc(sizeof(char) * (yyleng - 2));
+  strncpy(yylval.str, &yytext[1], yyleng);
+  yylval.str[yyleng - 2] = 0;
   return STRING;
 }
 

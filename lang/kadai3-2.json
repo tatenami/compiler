@@ -3,7 +3,7 @@
 "DECL_STATEMENT_AST_2": {
 "DECL_PART_AST_3": {
 "IDENTS_AST_4": {
-"IDENT_AST_5": {
+"IDENT_AST(fizz)_5": {
 }
 }
 }
@@ -12,7 +12,7 @@
 "DECL_STATEMENT_AST_7": {
 "DECL_PART_AST_8": {
 "IDENTS_AST_9": {
-"IDENT_AST_10": {
+"IDENT_AST(buzz)_10": {
 }
 }
 }
@@ -21,7 +21,7 @@
 "DECL_STATEMENT_AST_12": {
 "DECL_PART_AST_13": {
 "IDENTS_AST_14": {
-"IDENT_AST_15": {
+"IDENT_AST(fizzbuzz)_15": {
 }
 }
 }
@@ -30,7 +30,7 @@
 "DECL_STATEMENT_AST_17": {
 "DECL_PART_AST_18": {
 "IDENTS_AST_19": {
-"IDENT_AST_20": {
+"IDENT_AST(others)_20": {
 }
 }
 }
@@ -39,7 +39,7 @@
 "DECL_STATEMENT_AST_22": {
 "DECL_PART_AST_23": {
 "IDENTS_AST_24": {
-"IDENT_AST_25": {
+"IDENT_AST(i)_25": {
 }
 }
 }
@@ -53,9 +53,9 @@
 "STATEMENT_AST_27": {
 "ASSIGNMENT_STMT_AST_28": {
 "ASSIGNMENT_AST_29": {
-"IDENT_AST_30": {
+"IDENT_AST(fizz)_30": {
 }
-, "NUMBER_AST_31": {
+, "NUMBER_AST(0)_31": {
 }
 }
 }
@@ -64,9 +64,9 @@
 "STATEMENT_AST_33": {
 "ASSIGNMENT_STMT_AST_34": {
 "ASSIGNMENT_AST_35": {
-"IDENT_AST_36": {
+"IDENT_AST(buzz)_36": {
 }
-, "NUMBER_AST_37": {
+, "NUMBER_AST(0)_37": {
 }
 }
 }
@@ -75,9 +75,9 @@
 "STATEMENT_AST_39": {
 "ASSIGNMENT_STMT_AST_40": {
 "ASSIGNMENT_AST_41": {
-"IDENT_AST_42": {
+"IDENT_AST(fizzbuzz)_42": {
 }
-, "NUMBER_AST_43": {
+, "NUMBER_AST(0)_43": {
 }
 }
 }
@@ -86,9 +86,9 @@
 "STATEMENT_AST_45": {
 "ASSIGNMENT_STMT_AST_46": {
 "ASSIGNMENT_AST_47": {
-"IDENT_AST_48": {
+"IDENT_AST(others)_48": {
 }
-, "NUMBER_AST_49": {
+, "NUMBER_AST(0)_49": {
 }
 }
 }
@@ -97,9 +97,9 @@
 "STATEMENT_AST_51": {
 "ASSIGNMENT_STMT_AST_52": {
 "ASSIGNMENT_AST_53": {
-"IDENT_AST_54": {
+"IDENT_AST(i)_54": {
 }
-, "NUMBER_AST_55": {
+, "NUMBER_AST(1)_55": {
 }
 }
 }
@@ -108,9 +108,9 @@
 "STATEMENT_AST_57": {
 "WHILE_STMT_AST_58": {
 "LT_AST_59": {
-"IDENT_AST_60": {
+"IDENT_AST(i)_60": {
 }
-, "NUMBER_AST_61": {
+, "NUMBER_AST(31)_61": {
 }
 }
 , "STATEMENTS_AST_62": {
@@ -121,28 +121,28 @@
 "MUL_AST_67": {
 "FACTOR_AST_68": {
 "DIV_AST_69": {
-"IDENT_AST_70": {
+"IDENT_AST(i)_70": {
 }
-, "NUMBER_AST_71": {
-}
-}
-}
-, "NUMBER_AST_72": {
+, "NUMBER_AST(15)_71": {
 }
 }
-, "IDENT_AST_73": {
+}
+, "NUMBER_AST(15)_72": {
+}
+}
+, "IDENT_AST(i)_73": {
 }
 }
 , "STATEMENTS_AST_74": {
 "STATEMENT_AST_75": {
 "ASSIGNMENT_STMT_AST_76": {
 "ASSIGNMENT_AST_77": {
-"IDENT_AST_78": {
+"IDENT_AST(fizzbuzz)_78": {
 }
 , "ADD_AST_79": {
-"IDENT_AST_80": {
+"IDENT_AST(fizzbuzz)_80": {
 }
-, "NUMBER_AST_81": {
+, "NUMBER_AST(1)_81": {
 }
 }
 }
@@ -159,28 +159,28 @@
 "MUL_AST_88": {
 "FACTOR_AST_89": {
 "DIV_AST_90": {
-"IDENT_AST_91": {
+"IDENT_AST(i)_91": {
 }
-, "NUMBER_AST_92": {
-}
-}
-}
-, "NUMBER_AST_93": {
+, "NUMBER_AST(3)_92": {
 }
 }
-, "IDENT_AST_94": {
+}
+, "NUMBER_AST(3)_93": {
+}
+}
+, "IDENT_AST(i)_94": {
 }
 }
 , "STATEMENTS_AST_95": {
 "STATEMENT_AST_96": {
 "ASSIGNMENT_STMT_AST_97": {
 "ASSIGNMENT_AST_98": {
-"IDENT_AST_99": {
+"IDENT_AST(fizz)_99": {
 }
 , "ADD_AST_100": {
-"IDENT_AST_101": {
+"IDENT_AST(fizz)_101": {
 }
-, "NUMBER_AST_102": {
+, "NUMBER_AST(1)_102": {
 }
 }
 }
@@ -197,28 +197,28 @@
 "MUL_AST_109": {
 "FACTOR_AST_110": {
 "DIV_AST_111": {
-"IDENT_AST_112": {
+"IDENT_AST(i)_112": {
 }
-, "NUMBER_AST_113": {
-}
-}
-}
-, "NUMBER_AST_114": {
+, "NUMBER_AST(5)_113": {
 }
 }
-, "IDENT_AST_115": {
+}
+, "NUMBER_AST(5)_114": {
+}
+}
+, "IDENT_AST(i)_115": {
 }
 }
 , "STATEMENTS_AST_116": {
 "STATEMENT_AST_117": {
 "ASSIGNMENT_STMT_AST_118": {
 "ASSIGNMENT_AST_119": {
-"IDENT_AST_120": {
+"IDENT_AST(buzz)_120": {
 }
 , "ADD_AST_121": {
-"IDENT_AST_122": {
+"IDENT_AST(buzz)_122": {
 }
-, "NUMBER_AST_123": {
+, "NUMBER_AST(1)_123": {
 }
 }
 }
@@ -231,12 +231,12 @@
 "STATEMENT_AST_126": {
 "ASSIGNMENT_STMT_AST_127": {
 "ASSIGNMENT_AST_128": {
-"IDENT_AST_129": {
+"IDENT_AST(others)_129": {
 }
 , "ADD_AST_130": {
-"IDENT_AST_131": {
+"IDENT_AST(others)_131": {
 }
-, "NUMBER_AST_132": {
+, "NUMBER_AST(1)_132": {
 }
 }
 }
@@ -258,12 +258,12 @@
 "STATEMENT_AST_134": {
 "ASSIGNMENT_STMT_AST_135": {
 "ASSIGNMENT_AST_136": {
-"IDENT_AST_137": {
+"IDENT_AST(i)_137": {
 }
 , "ADD_AST_138": {
-"IDENT_AST_139": {
+"IDENT_AST(i)_139": {
 }
-, "NUMBER_AST_140": {
+, "NUMBER_AST(1)_140": {
 }
 }
 }
