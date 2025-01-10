@@ -1,0 +1,13 @@
+breakpoint 0x000010000
+breakpoint 0x00001000
+run
+step 1
+PrintSymbols
+breakpoint 0x00001028
+run
+step 1
+print $t2
+print $t1
+print $t2
+print $t3
+regdump

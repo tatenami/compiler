@@ -92,7 +92,7 @@ typedef enum {
 
 // 抽象構文木のノードのデータ構造
 typedef struct node {
-  Ntype type;
+  Ntype  type;
   int    ival;
   float  fval;
   char   cval;

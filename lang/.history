@@ -1,0 +1,4 @@
+breakpoint 0x00001000
+run
+step 1
+print

@@ -1,6 +1,6 @@
 #include "ast2.h"
 
-#define MAXBUF 100
+#define MAX_VAR_NAME 100
 #define MAX_STR_LEN 100
 
 Node *top; // 抽象構文木のルートノード保存用
@@ -175,14 +175,14 @@ Node *build_ident_node(Ntype t, char *s) {
     yyerror("out of memory");
   }
 
-  p->variable = (char *)malloc(MAXBUF);
+  p->variable = (char *)malloc(MAX_VAR_NAME);
 
   if (p->variable == NULL) {
     yyerror("out of memory");
   }
 
   p->type = t;
-  strncpy(p->variable, s, MAXBUF);
+  strncpy(p->variable, s, MAX_VAR_NAME);
   p->child = NULL;
   p->brother = NULL;
 
@@ -301,16 +301,4 @@ int print_tree(Node *n, int num) {
     num = print_tree(n->brother, num);
   }
   return num;
-}
-
-int main() {
-  if (yyparse()) {
-    fprintf(stderr, "Error!\n");
-    return 1;
-  }
-  // printf("OK!\n");
-  // printf("[*] AST generation is completed\n");
-  print_tree_in_json(top); // ASTの可視化
-
-  return 0;
 }

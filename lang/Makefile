@@ -1,11 +1,11 @@
-TARGET=lang
-AST=ast
+TARGET=lang2
+AST=ast2
 LEX=${TARGET}.l
 YACC=${TARGET}.y
 SAMPLE=sample.txt
 
 # 3. Compile define.tab.c and lex.yy.c using gcc
-${TARGET}: ${TARGET}.tab.c lex.yy.c ${AST}.c
+${TARGET}: ${TARGET}.tab.c lex.yy.c ${AST}.c code_generation.c
 	gcc $^ -o $@ -lfl -ly -DYYERROR_VERBOSE -g
 
 # 2. Generate target.tab.{c, h} from define.y using bison 
@@ -18,8 +18,5 @@ lex.yy.c: ${LEX}
 clean:
 	rm ./lex.yy.c ${TARGET}.tab.*
 
-clean2:
-	rm ./lex.yy.c lang2.tab.*
-
 run:
-	./lang < ${SAMPLE}
+	./${TARGET} < ${SAMPLE}
