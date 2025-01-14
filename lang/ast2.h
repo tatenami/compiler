@@ -97,7 +97,7 @@ typedef struct node {
   float  fval;
   char   cval;
   char*  sval;
-  char*  variable;
+  char*  var_name;
   struct node *child;
   struct node *brother;  
 } Node;

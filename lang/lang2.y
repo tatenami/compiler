@@ -146,7 +146,7 @@ assignment
 ;
 
 assignment_stmt
-  : assignment SEMIC { $$ = build_node1(ASSIGNMENT_STMT_AST, $1); }
+  : assignment SEMIC { $$ = $1; }
 ;
 
 expressions
@@ -205,7 +205,7 @@ unary_factor
 
 factor
   : var                         
-  | L_PARAN expression R_PARAN  { $$ = build_node1(FACTOR_AST, $2); }                   
+  | L_PARAN expression R_PARAN  { $$ = $2; }                   
   | unary_factor                
   | NOT IDENT                   { $$ = build_node1(FACTOR_AST, build_ident_node(IDENT_AST, $2)); } 
 ; 
@@ -294,22 +294,22 @@ elif_stmt
 condition
   : expression comp_op expression {
     if ($2 == OP_EQ) {
-      $$ = build_node2(EQ_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(EQ_AST, $1, $3));
     }
     else if ($2 == OP_NE) {
-      $$ = build_node2(NE_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(NE_AST, $1, $3));
     }
     else if ($2 == OP_LT) {
-      $$ = build_node2(LT_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(LT_AST, $1, $3));
     }
     else if ($2 == OP_GT) {
-      $$ = build_node2(LTE_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(LTE_AST, $1, $3));
     }
     else if ($2 == OP_LTE) {
-      $$ = build_node2(LTE_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(LTE_AST, $1, $3));
     }
     else if ($2 == OP_GTE) {
-      $$ = build_node2(GTE_AST, $1, $3);
+      $$ = build_node1(CONDITION_AST, build_node2(GTE_AST, $1, $3));
     }
   }
 ;

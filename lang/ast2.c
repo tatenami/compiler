@@ -103,7 +103,7 @@ Node* build_num_node(Ntype t, int n){
   }
   p->type = t;
   p->ival = n;
-  p->variable = NULL;
+  p->var_name = NULL;
   p->child = NULL;
   p->brother = NULL;
   return p;
@@ -122,7 +122,7 @@ Node *build_float_node(Ntype t, float n) {
   p->fval = n;
   p->child = NULL;
   p->brother = NULL;
-  p->variable = NULL;
+  p->var_name = NULL;
 
   return p;
 }
@@ -139,7 +139,7 @@ Node *build_char_node(Ntype t, char c) {
   p->cval = c;
   p->child = NULL;
   p->brother = NULL;
-  p->variable = NULL;
+  p->var_name = NULL;
 
   return p;
 }
@@ -162,7 +162,7 @@ Node *build_str_node(Ntype t, char *s) {
   strncpy(p->sval, s, MAX_STR_LEN);
   p->child = NULL;
   p->brother = NULL;
-  p->variable = NULL;
+  p->var_name = NULL;
 
   return p;
 }
@@ -175,14 +175,14 @@ Node *build_ident_node(Ntype t, char *s) {
     yyerror("out of memory");
   }
 
-  p->variable = (char *)malloc(MAX_VAR_NAME);
+  p->var_name = (char *)malloc(MAX_VAR_NAME);
 
-  if (p->variable == NULL) {
+  if (p->var_name == NULL) {
     yyerror("out of memory");
   }
 
   p->type = t;
-  strncpy(p->variable, s, MAX_VAR_NAME);
+  strncpy(p->var_name, s, MAX_VAR_NAME);
   p->child = NULL;
   p->brother = NULL;
 
@@ -199,7 +199,7 @@ Node *build_node0(Ntype t) {
   }
   p->type = t;
   p->child = NULL;
-  p->variable = NULL;
+  p->var_name = NULL;
   return p;
 }
 
@@ -213,7 +213,7 @@ Node *build_node1(Ntype t, Node *p1) {
   }
   p->type = t;
   p->child = p1;
-  p->variable = NULL;
+  p->var_name = NULL;
   return p;
 }
 
@@ -227,7 +227,7 @@ Node *build_node2(Ntype t, Node *p1, Node *p2) {
   p->type = t;
   p->child = p1;
   p->child->brother = p2;
-  p->variable = NULL;
+  p->var_name = NULL;
   return p;
 }
 
@@ -242,7 +242,7 @@ Node *build_node3(Ntype t, Node *p1, Node *p2, Node *p3) {
   p->child = p1;
   p->child->brother = p2;
   p->child->brother->brother = p3;
-  p->variable = NULL;
+  p->var_name = NULL;
   return p;
 }
 
@@ -258,7 +258,7 @@ Node *build_node4(Ntype t, Node *p1, Node *p2, Node *p3, Node *p4) {
   p->child->brother = p2;
   p->child->brother->brother = p3;
   p->child->brother->brother->brother = p4;
-  p->variable = NULL;
+  p->var_name = NULL;
   return p;
 }
 
@@ -274,7 +274,7 @@ void print_tree_in_json(Node *n) {
 
 int print_tree(Node *n, int num) {
   if (n->type == IDENT_AST) {
-    printf("\"%s(%s)_%d\": {\n", node_types[n->type], n->variable, num++);
+    printf("\"%s(%s)_%d\": {\n", node_types[n->type], n->var_name, num++);
   }
   else if (n->type == NUMBER_AST) {
     printf("\"%s(%d)_%d\": {\n", node_types[n->type], n->ival, num++);

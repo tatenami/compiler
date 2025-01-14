@@ -3,7 +3,7 @@
 "DECL_STATEMENT_AST_2": {
 "DECL_PART_AST_3": {
 "IDENTS_AST_4": {
-"IDENT_AST_5": {
+"IDENT_AST(i)_5": {
 }
 }
 }
@@ -12,7 +12,7 @@
 "DECL_STATEMENT_AST_7": {
 "DECL_PART_AST_8": {
 "IDENTS_AST_9": {
-"IDENT_AST_10": {
+"IDENT_AST(fact)_10": {
 }
 }
 }
@@ -23,9 +23,9 @@
 "STATEMENT_AST_12": {
 "ASSIGNMENT_STMT_AST_13": {
 "ASSIGNMENT_AST_14": {
-"IDENT_AST_15": {
+"IDENT_AST(fact)_15": {
 }
-, "NUMBER_AST_16": {
+, "NUMBER_AST(1)_16": {
 }
 }
 }
@@ -34,9 +34,9 @@
 "STATEMENT_AST_18": {
 "ASSIGNMENT_STMT_AST_19": {
 "ASSIGNMENT_AST_20": {
-"IDENT_AST_21": {
+"IDENT_AST(i)_21": {
 }
-, "NUMBER_AST_22": {
+, "NUMBER_AST(1)_22": {
 }
 }
 }
@@ -45,21 +45,21 @@
 "STATEMENT_AST_24": {
 "WHILE_STMT_AST_25": {
 "LT_AST_26": {
-"IDENT_AST_27": {
+"IDENT_AST(i)_27": {
 }
-, "NUMBER_AST_28": {
+, "NUMBER_AST(6)_28": {
 }
 }
 , "STATEMENTS_AST_29": {
 "STATEMENT_AST_30": {
 "ASSIGNMENT_STMT_AST_31": {
 "ASSIGNMENT_AST_32": {
-"IDENT_AST_33": {
+"IDENT_AST(fact)_33": {
 }
 , "MUL_AST_34": {
-"IDENT_AST_35": {
+"IDENT_AST(fact)_35": {
 }
-, "IDENT_AST_36": {
+, "IDENT_AST(i)_36": {
 }
 }
 }
@@ -69,14 +69,12 @@
 "STATEMENT_AST_38": {
 "ASSIGNMENT_STMT_AST_39": {
 "ASSIGNMENT_AST_40": {
-"IDENT_AST_41": {
+"IDENT_AST(i)_41": {
 }
 , "ADD_AST_42": {
-"IDENT_AST_43": {
+"IDENT_AST(i)_43": {
 }
-, "NUMBER_AST_44": {
-}
-}
+, "NUMBER_AST(1)_44": {
 }
 }
 }
@@ -89,3 +87,39 @@
 }
 }
 }
+}
+} INITIAL_GP = 0x10008000 # initial value of global pointer
+ INITIAL_SP = 0x7ffffffc # initial value of stack pointer
+# system call service number
+ stop_service = 99
+
+ .text # テキストセグメントの開始
+init:
+ # initialize $gp (global pointer) and $sp (stack pointer)
+ la $gp, INITIAL_GP # $gp ←0x10008000 (INITIAL_GP)
+ la $sp, INITIAL_SP # $sp ←0x7ffffffc (INITIAL_SP)
+ jal main # jump to 'main'
+ nop # (delay slot)
+ li $v0, stop_service # $v0 <-99 (stop_service)
+ syscall # stop
+ nop
+ # not reach here
+stop: # if syscall return
+ j stop # infinite loop...
+ nop # (delay slot)
+
+ .text 0x00001000 # 以降のコードを 0から配置 x00001000
+main:
+ la $t0, RESULT # $t0 <-0x10004000
+  # assignment [fact]
+  sw $v0, -1($t0)
+  nop
+  # assignment [i]
+  sw $v0, -1($t0)
+  nop
+  # assignment [fact]
+  sw $v0, -1($t0)
+  nop
+  # assignment [i]
+  sw $v0, -1($t0)
+  nop

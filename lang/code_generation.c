@@ -1,4 +1,4 @@
-#include "ast2.h"
+#include "code_generation.h"
 
 struct SymbolInfo {
   Node  *target_node; // 対象のノード
@@ -6,29 +6,60 @@ struct SymbolInfo {
   int    number;      // 変数番号
   int    mem_size;    // 変数のメモリサイズ
   long   mem_offset;  // データセグメントからのメモリオフセット
-  struct SymbolInfo *next; // リストの次の記号情報へのポインタ
+};
+
+typedef union {
+  unsigned char rop;
+  Node *nop;
+} Operand;
+
+struct ThreeAddrCode {
+  Ntype op;
+  unsigned char result;
+  Operand op1;
+  Operand op2;
+  struct ThreeAddrCode *next;
 };
 
 /* Global variable */
 FILE*  code_fp;
 extern Node *top;
-struct SymbolInfo *symbol_head;
+struct SymbolInfo *symbols;
+int symbol_num = 0;
 const unsigned int  var_base_size = 4;
 const unsigned long base_address = 0x10004000;
+const int data_seg_reg = 0; // データセグメントのアドレスを格納したレジスタ
+const int comp_result_reg = 1; // 比較演算の結果等の格納
+const unsigned int reg_start = 2; // 自由に使えるレジスタの番号の最小値
+
+/* global vals use generate code */
+int num_whiles = 0;
+
 
 /* ---------- 記号表関連 ---------- */
 
 long get_offset(char *var_name) {
-  struct SymbolInfo *symbol = symbol_head->next;
 
-  while (symbol != NULL) {
-    if (strcmp(var_name, symbol->var_name) == 0) {
-      return symbol->mem_offset;
+  for (int i = 0; i < symbol_num; i++) {
+    if (strcmp(var_name, symbols[i].var_name) == 0) {
+      return symbols[i].mem_offset;
     }
-    symbol = symbol->next;
   }
 
   return -1;
+}
+
+void count_symbol(Node *n) {
+  if (n->type == DECL_PART_AST) {
+    symbol_num++;
+  }
+
+  if (n->child != NULL)  {
+    count_symbol(n->child);
+  }
+  if (n->brother != NULL) {
+    count_symbol(n->brother);
+  }
 }
 
 /**
@@ -38,7 +69,7 @@ long get_offset(char *var_name) {
  * @param n 
  * @return struct SymbolInfo* 
  */
-struct SymbolInfo *make_symbol(struct SymbolInfo *s, Node *n) {
+void make_symbol(Node *n, int num) {
   int size;
   switch (n->type) {
     case IDENTS_AST: {
@@ -62,17 +93,11 @@ struct SymbolInfo *make_symbol(struct SymbolInfo *s, Node *n) {
     }
   }
 
-  struct SymbolInfo *ns = (struct SymbolInfo *)malloc(sizeof(struct SymbolInfo));
-
-  ns->number = s->number + 1;
-  ns->target_node = n;
-  ns->mem_size   = size;
-  ns->mem_offset = (ns->number == 0) ? 0 : (s->mem_offset + size);
-  ns->var_name   = n->variable;
-  ns->next = NULL;
-  s->next = ns; // 生成したシンボルを末尾に追加
-
-  return ns;
+  symbols[num].number = num;
+  symbols[num].target_node = n;
+  symbols[num].mem_size   = size;
+  symbols[num].mem_offset = (num == 0) ? 0 : (symbols[num - 1].mem_offset + size);
+  symbols[num].var_name   = n->var_name;
 }
 
 /**
@@ -82,81 +107,164 @@ struct SymbolInfo *make_symbol(struct SymbolInfo *s, Node *n) {
  * @param n ツリーのノード
  * @return struct SymbolInfo* 
  */
-struct SymbolInfo *add_symbol(struct SymbolInfo *s, Node *n) {
+int add_symbol(Node *n) {
+  static int num = 0;
+
   if (n->type == DECL_PART_AST) {
-    s = make_symbol(s, n->child);
+    make_symbol(n->child, num++);
   }
 
   if (n->child != NULL) {
-    s = add_symbol(s, n->child);
+    add_symbol(n->child);
   }
   if (n->brother != NULL) {
-    s = add_symbol(s, n->brother);
+    add_symbol(n->brother);
   }
 
-  return s;
+  return num;
 } 
 
-void make_symbol_list(struct SymbolInfo *s, Node *n) {
-  add_symbol(s, n);
-}
-
-struct SymbolInfo *init_sysbol_list() {
-  struct SymbolInfo *s_top = (struct SymbolInfo *)malloc(sizeof(struct SymbolInfo));
-  s_top->number = -1;
-  s_top->next = NULL;
-  s_top->mem_offset = 0;
-
-  return s_top;
-}
-
-void print_symbol(struct SymbolInfo *s, int num) {
-  if (s->number >= 0) 
-    printf("symbol_%d [%s] \tsize: %d offset: %#x\n", 
-           s->number, s->var_name, s->mem_size, (int)s->mem_offset);
-
-  if (s->next == NULL) return;
-  print_symbol(s->next, num);
+void make_symbol_list(Node *n) {
+  add_symbol(n);
 }
 
 void print_symbol_list() {
-  printf("---[ Symbols ]---\n");
-  print_symbol(symbol_head->next, 0);
-  printf("-----------------\n");
+  fprintf(code_fp, "# ------ [ Symbols ] ------\n");
+
+  for (int i = 0; i < symbol_num; i++) {
+    fprintf(code_fp, "# \tsymbol_%d \tsize: %d \toffset: %#5x \t[%s]\n", 
+          i, symbols[i].mem_size, (int)(symbols[i].mem_offset), symbols[i].var_name);
+  }
+
+  fprintf(code_fp, "# -------------------------\n");
 }
 
 /* ---------- コード生成関連 ---------- */
 
-void gen_code_assignment(Node *n) {
-  Node *ident = n->child;
-  Node *expression = ident->brother;
-  int offset = get_offset(ident->variable);
 
-  fprintf(code_fp, "# assignment %s\n", ident->variable);
 
-  switch (expression->type) {
+void gen_code_keep_operand(Node *op, int reg_num) {
+  switch (op->type) {
     case NUMBER_AST: {
-      int num = expression->ival;
-      fprintf(code_fp, "  li $v0, %d\n", num);
-      fprintf(code_fp, "  addi $t6, $t0, %d\n", offset);
+      fprintf(code_fp, "  # keep imm val (%d) to register\n", op->ival);
+      fprintf(code_fp, "  li $t%d, %d\n", reg_num, op->ival);
       break;
     }
-    case ADD_AST: {
-
+    case IDENT_AST: {
+      int offset = get_offset(op->var_name);
+      fprintf(code_fp, "  # keep val to register\n");
+      fprintf(code_fp, "  lw $t%d, %d($t0)\n", reg_num, offset);
+      fprintf(code_fp, "  nop\n");
       break;
     }
   }
-
-  fprintf(code_fp, "  sw $v0, 0($t6)\n");
-  fprintf(code_fp, "  nop\n");
 }
 
-void gen_code_sentence(Node *n) {
+void gen_code_comp(Node *n) {
+  Node *op1 = n->child;
+  Node *op2 = op1->brother;
+
+  int reg_num = reg_start;
+
+  switch (n->type) {
+    case LT_AST: {
+      gen_code_keep_operand(op1, reg_num++);
+      gen_code_keep_operand(op2, reg_num++);
+      int r2 = --reg_num;
+      int r1 = --reg_num;
+      fprintf(code_fp, "  # comp '<'\n");
+      fprintf(code_fp, "  slt $t%d, $t%d, $t%d\n", comp_result_reg, r1, r2);
+      break;
+    }
+  }
+}
+
+int gen_code_add(Node *n, int reg_num) {
+  int r2 = --reg_num;
+  int r1 = --reg_num;
+  fprintf(code_fp, "  # add exp\n");
+  fprintf(code_fp, "  add $v0, $t%d, $t%d\n", r1, r2);
+  return reg_num;
+}
+
+// 算術式生成
+void gen_code_expression(Node *n, int reg_num) { 
+  // struct ThreeAddrCode *exps = (struct ThreeAddrCode *)malloc();
+
+  Node *op1 = n->child;
+  Node *op2 = op1->brother;
+
+  gen_code_keep_operand(op1, reg_num++);
+  gen_code_keep_operand(op2, reg_num++);
+
+  switch (n->type) {
+    case ADD_AST: {
+      reg_num = gen_code_add(n, reg_num);
+      break;
+    }
+  }
+}
+
+// 代入文生成
+void gen_code_assignment(Node *n) {
+  Node *ident = n->child;
+  Node *expression = ident->brother;
+  int offset = get_offset(ident->var_name);
+
+
+  if (expression->type == NUMBER_AST) {
+    fprintf(code_fp, "  li $t%d, %d\n", reg_start, expression->ival);
+    fprintf(code_fp, "  # assignment [%s] <- imm (%d)\n", ident->var_name, expression->ival);
+    fprintf(code_fp, "  sw $t%d, %d($t0)\n", reg_start, offset);
+    fprintf(code_fp, "  nop\n");
+  }
+  else {
+    gen_code_expression(expression, reg_start);
+    fprintf(code_fp, "  # assignment [%s] <- exp val\n", ident->var_name);
+    fprintf(code_fp, "  sw $v0, %d($t0)\n", offset);
+    fprintf(code_fp, "  nop\n");
+  }
+}
+
+void gen_code_while(Node *n) {
+  Node *comp = n->child;
+  Node *stmts = comp->brother;
+
+  int this_while_num = num_whiles;
+
+  fprintf(code_fp, "$WHILE%d:\n", this_while_num);
+
+  gen_code_comp(comp->child);   // 継続の比較演算処理を生成
+  fprintf(code_fp, "  beq $t%d, $zero, $ENDWHILE%d\n", comp_result_reg, this_while_num);
+  num_whiles++;
+
+  gen_code_statements(stmts); // 内部の処理生成 
+
+  fprintf(code_fp, "  j $WHILE%d\n", this_while_num);
+  fprintf(code_fp, "  nop\n");
+  fprintf(code_fp, "$ENDWHILE%d:\n", this_while_num);
+}
+
+void gen_code_statement(Node *n) {
+  n = n->child; 
   switch (n->type) {
     case ASSIGNMENT_AST: {
       gen_code_assignment(n);
       break;
     }
+    case WHILE_STMT_AST: {
+      gen_code_while(n); // while内の処理が再帰的に生成されないよう return 
+      return;
+    }
+  }
+}
+
+void gen_code_statements(Node *n) {
+  Node *stmt = n->child;
+  gen_code_statement(stmt);
+
+  if (stmt->brother != NULL) {
+    gen_code_statements(stmt->brother);
   }
 }
 
@@ -168,17 +276,14 @@ void gen_code_sentence(Node *n) {
  * @param fp  コードを記述するファイルのポインタ
  * @return int 
  */
-void gen_code(Node *n) {
+void gen_code(Node *n_top) {
   // printf("\ngen_code -> ");
   // print_node(n, num);
-  gen_code_sentence(n);
 
-  if (n->child != NULL) {
-    gen_code(n->child);
-  }
-  if (n->brother != NULL) {
-    gen_code(n->brother);
-  }
+  Node *dec = n_top->child;
+  Node *stmts = dec->brother;
+
+  gen_code_statements(stmts);  
 }
 
 /**
@@ -223,7 +328,26 @@ void initialize(FILE *fp) {
   fprintf(fp, " la $t0, RESULT # $t0 <-0x10004000\n");
 }
 
+void gen_data_segment(struct SymbolInfo *s) {
+  while (s != NULL) {
+      
+  }
+}
+
+void closing(FILE *fp) {
+  fprintf(fp, "\n li $v0, stop_service\n");
+  fprintf(fp, " syscall\n");
+  fprintf(fp, " nop\n");
+  fprintf(fp, " jr $ra\n");
+  fprintf(fp, " nop\n");
+  fprintf(fp, "\n");
+  fprintf(fp, ".data 0x10004000\n");
+  fprintf(fp, " RESULT:\n");
+}
+
 /* main */
+
+#define JSON 0
 
 int main(int argc, char *argv[]) {
   if (yyparse()) {
@@ -232,7 +356,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (argc == 2) {
-    code_fp = fopen(strcat(argv[1], ".s"), "w");
+    code_fp = fopen(argv[1], "w");
     if (code_fp == NULL) {
       fprintf(stderr, "Can't open file");
       return 1;
@@ -242,19 +366,25 @@ int main(int argc, char *argv[]) {
     code_fp = stdout;
   }
 
-
-  // print_tree_in_json(top); // ASTの可視化
+  #if JSON
+   print_tree_in_json(top); // ASTの可視化
+  #endif
 
   // 記号情報リストの生成
-  symbol_head =  init_sysbol_list();
-  make_symbol_list(symbol_head, top);
+
+  #if !JSON
+  count_symbol(top);
+  symbols = (struct SymbolInfo *)malloc(sizeof(struct SymbolInfo) * symbol_num);
+  make_symbol_list(top);
   print_symbol_list();
 
   // コード生成
   initialize(code_fp);
   gen_code(top);
-  free_ast_tree(top);
+  closing(code_fp);
+  #endif
 
+  free_ast_tree(top);
   fclose(code_fp);
 
   return 0;

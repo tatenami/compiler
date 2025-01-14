@@ -3,7 +3,7 @@
 "DECL_STATEMENT_AST_2": {
 "DECL_PART_AST_3": {
 "IDENTS_AST_4": {
-"IDENT_AST_5": {
+"IDENT_AST(fizz)_5": {
 }
 }
 }
@@ -12,7 +12,7 @@
 "DECL_STATEMENT_AST_7": {
 "DECL_PART_AST_8": {
 "IDENTS_AST_9": {
-"IDENT_AST_10": {
+"IDENT_AST(buzz)_10": {
 }
 }
 }
@@ -21,7 +21,7 @@
 "DECL_STATEMENT_AST_12": {
 "DECL_PART_AST_13": {
 "IDENTS_AST_14": {
-"IDENT_AST_15": {
+"IDENT_AST(fizzbuzz)_15": {
 }
 }
 }
@@ -30,7 +30,7 @@
 "DECL_STATEMENT_AST_17": {
 "DECL_PART_AST_18": {
 "IDENTS_AST_19": {
-"IDENT_AST_20": {
+"IDENT_AST(others)_20": {
 }
 }
 }
@@ -39,7 +39,7 @@
 "DECL_STATEMENT_AST_22": {
 "DECL_PART_AST_23": {
 "IDENTS_AST_24": {
-"IDENT_AST_25": {
+"IDENT_AST(i)_25": {
 }
 }
 }
@@ -53,9 +53,9 @@
 "STATEMENT_AST_27": {
 "ASSIGNMENT_STMT_AST_28": {
 "ASSIGNMENT_AST_29": {
-"IDENT_AST_30": {
+"IDENT_AST(fizz)_30": {
 }
-, "NUMBER_AST_31": {
+, "NUMBER_AST(0)_31": {
 }
 }
 }
@@ -64,9 +64,9 @@
 "STATEMENT_AST_33": {
 "ASSIGNMENT_STMT_AST_34": {
 "ASSIGNMENT_AST_35": {
-"IDENT_AST_36": {
+"IDENT_AST(buzz)_36": {
 }
-, "NUMBER_AST_37": {
+, "NUMBER_AST(0)_37": {
 }
 }
 }
@@ -75,9 +75,9 @@
 "STATEMENT_AST_39": {
 "ASSIGNMENT_STMT_AST_40": {
 "ASSIGNMENT_AST_41": {
-"IDENT_AST_42": {
+"IDENT_AST(fizzbuzz)_42": {
 }
-, "NUMBER_AST_43": {
+, "NUMBER_AST(0)_43": {
 }
 }
 }
@@ -86,9 +86,9 @@
 "STATEMENT_AST_45": {
 "ASSIGNMENT_STMT_AST_46": {
 "ASSIGNMENT_AST_47": {
-"IDENT_AST_48": {
+"IDENT_AST(others)_48": {
 }
-, "NUMBER_AST_49": {
+, "NUMBER_AST(0)_49": {
 }
 }
 }
@@ -97,9 +97,9 @@
 "STATEMENT_AST_51": {
 "ASSIGNMENT_STMT_AST_52": {
 "ASSIGNMENT_AST_53": {
-"IDENT_AST_54": {
+"IDENT_AST(i)_54": {
 }
-, "NUMBER_AST_55": {
+, "NUMBER_AST(1)_55": {
 }
 }
 }
@@ -108,9 +108,9 @@
 "STATEMENT_AST_57": {
 "WHILE_STMT_AST_58": {
 "LT_AST_59": {
-"IDENT_AST_60": {
+"IDENT_AST(i)_60": {
 }
-, "NUMBER_AST_61": {
+, "NUMBER_AST(31)_61": {
 }
 }
 , "STATEMENTS_AST_62": {
@@ -119,124 +119,121 @@
 "IF_STMT_AST_65": {
 "EQ_AST_66": {
 "MUL_AST_67": {
-"FACTOR_AST_68": {
-"DIV_AST_69": {
-"IDENT_AST_70": {
+"DIV_AST_68": {
+"IDENT_AST(i)_69": {
 }
-, "NUMBER_AST_71": {
+, "NUMBER_AST(15)_70": {
 }
 }
+, "NUMBER_AST(15)_71": {
 }
-, "NUMBER_AST_72": {
 }
+, "IDENT_AST(i)_72": {
 }
-, "IDENT_AST_73": {
 }
+, "STATEMENTS_AST_73": {
+"STATEMENT_AST_74": {
+"ASSIGNMENT_STMT_AST_75": {
+"ASSIGNMENT_AST_76": {
+"IDENT_AST(fizzbuzz)_77": {
 }
-, "STATEMENTS_AST_74": {
-"STATEMENT_AST_75": {
-"ASSIGNMENT_STMT_AST_76": {
-"ASSIGNMENT_AST_77": {
-"IDENT_AST_78": {
+, "ADD_AST_78": {
+"IDENT_AST(fizzbuzz)_79": {
 }
-, "ADD_AST_79": {
-"IDENT_AST_80": {
+, "NUMBER_AST(1)_80": {
 }
-, "NUMBER_AST_81": {
 }
 }
 }
 }
 }
 }
+, "ELSE_STMT_AST_81": {
+"STATEMENTS_AST_82": {
+"STATEMENT_AST_83": {
+"ELIF_STMT_AST_84": {
+"IF_STMT_AST_85": {
+"EQ_AST_86": {
+"MUL_AST_87": {
+"DIV_AST_88": {
+"IDENT_AST(i)_89": {
 }
-, "ELSE_STMT_AST_82": {
-"STATEMENTS_AST_83": {
-"STATEMENT_AST_84": {
-"ELIF_STMT_AST_85": {
-"IF_STMT_AST_86": {
-"EQ_AST_87": {
-"MUL_AST_88": {
-"FACTOR_AST_89": {
-"DIV_AST_90": {
-"IDENT_AST_91": {
+, "NUMBER_AST(3)_90": {
 }
-, "NUMBER_AST_92": {
 }
+, "NUMBER_AST(3)_91": {
 }
 }
-, "NUMBER_AST_93": {
+, "IDENT_AST(i)_92": {
 }
 }
-, "IDENT_AST_94": {
+, "STATEMENTS_AST_93": {
+"STATEMENT_AST_94": {
+"ASSIGNMENT_STMT_AST_95": {
+"ASSIGNMENT_AST_96": {
+"IDENT_AST(fizz)_97": {
 }
+, "ADD_AST_98": {
+"IDENT_AST(fizz)_99": {
 }
-, "STATEMENTS_AST_95": {
-"STATEMENT_AST_96": {
-"ASSIGNMENT_STMT_AST_97": {
-"ASSIGNMENT_AST_98": {
-"IDENT_AST_99": {
+, "NUMBER_AST(1)_100": {
 }
-, "ADD_AST_100": {
-"IDENT_AST_101": {
 }
-, "NUMBER_AST_102": {
 }
 }
 }
 }
 }
+, "ELSE_STMT_AST_101": {
+"STATEMENTS_AST_102": {
+"STATEMENT_AST_103": {
+"ELIF_STMT_AST_104": {
+"IF_STMT_AST_105": {
+"EQ_AST_106": {
+"MUL_AST_107": {
+"DIV_AST_108": {
+"IDENT_AST(i)_109": {
 }
+, "NUMBER_AST(5)_110": {
 }
-, "ELSE_STMT_AST_103": {
-"STATEMENTS_AST_104": {
-"STATEMENT_AST_105": {
-"ELIF_STMT_AST_106": {
-"IF_STMT_AST_107": {
-"EQ_AST_108": {
-"MUL_AST_109": {
-"FACTOR_AST_110": {
-"DIV_AST_111": {
-"IDENT_AST_112": {
 }
-, "NUMBER_AST_113": {
+, "NUMBER_AST(5)_111": {
 }
 }
+, "IDENT_AST(i)_112": {
 }
-, "NUMBER_AST_114": {
 }
+, "STATEMENTS_AST_113": {
+"STATEMENT_AST_114": {
+"ASSIGNMENT_STMT_AST_115": {
+"ASSIGNMENT_AST_116": {
+"IDENT_AST(buzz)_117": {
 }
-, "IDENT_AST_115": {
+, "ADD_AST_118": {
+"IDENT_AST(buzz)_119": {
 }
+, "NUMBER_AST(1)_120": {
 }
-, "STATEMENTS_AST_116": {
-"STATEMENT_AST_117": {
-"ASSIGNMENT_STMT_AST_118": {
-"ASSIGNMENT_AST_119": {
-"IDENT_AST_120": {
 }
-, "ADD_AST_121": {
-"IDENT_AST_122": {
 }
-, "NUMBER_AST_123": {
 }
 }
 }
 }
+, "ELSE_STMT_AST_121": {
+"STATEMENTS_AST_122": {
+"STATEMENT_AST_123": {
+"ASSIGNMENT_STMT_AST_124": {
+"ASSIGNMENT_AST_125": {
+"IDENT_AST(others)_126": {
 }
+, "ADD_AST_127": {
+"IDENT_AST(others)_128": {
 }
+, "NUMBER_AST(1)_129": {
 }
-, "ELSE_STMT_AST_124": {
-"STATEMENTS_AST_125": {
-"STATEMENT_AST_126": {
-"ASSIGNMENT_STMT_AST_127": {
-"ASSIGNMENT_AST_128": {
-"IDENT_AST_129": {
 }
-, "ADD_AST_130": {
-"IDENT_AST_131": {
 }
-, "NUMBER_AST_132": {
 }
 }
 }
@@ -251,19 +248,19 @@
 }
 }
 }
+, "STATEMENTS_AST_130": {
+"STATEMENT_AST_131": {
+"ASSIGNMENT_STMT_AST_132": {
+"ASSIGNMENT_AST_133": {
+"IDENT_AST(i)_134": {
 }
+, "ADD_AST_135": {
+"IDENT_AST(i)_136": {
 }
+, "NUMBER_AST(1)_137": {
 }
-, "STATEMENTS_AST_133": {
-"STATEMENT_AST_134": {
-"ASSIGNMENT_STMT_AST_135": {
-"ASSIGNMENT_AST_136": {
-"IDENT_AST_137": {
 }
-, "ADD_AST_138": {
-"IDENT_AST_139": {
 }
-, "NUMBER_AST_140": {
 }
 }
 }
@@ -277,7 +274,56 @@
 }
 }
 }
-}
-}
-}
-}
+} INITIAL_GP = 0x10008000 # initial value of global pointer
+ INITIAL_SP = 0x7ffffffc # initial value of stack pointer
+# system call service number
+ stop_service = 99
+
+ .text # テキストセグメントの開始
+init:
+ # initialize $gp (global pointer) and $sp (stack pointer)
+ la $gp, INITIAL_GP # $gp ←0x10008000 (INITIAL_GP)
+ la $sp, INITIAL_SP # $sp ←0x7ffffffc (INITIAL_SP)
+ jal main # jump to 'main'
+ nop # (delay slot)
+ li $v0, stop_service # $v0 <-99 (stop_service)
+ syscall # stop
+ nop
+ # not reach here
+stop: # if syscall return
+ j stop # infinite loop...
+ nop # (delay slot)
+
+ .text 0x00001000 # 以降のコードを 0から配置 x00001000
+main:
+ la $t0, RESULT # $t0 <-0x10004000
+  # assignment [fizz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [buzz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [fizzbuzz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [others]
+  sw $v0, -1($t0)
+  nop
+  # assignment [i]
+  sw $v0, -1($t0)
+  nop
+  # assignment [fizzbuzz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [fizz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [buzz]
+  sw $v0, -1($t0)
+  nop
+  # assignment [others]
+  sw $v0, -1($t0)
+  nop
+  # assignment [i]
+  sw $v0, -1($t0)
+  nop

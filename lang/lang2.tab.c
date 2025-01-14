@@ -1742,7 +1742,7 @@ yyreduce:
 
   case 33: /* assignment_stmt: assignment SEMIC  */
 #line 149 "lang2.y"
-                     { (yyval.np) = build_node1(ASSIGNMENT_STMT_AST, (yyvsp[-1].np)); }
+                     { (yyval.np) = (yyvsp[-1].np); }
 #line 1747 "lang2.tab.c"
     break;
 
@@ -1817,7 +1817,7 @@ yyreduce:
 
   case 44: /* factor: L_PARAN expression R_PARAN  */
 #line 208 "lang2.y"
-                                { (yyval.np) = build_node1(FACTOR_AST, (yyvsp[-1].np)); }
+                                { (yyval.np) = (yyvsp[-1].np); }
 #line 1822 "lang2.tab.c"
     break;
 
@@ -1987,22 +1987,22 @@ yyreduce:
 #line 295 "lang2.y"
                                   {
     if ((yyvsp[-1].np) == OP_EQ) {
-      (yyval.np) = build_node2(EQ_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(EQ_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
     else if ((yyvsp[-1].np) == OP_NE) {
-      (yyval.np) = build_node2(NE_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(NE_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
     else if ((yyvsp[-1].np) == OP_LT) {
-      (yyval.np) = build_node2(LT_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(LT_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
     else if ((yyvsp[-1].np) == OP_GT) {
-      (yyval.np) = build_node2(LTE_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(LTE_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
     else if ((yyvsp[-1].np) == OP_LTE) {
-      (yyval.np) = build_node2(LTE_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(LTE_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
     else if ((yyvsp[-1].np) == OP_GTE) {
-      (yyval.np) = build_node2(GTE_AST, (yyvsp[-2].np), (yyvsp[0].np));
+      (yyval.np) = build_node1(CONDITION_AST, build_node2(GTE_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
   }
 #line 2009 "lang2.tab.c"

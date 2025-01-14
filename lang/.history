@@ -2,3 +2,12 @@ breakpoint 0x00001000
 run
 step 1
 print
+exit
+run
+regdump
+exit
+run
+regdump
+print 0x10004000
+print
+exit

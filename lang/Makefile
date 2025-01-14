@@ -3,6 +3,7 @@ AST=ast2
 LEX=${TARGET}.l
 YACC=${TARGET}.y
 SAMPLE=sample.txt
+SRC=kadai1
 
 # 3. Compile define.tab.c and lex.yy.c using gcc
 ${TARGET}: ${TARGET}.tab.c lex.yy.c ${AST}.c code_generation.c
@@ -18,5 +19,5 @@ lex.yy.c: ${LEX}
 clean:
 	rm ./lex.yy.c ${TARGET}.tab.*
 
-run:
-	./${TARGET} < ${SAMPLE}
+build:
+	./${TARGET} asm/${SRC}.s < resource/${SRC}
