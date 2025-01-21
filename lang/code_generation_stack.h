@@ -1,8 +1,8 @@
 #include "ast2.h"
 
-int gen_code_add(Node *n, int reg_num);
-int gen_code_expression(Node *n, int reg_num);
-void gen_code_keep_operand(Node *op, int reg_num);
+void gen_code_add();
+int gen_code_expression(Node *n, int reg_num, int offset);
+int gen_code_keep_operand(Node *op, int reg_num, int offset);
 void gen_code_assignment(Node *n);
 void gen_code_while(Node *n);
 void gen_code_if(Node *n);

@@ -1,4 +1,4 @@
-#include "code_generation.h"
+#include "code_generation_stack.h"
 
 struct SymbolInfo {
   Node  *target_node; // 対象のノード
@@ -31,6 +31,7 @@ const unsigned long base_address = 0x10004000;
 const int reg_data_seg = 0; // データセグメントのアドレスを格納したレジスタ
 const int reg_comp_result = 1; // 比較演算の結果等の格納
 const unsigned int reg_start = 2; // 自由に使えるレジスタの番号の最小値
+const unsigned int stack_offset = 4;
 
 /* global vals use generate code */
 int num_whiles = 0;
@@ -144,45 +145,63 @@ void print_symbol_list(FILE *fp) {
 
 
 
-void gen_code_keep_operand(Node *op, int reg_num) {
+int gen_code_keep_operand(Node *op, int reg_num, int offset) {
+
   switch (op->type) {
     case NUMBER_AST: {
-      fprintf(code_fp, "  # keep imm val (%d) to register\n", op->ival);
+      offset += var_base_size;
+      fprintf(code_fp, "  # keep imm val (%d) to stack\n", op->ival);
       fprintf(code_fp, "  li $t%d, %d\n", reg_num, op->ival);
+      fprintf(code_fp, "  sw $t%d, %d($sp)\n", reg_num, offset);
+      fprintf(code_fp, "  nop\n");
       break;
     }
     case IDENT_AST: {
-      int offset = get_offset(op->var_name);
-      fprintf(code_fp, "  # keep val (%s) to register\n", op->var_name);
-      fprintf(code_fp, "  lw $t%d, %d($t0)\n", reg_num, offset);
+      offset += var_base_size;
+      int var_offset = get_offset(op->var_name);
+      fprintf(code_fp, "  # keep val (%s) to stack\n", op->var_name);
+      fprintf(code_fp, "  lw $t%d, %d($t0)\n", reg_num, var_offset);
+      fprintf(code_fp, "  nop\n");
+      fprintf(code_fp, "  sw $t%d, %d($sp)\n", reg_num, offset);
       fprintf(code_fp, "  nop\n");
       break;
     }
   }
+
+  return offset;
 }
 
-void gen_code_comp(Node *n) {
+void gen_code_comp(Node *n, int offset) {
   n = n->child;
   Node *op1 = n->child;
   Node *op2 = op1->brother;
 
   int reg_num = reg_start;
+  offset = stack_offset;
+
+  int reg_op1 = reg_start;
+  int reg_op2 = reg_op1 + 1;
+
+  offset = gen_code_expression(op1, reg_num++, offset);
+  offset = gen_code_expression(op2, reg_num, offset);
+
+  fprintf(code_fp, "  lw $t%d, %d($sp)\n", reg_op2, offset);
+  fprintf(code_fp, "  nop\n");
+  offset -= var_base_size;
+  fprintf(code_fp, "  lw $t%d, %d($sp)\n", reg_op1, offset);
+  fprintf(code_fp, "  nop\n");
 
   switch (n->type) {
     case LT_AST: {
-      reg_num = gen_code_expression(op1, reg_num);
-      reg_num = gen_code_expression(op2, reg_num);
-      int r2 = --reg_num;
-      int r1 = --reg_num;
+      int r2 = reg_num;
+      int r1 = r2 - 1;
       fprintf(code_fp, "  # comp '<'\n");
       fprintf(code_fp, "  slt $t%d, $t%d, $t%d\n", reg_comp_result, r1, r2);
       break;
     }
     case EQ_AST: {
-      reg_num = gen_code_expression(op1, reg_num);
-      reg_num = gen_code_expression(op2, reg_num);
-      int r2 = --reg_num;
-      int r1 = --reg_num;
+      int r2 = reg_num;
+      int r1 = r2 - 1;
       fprintf(code_fp, "  # comp '=='\n");
       fprintf(code_fp, "  sub $t%d, $t%d, $t%d\n", reg_comp_result, r1, r2);
       break;
@@ -190,79 +209,79 @@ void gen_code_comp(Node *n) {
   }
 }
 
-int gen_code_add(Node *n, int reg_num) {
-  int r2 = --reg_num;
-  int r1 = --reg_num;
+void gen_code_add() {
   fprintf(code_fp, "  # add exp\n");
-  fprintf(code_fp, "  add $v0, $t%d, $t%d\n", r1, r2);
-  return reg_num;
+  fprintf(code_fp, "  add $v0, $t2, $t3\n");
 }
 
-int gen_code_sub(Node *n, int reg_num) {
-  int r2 = --reg_num;
-  int r1 = --reg_num;
+void gen_code_sub() {
   fprintf(code_fp, "  # sub exp\n");
-  fprintf(code_fp, "  sub $v0, $t%d, $t%d\n", r1, r2);
-  return reg_num;
+  fprintf(code_fp, "  sub $v0, $t2, $t3\n");
 }
 
-int gen_code_mul(Node *n, int reg_num) {
-  int r2 = --reg_num;
-  int r1 = --reg_num;
+void gen_code_mul() {
   fprintf(code_fp, "  # mul exp\n");
-  fprintf(code_fp, "  mult $t%d, $t%d\n", r1, r2);
+  fprintf(code_fp, "  mult $t2, $t3\n");
   fprintf(code_fp, "  mflo $v0\n"); // たちまち下位32Bitを計算結果として扱う
-  return reg_num;
 }
 
-int gen_code_div(Node *n, int reg_num) {
-  int r2 = --reg_num;
-  int r1 = --reg_num;
+void gen_code_div() {
   fprintf(code_fp, "  # mul exp\n");
-  fprintf(code_fp, "  div $t%d, $t%d\n", r1, r2);
-  fprintf(code_fp, "  mfhi $v0\n"); // 商を計算結果のレジスタへ
-  return reg_num;
+  fprintf(code_fp, "  div $t2, $t3\n");
+  fprintf(code_fp, "  mflo $v0\n"); // 商を計算結果のレジスタへ
 }
 
 void make_exp_tree() {
-
+  
 }
 
 // 算術式生成
-int gen_code_expression(Node *n, int reg_num) { 
+int gen_code_expression(Node *n, int reg_num, int offset) { 
   // struct ThreeAddrCode *exps = (struct ThreeAddrCode *)malloc();
 
   if (n->type == IDENT_AST || n->type == NUMBER_AST) {
-    gen_code_keep_operand(n, reg_num++);
+    offset = gen_code_keep_operand(n, reg_num++, offset);
   }
   else {
     Node *op1 = n->child;
     Node *op2 = op1->brother;
 
-    reg_num = gen_code_expression(op1, reg_num);
-    reg_num = gen_code_expression(op2, reg_num);
+    offset = gen_code_expression(op1, reg_num++, offset);
+    offset = gen_code_expression(op2, reg_num, offset);
+
+    int reg_op2 = reg_num;
+    int reg_op1 = reg_op2 - 1;
+
+    fprintf(code_fp, "  lw $t%d, %d($sp)\n", reg_op2, offset);
+    fprintf(code_fp, "  nop\n");
+    offset -= var_base_size;
+    fprintf(code_fp, "  lw $t%d, %d($sp)\n", reg_op1, offset);
+    fprintf(code_fp, "  nop\n");
 
     switch (n->type) {
       case ADD_AST: {
-        reg_num = gen_code_add(n, reg_num);
+        gen_code_add();
         break;
       }
       case SUB_AST: {
-        reg_num = gen_code_sub(n, reg_num);
+        gen_code_sub();
         break;  
       }
       case MUL_AST: {
-        reg_num = gen_code_mul(n, reg_num);
+        gen_code_mul();
         break;
       }
       case DIV_AST: {
-        reg_num = gen_code_div(n, reg_num);
+        gen_code_div();
         break;
       }
     }
+
+    fprintf(code_fp, "  sw $v0, %d($sp)\n", offset);
+    fprintf(code_fp, "  nop\n");
   }
 
-  return reg_num;
+  return offset;
 }
 
 // 代入文生成
@@ -279,7 +298,7 @@ void gen_code_assignment(Node *n) {
     fprintf(code_fp, "  nop\n");
   }
   else {
-    gen_code_expression(expression, reg_start);
+    gen_code_expression(expression, reg_start, stack_offset);
     fprintf(code_fp, "  # assignment [%s] <- exp val\n", ident->var_name);
     fprintf(code_fp, "  sw $v0, %d($t0)\n", offset);
     fprintf(code_fp, "  nop\n");
@@ -288,25 +307,42 @@ void gen_code_assignment(Node *n) {
 
 // if / if-else 生成
 void gen_code_if(Node *n) {
-  int this_if_num = num_ifs++;
 
   Node *cond  = n->child;
   Node *stmts = cond->brother;
-  gen_code_comp(cond); // 条件式生成
+  gen_code_comp(cond, stack_offset); // 条件式生成
 
-  fprintf(code_fp, "  bne $t%d, $zero, $IF%d_END\n", reg_comp_result, this_if_num);
+  int num_if = num_ifs++;
+
+  fprintf(code_fp, "  bne $t%d, $zero, $END_IF%d\n", reg_comp_result, num_if);
   fprintf(code_fp, "  nop\n");
   gen_code_statements(stmts);
-  fprintf(code_fp, "$IF%d_END:\n", this_if_num);
+  fprintf(code_fp, "$END_IF%d:\n", num_if);
 }
 
 void gen_code_elif(Node *n) {
   Node *if_stmt   = n->child;
   Node *else_stmt = if_stmt->brother;
 
-  gen_code_if(if_stmt);
+  Node *cond  = if_stmt->child;
+  Node *stmts = cond->brother;
+  gen_code_comp(cond, stack_offset); // 条件式生成
+
+  int num_if = num_ifs++;
+
+  // else
   fprintf(code_fp, "  # else stmt\n");
-  gen_code_statements(else_stmt->child); 
+  fprintf(code_fp, "  beq $t%d, $zero, $IF%d\n", reg_comp_result, num_if);
+  fprintf(code_fp, "  nop\n");
+  gen_code_statements(else_stmt->child);
+  fprintf(code_fp, "  j $END_IF%d\n", num_if);
+  fprintf(code_fp, "  nop\n");
+
+  // if
+  fprintf(code_fp, "  # if stmt\n");
+  fprintf(code_fp, "$IF%d:\n", num_if);
+  gen_code_statements(if_stmt);
+  fprintf(code_fp, "$END_IF%d:\n", num_if);
 }
 
 
@@ -319,7 +355,7 @@ void gen_code_while(Node *n) {
 
   fprintf(code_fp, "$WHILE%d:\n", this_while_num);
 
-  gen_code_comp(cond);   // 継続の比較演算処理を生成
+  gen_code_comp(cond, stack_offset);   // 継続の比較演算処理を生成
   fprintf(code_fp, "  beq $t%d, $zero, $ENDWHILE%d\n", reg_comp_result, this_while_num);
   fprintf(code_fp, "  nop\n");
   num_whiles++;
@@ -343,12 +379,12 @@ void gen_code_statement(Node *n) {
       return;
     }
     case IF_STMT_AST: {
-      fprintf(code_fp, "  # --- [START] if stmt: %d ---\n", num_ifs);
+      fprintf(code_fp, "  # --- [START] if stmt ---\n");
       gen_code_if(n); //  if内の処理が再帰的に生成されないよう return 
       return;
     }
     case ELIF_STMT_AST: {
-      fprintf(code_fp, "  # --- [START] if-else stmt: %d ---\n", num_ifs);
+      fprintf(code_fp, "  # --- [START] if-else stmt ---\n");
       gen_code_elif(n);
       return;
     }

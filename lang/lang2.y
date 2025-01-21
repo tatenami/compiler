@@ -269,8 +269,8 @@ for_stmt
 ;
 
 cond_stmt
-  : if_stmt
-  | elif_stmt
+  : if_stmt   // { $$ = build_node1(IF_AST, $1); }
+  | elif_stmt // { $$ = build_node1(IF_AST, $1); }
 ;
 
 if_stmt

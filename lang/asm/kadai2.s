@@ -1,6 +1,6 @@
 # ------ [ Symbols ] ------
 # 	symbol_0 	size: 4 	offset:     0 	[i]
-# 	symbol_1 	size: 4 	offset:   0x4 	[sum]
+# 	symbol_1 	size: 4 	offset:   0x4 	[fact]
 # -------------------------
  INITIAL_GP = 0x10008000 # initial value of global pointer
  INITIAL_SP = 0x7ffffffc # initial value of stack pointer
@@ -25,8 +25,8 @@ stop: # if syscall return
  .text 0x00001000 # 以降のコードを 0から配置 x00001000
 main:
  la $t0, RESULT # $t0 <-0x10004000
-  li $t2, 0
-  # assignment [sum] <- imm (0)
+  li $t2, 1
+  # assignment [fact] <- imm (1)
   sw $t2, 4($t0)
   nop
   li $t2, 1
@@ -39,8 +39,8 @@ $WHILE0:
   nop
   sw $t2, 8($sp)
   nop
-  # keep imm val (11) to stack
-  li $t3, 11
+  # keep imm val (6) to stack
+  li $t3, 6
   sw $t3, 12($sp)
   nop
   lw $t3, 12($sp)
@@ -51,7 +51,7 @@ $WHILE0:
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDWHILE0
   nop
-  # keep val (sum) to stack
+  # keep val (fact) to stack
   lw $t2, 4($t0)
   nop
   sw $t2, 8($sp)
@@ -65,11 +65,12 @@ $WHILE0:
   nop
   lw $t2, 8($sp)
   nop
-  # add exp
-  add $v0, $t2, $t3
+  # mul exp
+  mult $t2, $t3
+  mflo $v0
   sw $v0, 8($sp)
   nop
-  # assignment [sum] <- exp val
+  # assignment [fact] <- exp val
   sw $v0, 4($t0)
   nop
   # keep val (i) to stack

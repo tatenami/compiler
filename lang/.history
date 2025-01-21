@@ -11,3 +11,6 @@ regdump
 print 0x10004000
 print
 exit
+run
+print
+exit
