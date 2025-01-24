@@ -40,34 +40,50 @@
 , "STATEMENTS_AST_21": {
 "STATEMENT_AST_22": {
 "WHILE_STMT_AST_23": {
-"LT_AST_24": {
-"IDENT_AST(i)_25": {
+"CONDITION_AST_24": {
+"LT_AST_25": {
+"IDENT_AST(i)_26": {
 }
-, "NUMBER_AST(11)_26": {
-}
-}
-, "STATEMENTS_AST_27": {
-"STATEMENT_AST_28": {
-"ASSIGNMENT_AST_29": {
-"IDENT_AST(sum)_30": {
-}
-, "ADD_AST_31": {
-"IDENT_AST(sum)_32": {
-}
-, "IDENT_AST(i)_33": {
+, "NUMBER_AST(11)_27": {
 }
 }
 }
+, "STATEMENTS_AST_28": {
+"STATEMENT_AST_29": {
+"ASSIGNMENT_AST_30": {
+"IDENT_AST(sum)_31": {
 }
-, "STATEMENTS_AST_34": {
-"STATEMENT_AST_35": {
-"ASSIGNMENT_AST_36": {
-"IDENT_AST(i)_37": {
+, "ADD_AST_32": {
+"MUL_AST_33": {
+"ADD_AST_34": {
+"IDENT_AST(sum)_35": {
 }
-, "ADD_AST_38": {
+, "NUMBER_AST(1)_36": {
+}
+}
+, "SUB_AST_37": {
+"DIV_AST_38": {
 "IDENT_AST(i)_39": {
 }
-, "NUMBER_AST(1)_40": {
+, "NUMBER_AST(3)_40": {
+}
+}
+, "NUMBER_AST(1)_41": {
+}
+}
+}
+, "MUL_AST_42": {
+"ADD_AST_43": {
+"IDENT_AST(i)_44": {
+}
+, "NUMBER_AST(3)_45": {
+}
+}
+, "SUB_AST_46": {
+"IDENT_AST(sum)_47": {
+}
+, "NUMBER_AST(1)_48": {
+}
 }
 }
 }

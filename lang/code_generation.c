@@ -5,6 +5,7 @@ struct SymbolInfo {
   char  *var_name;    // 変数名
   int    number;      // 変数番号
   int    mem_size;    // 変数のメモリサイズ
+  int    array_row_mem_size;
   long   mem_offset;  // データセグメントからのメモリオフセット
 };
 
@@ -19,6 +20,8 @@ struct ThreeAddrCode {
   Operand op1;
   Operand op2;
   struct ThreeAddrCode *next;
+  int right_depth;
+  int left_depth;
 };
 
 /* Global variable */
@@ -50,6 +53,17 @@ long get_offset(char *var_name) {
   return -1;
 }
 
+long get_array_row_size(char *var_name) {
+
+  for (int i = 0; i < symbol_num; i++) {
+    if (strcmp(var_name, symbols[i].var_name) == 0) {
+      return symbols[i].array_row_mem_size;
+    }
+  }
+
+  return -1;
+}
+
 void count_symbol(Node *n) {
   if (n->type == DECL_PART_AST) {
     symbol_num++;
@@ -72,6 +86,7 @@ void count_symbol(Node *n) {
  */
 void make_symbol(Node *n, int num) {
   int size;
+  int array_size = 0;
   switch (n->type) {
     case IDENTS_AST: {
       n = n->child; // IDENT
@@ -82,13 +97,12 @@ void make_symbol(Node *n, int num) {
       n = n->child; // IDENT
       Node *index1 = n->brother->child; // index1
       int num1 = index1->ival;
+      array_size = num1 * var_base_size;
+      size = array_size;
       // ２次元配列時
       if (index1->brother != NULL) {
         int num2 = index1->brother->ival;
-        size = (num1 + num2) * var_base_size;
-      }
-      else {
-        size = num1 * var_base_size;
+        size = array_size * num2;
       }
       break; 
     }
@@ -98,6 +112,7 @@ void make_symbol(Node *n, int num) {
   symbols[num].target_node = n;
   symbols[num].mem_size   = size;
   symbols[num].mem_offset = (num == 0) ? 0 : (symbols[num - 1].mem_offset + size);
+  symbols[num].array_row_mem_size = array_size;
   symbols[num].var_name   = n->var_name;
 }
 
@@ -141,7 +156,6 @@ void print_symbol_list(FILE *fp) {
 }
 
 /* ---------- コード生成関連 ---------- */
-
 
 
 void gen_code_keep_operand(Node *op, int reg_num) {
@@ -224,11 +238,30 @@ int gen_code_div(Node *n, int reg_num) {
   return reg_num;
 }
 
-void make_exp_tree() {
+// 算術式生成
+int is_operator(Node *n) {
+  return (n->type != NUMBER_AST) && (n->type != IDENT_AST);
+}
+
+void add_exp_3ac(struct ThreeAddrCode *exps, Node *n) {
+  if (!is_operator(n)) return;
+
+  if (n->child != NULL) {
+
+  }
+  if (n->brother != NULL) {
+
+  }
+
 
 }
 
-// 算術式生成
+struct ThreeAddrCode *make_exp_3ac(Node *n) {
+  struct ThreeAddrCode *exps = (struct ThreeAddrCode *)malloc(sizeof(struct ThreeAddrCode));
+
+  add_exp_3ac(exps, n);
+}
+
 int gen_code_expression(Node *n, int reg_num) { 
   // struct ThreeAddrCode *exps = (struct ThreeAddrCode *)malloc();
 
@@ -443,7 +476,7 @@ void closing(FILE *fp) {
 
 /* main */
 
-#define JSON 0
+#define JSON 1
 
 int main(int argc, char *argv[]) {
   if (yyparse()) {
