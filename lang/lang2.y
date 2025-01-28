@@ -93,8 +93,6 @@ func_var_decl
   }
 ;
 
-
-
 func_define
   : FUNCDECL IDENT L_PARAN func_var_decl R_PARAN L_BRACE declarations statements R_BRACE { 
     $$ = build_node4(FUNC_DEFINE_AST, build_ident_node(IDENT_AST, $2), $4, $7, $8);
