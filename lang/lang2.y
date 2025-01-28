@@ -199,15 +199,29 @@ term
 ;
 
 unary_factor
-  : IDENT unary_op { $$ = build_node2(UNARY_FACTOR_AST, build_ident_node(IDENT_AST, $1), $2); } // ex4 
-  | unary_op IDENT { $$ = build_node2(UNARY_FACTOR_AST, $1, build_ident_node(IDENT_AST, $2)); } // ex4 
+  : IDENT unary_op {
+    if ($2 == INCREM_AST) {
+      $$ = build_node2(UNARY_OP_AST, build_node0(B_INCREM_AST), build_ident_node(IDENT_AST, $1)); 
+    } 
+    else if ($2 == DECREM_AST) {
+      $$ = build_node2(UNARY_OP_AST, build_node0(B_DECREM_AST), build_ident_node(IDENT_AST, $1)); 
+    }
+  } // ex4 
+  | unary_op IDENT {
+    if ($1 == INCREM_AST) {
+      $$ = build_node2(UNARY_OP_AST, build_node0(F_INCREM_AST), build_ident_node(IDENT_AST, $2)); 
+    } 
+    else if ($1 == DECREM_AST) {
+      $$ = build_node2(UNARY_OP_AST, build_node0(F_DECREM_AST), build_ident_node(IDENT_AST, $2)); 
+    }
+  }
 ;
 
 factor
   : var                         
   | L_PARAN expression R_PARAN  { $$ = $2; }                   
   | unary_factor                
-  | NOT IDENT                   { $$ = build_node1(FACTOR_AST, build_ident_node(IDENT_AST, $2)); } 
+  | NOT IDENT                   { $$ = build_node1(NOT_AST, build_ident_node(IDENT_AST, $2)); } 
 ; 
 
 
@@ -223,8 +237,8 @@ mul_op
 
 // ex4
 unary_op
-  : INCREM { $$ = build_node1(UNARY_OP_AST, build_node0(INCREM_AST));}
-  | DECREM { $$ = build_node1(UNARY_OP_AST, build_node0(DECREM_AST));}
+  : INCREM { $$ = INCREM_AST;}
+  | DECREM { $$ = DECREM_AST;}
 ;
 
 // ex4 
@@ -240,7 +254,7 @@ var
   : IDENT                       { $$ = build_ident_node(IDENT_AST, $1);}
   | NUMBER                      { $$ = build_num_node(NUMBER_AST, $1); }
   | FLOAT                       { $$ = build_float_node(FLOAT_AST, $1); } // ex6
-  | IDENT array_index           { $$ = build_node2(ARRAY_AST, build_node0(IDENT_AST), $2); }
+  | IDENT array_index           { $$ = build_node2(ARRAY_AST, build_ident_node(IDENT_AST, $1), $2); }
 ;
 
 str

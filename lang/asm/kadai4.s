@@ -1,9 +1,9 @@
 # ------ [ Symbols ] ------
-# 	symbol_0 	size: 4 	offset:     0 	[N]
-# 	symbol_1 	size: 4 	offset:   0x4 	[i]
-# 	symbol_2 	size: 4 	offset:   0x8 	[j]
-# 	symbol_3 	size: 4 	offset:   0xc 	[k]
-# 	symbol_4 	size: 4004 	offset:  0x10 	[a]
+# 	symbol_0 	size: 4 	offset:     0(0) 	[N]
+# 	symbol_1 	size: 4 	offset:   0x4(4) 	[i]
+# 	symbol_2 	size: 4 	offset:   0x8(8) 	[j]
+# 	symbol_3 	size: 4 	offset:   0xc(12) 	[k]
+# 	symbol_4 	size: 4004 	offset:  0x10(16) 	[a]
 # -------------------------
  INITIAL_GP = 0x10008000 # initial value of global pointer
  INITIAL_SP = 0x7ffffffc # initial value of stack pointer
@@ -47,8 +47,10 @@ $WHILE0:
   nop
   sw $t3, 8($sp)
   nop
+  # pop stack
   lw $t3, 8($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '<='
@@ -58,11 +60,13 @@ $WHILE0:
   nop
   li $v0, 1
   # assignment [a] <- imm (1)
+  # clac array offset of [a]
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
   sw $t2, 4($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   li $t3, 4  # mul exp
@@ -72,6 +76,7 @@ $WHILE0:
   add $t2, $t2, $t3
   # add exp
   add $t2, $t0, $t2
+  # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
   # keep val (i) to stack
@@ -81,10 +86,7 @@ $WHILE0:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  sw $t3, 8($sp)
-  nop
-  lw $t3, 8($sp)
-  nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # add exp
@@ -92,6 +94,7 @@ $WHILE0:
   sw $v0, 4($sp)
   nop
   # assignment [i] <- exp val
+  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 4($t0)
@@ -116,19 +119,18 @@ $WHILE1:
   nop
   # keep imm val (2) to stack
   li $t3, 2
-  sw $t3, 12($sp)
-  nop
-  lw $t3, 12($sp)
-  nop
+  # pop stack
   lw $t2, 8($sp)
   nop
-  # mul exp
+  # div exp
   div $t2, $t3
   mflo $v0
   sw $v0, 8($sp)
   nop
+  # pop stack
   lw $t3, 8($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '<='
@@ -156,17 +158,21 @@ $WHILE2:
   nop
   sw $t3, 12($sp)
   nop
+  # pop stack
   lw $t3, 12($sp)
   nop
+  # pop stack
   lw $t2, 8($sp)
   nop
-  # mul exp
+  # div exp
   div $t2, $t3
   mflo $v0
   sw $v0, 8($sp)
   nop
+  # pop stack
   lw $t3, 8($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '<='
@@ -184,8 +190,10 @@ $WHILE2:
   nop
   sw $t3, 8($sp)
   nop
+  # pop stack
   lw $t3, 8($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # mul exp
@@ -194,17 +202,20 @@ $WHILE2:
   sw $v0, 4($sp)
   nop
   # assignment [k] <- exp val
+  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 12($t0)
   nop
   li $v0, 0
   # assignment [a] <- imm (0)
+  # clac array offset of [a]
   # keep val (k) to stack
   lw $t2, 12($t0)
   nop
   sw $t2, 4($sp)
   nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   li $t3, 4  # mul exp
@@ -214,6 +225,7 @@ $WHILE2:
   add $t2, $t2, $t3
   # add exp
   add $t2, $t0, $t2
+  # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
   # keep val (j) to stack
@@ -223,10 +235,7 @@ $WHILE2:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  sw $t3, 8($sp)
-  nop
-  lw $t3, 8($sp)
-  nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # add exp
@@ -234,6 +243,7 @@ $WHILE2:
   sw $v0, 4($sp)
   nop
   # assignment [j] <- exp val
+  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 8($t0)
@@ -248,10 +258,7 @@ $ENDWHILE2:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  sw $t3, 8($sp)
-  nop
-  lw $t3, 8($sp)
-  nop
+  # pop stack
   lw $t2, 4($sp)
   nop
   # add exp
@@ -259,6 +266,7 @@ $ENDWHILE2:
   sw $v0, 4($sp)
   nop
   # assignment [i] <- exp val
+  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 4($t0)

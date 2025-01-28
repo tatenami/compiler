@@ -56,7 +56,10 @@ $WHILE0:
   nop
   # keep imm val (31) to stack
   li $t3, 31
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # comp '<'
@@ -71,33 +74,23 @@ $WHILE0:
   nop
   # keep imm val (15) to stack
   li $t3, 15
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # div exp
   div $t2, $t3
-  mflo $v0
+  mfhi $v0
   sw $v0, 4($sp)
   nop
-  # keep imm val (15) to stack
-  li $t3, 15
-  # pop stack
-  lw $t2, 4($sp)
-  nop
-  # mul exp
-  mult $t2, $t3
-  mflo $v0
-  sw $v0, 4($sp)
-  nop
-  # keep val (i) to stack
-  lw $t3, 16($t0)
-  nop
+  # keep imm val (0) to stack
+  li $t3, 0
   sw $t3, 8($sp)
   nop
-  # pop stack
   lw $t3, 8($sp)
   nop
-  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '=='
@@ -114,33 +107,23 @@ $WHILE0:
   nop
   # keep imm val (3) to stack
   li $t3, 3
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # div exp
   div $t2, $t3
-  mflo $v0
+  mfhi $v0
   sw $v0, 4($sp)
   nop
-  # keep imm val (3) to stack
-  li $t3, 3
-  # pop stack
-  lw $t2, 4($sp)
-  nop
-  # mul exp
-  mult $t2, $t3
-  mflo $v0
-  sw $v0, 4($sp)
-  nop
-  # keep val (i) to stack
-  lw $t3, 16($t0)
-  nop
+  # keep imm val (0) to stack
+  li $t3, 0
   sw $t3, 8($sp)
   nop
-  # pop stack
   lw $t3, 8($sp)
   nop
-  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '=='
@@ -157,33 +140,23 @@ $WHILE0:
   nop
   # keep imm val (5) to stack
   li $t3, 5
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # div exp
   div $t2, $t3
-  mflo $v0
+  mfhi $v0
   sw $v0, 4($sp)
   nop
-  # keep imm val (5) to stack
-  li $t3, 5
-  # pop stack
-  lw $t2, 4($sp)
-  nop
-  # mul exp
-  mult $t2, $t3
-  mflo $v0
-  sw $v0, 4($sp)
-  nop
-  # keep val (i) to stack
-  lw $t3, 16($t0)
-  nop
+  # keep imm val (0) to stack
+  li $t3, 0
   sw $t3, 8($sp)
   nop
-  # pop stack
   lw $t3, 8($sp)
   nop
-  # pop stack
   lw $t2, 4($sp)
   nop
   # comp '=='
@@ -199,7 +172,10 @@ $WHILE0:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # add exp
@@ -207,7 +183,6 @@ $WHILE0:
   sw $v0, 4($sp)
   nop
   # assignment [others] <- exp val
-  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 12($t0)
@@ -223,7 +198,10 @@ $IF2:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # add exp
@@ -231,7 +209,6 @@ $IF2:
   sw $v0, 4($sp)
   nop
   # assignment [buzz] <- exp val
-  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 4($t0)
@@ -248,7 +225,10 @@ $IF1:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # add exp
@@ -256,7 +236,6 @@ $IF1:
   sw $v0, 4($sp)
   nop
   # assignment [fizz] <- exp val
-  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 0($t0)
@@ -273,7 +252,10 @@ $IF0:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # add exp
@@ -281,7 +263,6 @@ $IF0:
   sw $v0, 4($sp)
   nop
   # assignment [fizzbuzz] <- exp val
-  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 8($t0)
@@ -294,7 +275,10 @@ $END_IF0:
   nop
   # keep imm val (1) to stack
   li $t3, 1
-  # pop stack
+  sw $t3, 8($sp)
+  nop
+  lw $t3, 8($sp)
+  nop
   lw $t2, 4($sp)
   nop
   # add exp
@@ -302,7 +286,6 @@ $END_IF0:
   sw $v0, 4($sp)
   nop
   # assignment [i] <- exp val
-  # pop stack
   lw $v0, 4($sp)
   nop
   sw $v0, 16($t0)

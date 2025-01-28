@@ -99,3 +99,15 @@ exit
 breakpoint 237
 run
 exit
+run
+print
+exit
+run
+print
+bye
+run
+print
+exit
+run
+print
+exit

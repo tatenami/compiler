@@ -1,6 +1,6 @@
 TARGET=lang2
 AST=ast2
-GEN=code_generation
+GEN=code_generation_stack
 LEX=${TARGET}.l
 YACC=${TARGET}.y
 SAMPLE=sample.txt

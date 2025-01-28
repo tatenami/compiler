@@ -1,0 +1,17 @@
+define and;
+define or;
+define xor;
+define lshift;
+define rshift;
+define a;
+define b;
+
+a = 1;
+b = 7;
+
+and = a & b;
+or = a | b;
+xor = a ^ b;
+rshift = a >> 1;
+lshift = b << 1;
+b = ~a;

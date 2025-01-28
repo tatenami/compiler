@@ -581,11 +581,11 @@ static const yytype_int16 yyrline[] =
       67,    73,    76,    82,    83,    88,    91,    99,   102,   108,
      111,   119,   120,   124,   125,   126,   127,   128,   132,   136,
      139,   142,   143,   149,   153,   154,   158,   166,   170,   181,
-     198,   202,   203,   207,   208,   209,   210,   215,   216,   220,
-     221,   222,   226,   227,   232,   233,   234,   235,   236,   240,
-     241,   242,   243,   247,   248,   252,   253,   257,   263,   266,
-     272,   273,   277,   283,   289,   295,   318,   319,   320,   321,
-     322,   323,   327,   330
+     198,   202,   210,   221,   222,   223,   224,   229,   230,   234,
+     235,   236,   240,   241,   246,   247,   248,   249,   250,   254,
+     255,   256,   257,   261,   262,   266,   267,   271,   277,   280,
+     286,   287,   291,   297,   303,   309,   332,   333,   334,   335,
+     336,   337,   341,   344
 };
 #endif
 
@@ -1805,186 +1805,200 @@ yyreduce:
 
   case 41: /* unary_factor: IDENT unary_op  */
 #line 202 "lang2.y"
-                   { (yyval.np) = build_node2(UNARY_FACTOR_AST, build_ident_node(IDENT_AST, (yyvsp[-1].sp)), (yyvsp[0].np)); }
-#line 1810 "lang2.tab.c"
+                   {
+    if ((yyvsp[0].np) == INCREM_AST) {
+      (yyval.np) = build_node2(UNARY_OP_AST, build_node0(B_INCREM_AST), build_ident_node(IDENT_AST, (yyvsp[-1].sp))); 
+    } 
+    else if ((yyvsp[0].np) == DECREM_AST) {
+      (yyval.np) = build_node2(UNARY_OP_AST, build_node0(B_DECREM_AST), build_ident_node(IDENT_AST, (yyvsp[-1].sp))); 
+    }
+  }
+#line 1817 "lang2.tab.c"
     break;
 
   case 42: /* unary_factor: unary_op IDENT  */
-#line 203 "lang2.y"
-                   { (yyval.np) = build_node2(UNARY_FACTOR_AST, (yyvsp[-1].np), build_ident_node(IDENT_AST, (yyvsp[0].sp))); }
-#line 1816 "lang2.tab.c"
+#line 210 "lang2.y"
+                   {
+    if ((yyvsp[-1].np) == INCREM_AST) {
+      (yyval.np) = build_node2(UNARY_OP_AST, build_node0(F_INCREM_AST), build_ident_node(IDENT_AST, (yyvsp[0].sp))); 
+    } 
+    else if ((yyvsp[-1].np) == DECREM_AST) {
+      (yyval.np) = build_node2(UNARY_OP_AST, build_node0(F_DECREM_AST), build_ident_node(IDENT_AST, (yyvsp[0].sp))); 
+    }
+  }
+#line 1830 "lang2.tab.c"
     break;
 
   case 44: /* factor: L_PARAN expression R_PARAN  */
-#line 208 "lang2.y"
+#line 222 "lang2.y"
                                 { (yyval.np) = (yyvsp[-1].np); }
-#line 1822 "lang2.tab.c"
+#line 1836 "lang2.tab.c"
     break;
 
   case 46: /* factor: NOT IDENT  */
-#line 210 "lang2.y"
-                                { (yyval.np) = build_node1(FACTOR_AST, build_ident_node(IDENT_AST, (yyvsp[0].sp))); }
-#line 1828 "lang2.tab.c"
+#line 224 "lang2.y"
+                                { (yyval.np) = build_node1(NOT_AST, build_ident_node(IDENT_AST, (yyvsp[0].sp))); }
+#line 1842 "lang2.tab.c"
     break;
 
   case 47: /* add_op: ADD  */
-#line 215 "lang2.y"
+#line 229 "lang2.y"
         { (yyval.ival) = OP_ADD; }
-#line 1834 "lang2.tab.c"
+#line 1848 "lang2.tab.c"
     break;
 
   case 48: /* add_op: SUB  */
-#line 216 "lang2.y"
+#line 230 "lang2.y"
         { (yyval.ival) = OP_SUB; }
-#line 1840 "lang2.tab.c"
+#line 1854 "lang2.tab.c"
     break;
 
   case 49: /* mul_op: MUL  */
-#line 220 "lang2.y"
+#line 234 "lang2.y"
         { (yyval.ival) = OP_MUL; }
-#line 1846 "lang2.tab.c"
+#line 1860 "lang2.tab.c"
     break;
 
   case 50: /* mul_op: DIV  */
-#line 221 "lang2.y"
+#line 235 "lang2.y"
         { (yyval.ival) = OP_DIV; }
-#line 1852 "lang2.tab.c"
+#line 1866 "lang2.tab.c"
     break;
 
   case 51: /* mul_op: REM  */
-#line 222 "lang2.y"
+#line 236 "lang2.y"
         { (yyval.ival) = OP_REM; }
-#line 1858 "lang2.tab.c"
+#line 1872 "lang2.tab.c"
     break;
 
   case 52: /* unary_op: INCREM  */
-#line 226 "lang2.y"
-           { (yyval.np) = build_node1(UNARY_OP_AST, build_node0(INCREM_AST));}
-#line 1864 "lang2.tab.c"
+#line 240 "lang2.y"
+           { (yyval.np) = INCREM_AST;}
+#line 1878 "lang2.tab.c"
     break;
 
   case 53: /* unary_op: DECREM  */
-#line 227 "lang2.y"
-           { (yyval.np) = build_node1(UNARY_OP_AST, build_node0(DECREM_AST));}
-#line 1870 "lang2.tab.c"
+#line 241 "lang2.y"
+           { (yyval.np) = DECREM_AST;}
+#line 1884 "lang2.tab.c"
     break;
 
   case 54: /* bit_op: AND  */
-#line 232 "lang2.y"
+#line 246 "lang2.y"
             { (yyval.np) = OP_AND; }
-#line 1876 "lang2.tab.c"
+#line 1890 "lang2.tab.c"
     break;
 
   case 55: /* bit_op: OR  */
-#line 233 "lang2.y"
+#line 247 "lang2.y"
             { (yyval.np) = OP_OR; }
-#line 1882 "lang2.tab.c"
+#line 1896 "lang2.tab.c"
     break;
 
   case 56: /* bit_op: XOR  */
-#line 234 "lang2.y"
+#line 248 "lang2.y"
             { (yyval.np) = OP_XOR; }
-#line 1888 "lang2.tab.c"
+#line 1902 "lang2.tab.c"
     break;
 
   case 57: /* bit_op: L_SHIFT  */
-#line 235 "lang2.y"
+#line 249 "lang2.y"
             { (yyval.np) = OP_L_SHIFT; }
-#line 1894 "lang2.tab.c"
+#line 1908 "lang2.tab.c"
     break;
 
   case 58: /* bit_op: R_SHIFT  */
-#line 236 "lang2.y"
+#line 250 "lang2.y"
             { (yyval.np) = OP_R_SHIFT; }
-#line 1900 "lang2.tab.c"
+#line 1914 "lang2.tab.c"
     break;
 
   case 59: /* var: IDENT  */
-#line 240 "lang2.y"
+#line 254 "lang2.y"
                                 { (yyval.np) = build_ident_node(IDENT_AST, (yyvsp[0].sp));}
-#line 1906 "lang2.tab.c"
+#line 1920 "lang2.tab.c"
     break;
 
   case 60: /* var: NUMBER  */
-#line 241 "lang2.y"
+#line 255 "lang2.y"
                                 { (yyval.np) = build_num_node(NUMBER_AST, (yyvsp[0].ival)); }
-#line 1912 "lang2.tab.c"
+#line 1926 "lang2.tab.c"
     break;
 
   case 61: /* var: FLOAT  */
-#line 242 "lang2.y"
+#line 256 "lang2.y"
                                 { (yyval.np) = build_float_node(FLOAT_AST, (yyvsp[0].fval)); }
-#line 1918 "lang2.tab.c"
+#line 1932 "lang2.tab.c"
     break;
 
   case 62: /* var: IDENT array_index  */
-#line 243 "lang2.y"
-                                { (yyval.np) = build_node2(ARRAY_AST, build_node0(IDENT_AST), (yyvsp[0].np)); }
-#line 1924 "lang2.tab.c"
+#line 257 "lang2.y"
+                                { (yyval.np) = build_node2(ARRAY_AST, build_ident_node(IDENT_AST, (yyvsp[-1].sp)), (yyvsp[0].np)); }
+#line 1938 "lang2.tab.c"
     break;
 
   case 63: /* str: STRING  */
-#line 247 "lang2.y"
+#line 261 "lang2.y"
            { (yyval.np) = build_str_node(STR_AST, (yyvsp[0].str)); }
-#line 1930 "lang2.tab.c"
-    break;
-
-  case 64: /* str: CHAR  */
-#line 248 "lang2.y"
-           { (yyval.np) = build_char_node(CHAR_AST, (yyvsp[0].chara)); }
-#line 1936 "lang2.tab.c"
-    break;
-
-  case 67: /* while_stmt: WHILE L_PARAN condition R_PARAN L_BRACE statements R_BRACE  */
-#line 257 "lang2.y"
-                                                               {
-    (yyval.np) = build_node2(WHILE_STMT_AST, (yyvsp[-4].np), (yyvsp[-1].np));
-  }
 #line 1944 "lang2.tab.c"
     break;
 
+  case 64: /* str: CHAR  */
+#line 262 "lang2.y"
+           { (yyval.np) = build_char_node(CHAR_AST, (yyvsp[0].chara)); }
+#line 1950 "lang2.tab.c"
+    break;
+
+  case 67: /* while_stmt: WHILE L_PARAN condition R_PARAN L_BRACE statements R_BRACE  */
+#line 271 "lang2.y"
+                                                               {
+    (yyval.np) = build_node2(WHILE_STMT_AST, (yyvsp[-4].np), (yyvsp[-1].np));
+  }
+#line 1958 "lang2.tab.c"
+    break;
+
   case 68: /* for_stmt: FOR L_PARAN assignment SEMIC condition SEMIC assignment R_PARAN L_BRACE statements R_BRACE  */
-#line 263 "lang2.y"
+#line 277 "lang2.y"
                                                                                                {
     (yyval.np) = build_node4(FOR_STMT_AST, (yyvsp[-8].np), (yyvsp[-6].np), (yyvsp[-4].np), (yyvsp[-1].np));
   }
-#line 1952 "lang2.tab.c"
+#line 1966 "lang2.tab.c"
     break;
 
   case 69: /* for_stmt: FOR L_PARAN SEMIC SEMIC R_PARAN L_BRACE statements R_BRACE  */
-#line 266 "lang2.y"
+#line 280 "lang2.y"
                                                                {
     (yyval.np) = build_node1(FOR_STMT_AST, (yyvsp[-1].np));
   }
-#line 1960 "lang2.tab.c"
+#line 1974 "lang2.tab.c"
     break;
 
   case 72: /* if_stmt: IF L_PARAN condition R_PARAN L_BRACE statements R_BRACE  */
-#line 277 "lang2.y"
+#line 291 "lang2.y"
                                                             { 
     (yyval.np) = build_node2(IF_STMT_AST, (yyvsp[-4].np), (yyvsp[-1].np));
   }
-#line 1968 "lang2.tab.c"
+#line 1982 "lang2.tab.c"
     break;
 
   case 73: /* else_stmt: ELSE L_BRACE statements R_BRACE  */
-#line 283 "lang2.y"
+#line 297 "lang2.y"
                                     {
     (yyval.np) = build_node1(ELSE_STMT_AST, (yyvsp[-1].np));
   }
-#line 1976 "lang2.tab.c"
+#line 1990 "lang2.tab.c"
     break;
 
   case 74: /* elif_stmt: if_stmt else_stmt  */
-#line 289 "lang2.y"
+#line 303 "lang2.y"
                       { 
     (yyval.np) = build_node2(ELIF_STMT_AST, (yyvsp[-1].np), (yyvsp[0].np));
   }
-#line 1984 "lang2.tab.c"
+#line 1998 "lang2.tab.c"
     break;
 
   case 75: /* condition: expression comp_op expression  */
-#line 295 "lang2.y"
+#line 309 "lang2.y"
                                   {
     if ((yyvsp[-1].np) == OP_EQ) {
       (yyval.np) = build_node1(CONDITION_AST, build_node2(EQ_AST, (yyvsp[-2].np), (yyvsp[0].np)));
@@ -2005,61 +2019,61 @@ yyreduce:
       (yyval.np) = build_node1(CONDITION_AST, build_node2(GTE_AST, (yyvsp[-2].np), (yyvsp[0].np)));
     }
   }
-#line 2009 "lang2.tab.c"
+#line 2023 "lang2.tab.c"
     break;
 
   case 76: /* comp_op: EQ  */
-#line 318 "lang2.y"
+#line 332 "lang2.y"
         { (yyval.np) = OP_EQ; }
-#line 2015 "lang2.tab.c"
+#line 2029 "lang2.tab.c"
     break;
 
   case 77: /* comp_op: NE  */
-#line 319 "lang2.y"
+#line 333 "lang2.y"
         { (yyval.np) = OP_NE; }
-#line 2021 "lang2.tab.c"
+#line 2035 "lang2.tab.c"
     break;
 
   case 78: /* comp_op: LT  */
-#line 320 "lang2.y"
+#line 334 "lang2.y"
         { (yyval.np) = OP_LT; }
-#line 2027 "lang2.tab.c"
+#line 2041 "lang2.tab.c"
     break;
 
   case 79: /* comp_op: GT  */
-#line 321 "lang2.y"
+#line 335 "lang2.y"
         { (yyval.np) = OP_GT; }
-#line 2033 "lang2.tab.c"
+#line 2047 "lang2.tab.c"
     break;
 
   case 80: /* comp_op: LTE  */
-#line 322 "lang2.y"
+#line 336 "lang2.y"
         { (yyval.np) = OP_LTE; }
-#line 2039 "lang2.tab.c"
-    break;
-
-  case 81: /* comp_op: GTE  */
-#line 323 "lang2.y"
-        { (yyval.np) = OP_GTE; }
-#line 2045 "lang2.tab.c"
-    break;
-
-  case 82: /* idents: IDENT COMMA idents  */
-#line 327 "lang2.y"
-                       { 
-    (yyval.np) = build_node2(IDENTS_AST, build_ident_node(IDENT_AST, (yyvsp[-2].sp)), (yyvsp[0].np)); 
-  }
 #line 2053 "lang2.tab.c"
     break;
 
-  case 83: /* idents: IDENT  */
-#line 330 "lang2.y"
-                       { (yyval.np) = build_node1(IDENTS_AST, build_ident_node(IDENT_AST, (yyvsp[0].sp))); }
+  case 81: /* comp_op: GTE  */
+#line 337 "lang2.y"
+        { (yyval.np) = OP_GTE; }
 #line 2059 "lang2.tab.c"
     break;
 
+  case 82: /* idents: IDENT COMMA idents  */
+#line 341 "lang2.y"
+                       { 
+    (yyval.np) = build_node2(IDENTS_AST, build_ident_node(IDENT_AST, (yyvsp[-2].sp)), (yyvsp[0].np)); 
+  }
+#line 2067 "lang2.tab.c"
+    break;
 
-#line 2063 "lang2.tab.c"
+  case 83: /* idents: IDENT  */
+#line 344 "lang2.y"
+                       { (yyval.np) = build_node1(IDENTS_AST, build_ident_node(IDENT_AST, (yyvsp[0].sp))); }
+#line 2073 "lang2.tab.c"
+    break;
+
+
+#line 2077 "lang2.tab.c"
 
       default: break;
     }
@@ -2283,5 +2297,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 333 "lang2.y"
+#line 347 "lang2.y"
 

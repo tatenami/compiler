@@ -33,6 +33,7 @@ void gen_code_mul(char *target, char *op1, char *op2);
 void gen_code_div(char *target, char *op1, char *op2);
 void gen_code_expression(Node *n, char *reg);
 void gen_code_keep_operand(Node *op, char *reg);
+void gen_code_unary_op(Node *op, Node *ident);
 void gen_code_assignment(Node *n);
 void gen_code_while(Node *n);
 void gen_code_if(Node *n);
