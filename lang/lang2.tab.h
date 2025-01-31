@@ -91,11 +91,8 @@ extern int yydebug;
     WHILE = 292,                   /* WHILE  */
     IF = 293,                      /* IF  */
     ELSE = 294,                    /* ELSE  */
-    CHAR = 295,                    /* CHAR  */
-    STRING = 296,                  /* STRING  */
-    FLOAT = 297,                   /* FLOAT  */
-    IDENT = 298,                   /* IDENT  */
-    NUMBER = 299                   /* NUMBER  */
+    IDENT = 295,                   /* IDENT  */
+    NUMBER = 296                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -108,12 +105,9 @@ union YYSTYPE
 
   struct node *np;
   char* sp;
-  char  chara;
-  char* str;
   int   ival;
-  float fval;
 
-#line 117 "lang2.tab.h"
+#line 111 "lang2.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

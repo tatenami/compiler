@@ -1,5 +1,6 @@
 #include "code_generation_stack.h"
 #define OPT1 1
+#define OPT2 1
 
 /* Global variable */
 FILE*  code_fp;
@@ -11,7 +12,7 @@ const unsigned long base_address = 0x10004000;
 
 
 const unsigned int reg_start = 2; // 自由に使えるレジスタの番号の最小値
-const unsigned int stack_offset = 4;
+const unsigned int stack_offset = 0;
 char reg_dataseg[] = "$t0";
 char reg_comp_result[] = "$t1"; // 比較演算の結果等の格納
 char reg_op1[] = "$t2";
@@ -21,10 +22,10 @@ char reg_op2[] = "$t3";
 int num_whiles = 0;
 int num_fors = 0;
 int num_ifs = 0;
-StackExp stack;
-
+int sp;
 
 /* ---------- 記号表関連 ---------- */
+
 
 long get_offset(char *var_name) {
   
@@ -47,13 +48,18 @@ int get_array_row_size(char *var_name) {
   return -1;
 }
 
-// long get_array_offset(char *var_name, int index1, int index2) {
-//   int var_offset = get_offset(var_name);
-//   int offset = (index1 * var_base_size) + (index2 * get_array_row_size(var_name));
-// }
-
 void count_symbol(Node *n) {
-  if (n->type == DECL_PART_AST) {
+  if (n->type == FUNC_DEFINE_AST) {
+    if (strcmp(n->child->var_name, "main") != 0) {
+      return;
+    }
+  }
+  
+  if (n->type == STATEMENTS_AST) {
+    return;
+  }
+
+  if (n->type == ARRAY_AST || n->type == IDENTS_AST) {
     symbol_num++;
   }
 
@@ -72,14 +78,28 @@ void count_symbol(Node *n) {
  * @param n 
  * @return struct SymbolInfo* 
  */
-void make_symbol(Node *n, int num) {
+int make_symbol(Node *n, int num) {
   int size;
+  int next_num = num;
   int array_row_size = 0;
   switch (n->type) {
     case IDENTS_AST: {
+      Node *indet = n->child; 
       n = n->child; // IDENT
       size = var_base_size;
-      break;
+      symbols[num].number = num;
+      symbols[num].target_node = n;
+      symbols[num].mem_size   = size;
+      symbols[num].mem_offset = (num == 0) ? 0 : (symbols[num - 1].mem_offset + symbols[num - 1].mem_size);
+      symbols[num].mem_array_row = array_row_size;
+      symbols[num].var_name   = n->var_name;
+      if (indet->brother != NULL) {
+        next_num = make_symbol(indet->brother, num + 1);
+      }
+      else {
+        next_num++;
+      }
+      return next_num;
     }
     case ARRAY_AST: {
       n = n->child; // IDENT
@@ -93,16 +113,19 @@ void make_symbol(Node *n, int num) {
       else { // １次元配列
         size = num1 * var_base_size;
       }
-      break; 
+
+      symbols[num].number = num;
+      symbols[num].target_node = n;
+      symbols[num].mem_size   = size;
+      symbols[num].mem_offset = (num == 0) ? 0 : (symbols[num - 1].mem_offset + symbols[num - 1].mem_size);
+      symbols[num].mem_array_row = array_row_size;
+      symbols[num].var_name   = n->var_name;
+
+      next_num++;
+      return next_num;
     }
   }
 
-  symbols[num].number = num;
-  symbols[num].target_node = n;
-  symbols[num].mem_size   = size;
-  symbols[num].mem_offset = (num == 0) ? 0 : (symbols[num - 1].mem_offset + symbols[num - 1].mem_size);
-  symbols[num].mem_array_row = array_row_size;
-  symbols[num].var_name   = n->var_name;
 }
 
 /**
@@ -115,8 +138,14 @@ void make_symbol(Node *n, int num) {
 int add_symbol(Node *n) {
   static int num = 0;
 
+  if (n->type == FUNC_DEFINE_AST) {
+    if (strcmp(n->child->var_name, "main") != 0) {
+      return 0;
+    }
+  }
+
   if (n->type == DECL_PART_AST) {
-    make_symbol(n->child, num++);
+    num = make_symbol(n->child, num);
   }
 
   if (n->child != NULL) {
@@ -147,16 +176,23 @@ void print_symbol_list(FILE *fp) {
 /* ---------- コード生成関連 ---------- */
 
 void gen_code_push(const char *reg) {
-  fprintf(code_fp, "  sw %s, %d($sp)\n", reg, stack.pointer);
+  fprintf(code_fp, "  sw %s, %d($sp)\n", reg, sp);
   fprintf(code_fp, "  nop\n");
-  stack.pointer += var_base_size;
+  sp -= var_base_size;
 }
 
 void gen_code_pop(const char *reg) {
   fprintf(code_fp, "  # pop stack\n");
-  stack.pointer -= var_base_size;
-  fprintf(code_fp, "  lw %s, %d($sp)\n", reg, stack.pointer);
+  sp += var_base_size;
+  fprintf(code_fp, "  lw %s, %d($sp)\n", reg, sp);
+  #if OPT2
+  if (strcmp(reg, reg_op2) != 0) {
+    fprintf(code_fp, "  nop\n");
+  }
+  #endif
+  #if !OPT2
   fprintf(code_fp, "  nop\n");
+  #endif
 }
 
 // 
@@ -195,7 +231,8 @@ void gen_code_array_offset(Node *n, char *target) { // n -> IDENT_AST
     gen_code_add(reg_op1, reg_op1, reg_op2); // offset($t2) += var_offset
   }
   else { // index1
-    gen_code_expression(index->child, reg_op1);
+    index = index->child;
+    gen_code_expression(index, reg_op1);
     #if OPT1
     if (index->type != NUMBER_AST) {
       gen_code_pop(reg_op1); // index1 の確保 $t2
@@ -288,6 +325,7 @@ void gen_code_comp(Node *n) {
   if (op2->type != NUMBER_AST) {
     gen_code_pop(reg_op2);
   }
+  
   if (op1->type != NUMBER_AST) {
     gen_code_pop(reg_op1);
   }
@@ -478,7 +516,7 @@ void gen_code_expression(Node *n, char *reg) {
       }
       case XOR_AST: {
         gen_code_xor("$v0", reg_op1, reg_op2);
-        break;
+        break;  
       }
       case L_SHIFT_AST: {
         gen_code_lshift("$v0", reg_op1, reg_op2);
@@ -780,7 +818,7 @@ void gen_data_segment(struct SymbolInfo *s) {
 }
 
 void closing(FILE *fp) {
-  fprintf(fp, "\n li $v0, stop_service\n");
+  fprintf(fp, " li $v0, stop_service\n");
   fprintf(fp, " syscall\n");
   fprintf(fp, " nop\n");
   fprintf(fp, " jr $ra\n");
@@ -811,7 +849,7 @@ int main(int argc, char *argv[]) {
     code_fp = stdout;
   }
 
-  #if JSON
+  #if JSON 
    print_tree_in_json(top); // ASTの可視化
   #endif
 
@@ -826,7 +864,7 @@ int main(int argc, char *argv[]) {
 
   // コード生成
   initialize(code_fp);
-  stack.pointer = stack_offset;
+  sp = stack_offset;
   gen_code(top);
   closing(code_fp);
   #endif

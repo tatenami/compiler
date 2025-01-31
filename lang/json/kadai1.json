@@ -54,36 +54,22 @@
 "IDENT_AST(sum)_31": {
 }
 , "ADD_AST_32": {
-"MUL_AST_33": {
-"ADD_AST_34": {
-"IDENT_AST(sum)_35": {
+"IDENT_AST(sum)_33": {
 }
-, "NUMBER_AST(1)_36": {
+, "IDENT_AST(i)_34": {
 }
 }
-, "SUB_AST_37": {
-"DIV_AST_38": {
-"IDENT_AST(i)_39": {
 }
-, "NUMBER_AST(3)_40": {
 }
+, "STATEMENTS_AST_35": {
+"STATEMENT_AST_36": {
+"ASSIGNMENT_AST_37": {
+"IDENT_AST(i)_38": {
+}
+, "ADD_AST_39": {
+"IDENT_AST(i)_40": {
 }
 , "NUMBER_AST(1)_41": {
-}
-}
-}
-, "MUL_AST_42": {
-"ADD_AST_43": {
-"IDENT_AST(i)_44": {
-}
-, "NUMBER_AST(3)_45": {
-}
-}
-, "SUB_AST_46": {
-"IDENT_AST(sum)_47": {
-}
-, "NUMBER_AST(1)_48": {
-}
 }
 }
 }

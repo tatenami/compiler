@@ -12,18 +12,15 @@
 %union {
   struct node *np;
   char* sp;
-  char  chara;
-  char* str;
   int   ival;
-  float fval;
 }
 
 %type <np> program declarations func_define decl_statement decl_part statements statement
            func_var_decl func_arg_part
-           break_stmt assignment_stmt assignment loop_stmt cond_stmt func_call expressions expression 
-           while_stmt if_stmt else_stmt elif_stmt for_stmt
+           assignment_stmt assignment loop_stmt cond_stmt func_call expressions expression 
+           while_stmt if_stmt else_stmt elif_stmt for_stmt break_stmt
            condition array array_index term factor unary_factor unary_op bit_op var idents
-           comp_op str
+           comp_op
 
 %type <ival> add_op mul_op
 
@@ -32,7 +29,7 @@
        SEMIC COMMA ADD SUB MUL DIV REM INCREM DECREM EQ NE LT GT LTE GTE
        AND OR XOR NOT L_SHIFT R_SHIFT
        FUNCDECL FUNCCALL BREAK
-       FOR WHILE IF ELSE <chara>CHAR <str>STRING <fval>FLOAT
+       FOR WHILE IF ELSE 
 
 %token <sp> IDENT
 %token <ival> NUMBER
@@ -54,6 +51,7 @@ declarations
 array_index
   : L_BRACKET expression R_BRACKET { $$ = build_node1(ARRAY_INDEX_AST, $2); } // ex1
   | L_BRACKET expression R_BRACKET L_BRACKET expression R_BRACKET { $$ = build_node2(ARRAY_INDEX_AST, $2, $5); } // ex1
+  | L_BRACKET R_BRACKET { $$ = build_node0(ARRAY_INDEX_AST); }
 ;
 
 array
@@ -138,9 +136,6 @@ assignment
     $$ = build_node2(ASSIGNMENT_AST, $1, $3);
   }
   | unary_factor { $$ = build_node1(ASSIGNMENT_AST, $1); }// ex4
-  | IDENT ASSIGN str {
-    $$ = build_node2(ASSIGNMENT_AST, build_ident_node(IDENT_AST, $1), $3);
-  }
 ;
 
 assignment_stmt
@@ -251,13 +246,7 @@ bit_op
 var
   : IDENT                       { $$ = build_ident_node(IDENT_AST, $1);}
   | NUMBER                      { $$ = build_num_node(NUMBER_AST, $1); }
-  | FLOAT                       { $$ = build_float_node(FLOAT_AST, $1); } // ex6
   | IDENT array_index           { $$ = build_node2(ARRAY_AST, build_ident_node(IDENT_AST, $1), $2); }
-;
-
-str
-  : STRING { $$ = build_str_node(STR_AST, $1); }
-  | CHAR   { $$ = build_char_node(CHAR_AST, $1); }
 ;
 
 loop_stmt

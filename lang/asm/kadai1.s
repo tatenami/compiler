@@ -37,12 +37,12 @@ $WHILE0:
   # keep val (i) to stack
   lw $t2, 0($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep imm val (11) to stack
   li $t3, 11
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # comp '<'
   slt $t1, $t2, $t3
@@ -51,53 +51,51 @@ $WHILE0:
   # keep val (sum) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep val (i) to stack
   lw $t3, 0($t0)
   nop
-  sw $t3, 8($sp)
+  sw $t3, -4($sp)
   nop
   # pop stack
-  lw $t3, 8($sp)
-  nop
+  lw $t3, -4($sp)
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # add exp
   add $v0, $t2, $t3
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [sum] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 4($t0)
   nop
   # keep val (i) to stack
   lw $t2, 0($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep imm val (1) to stack
   li $t3, 1
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # add exp
   add $v0, $t2, $t3
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [i] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 0($t0)
   nop
   j $WHILE0
   nop
 $ENDWHILE0:
-
  li $v0, stop_service
  syscall
  nop

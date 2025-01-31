@@ -21,8 +21,7 @@
 
 %%======== レポートタイトル等 ======================================%%
 % ToDo: 提出要領に従って，適切なタイトル・サブタイトルを設定する
-\title{情報工学実験C コンパイラ実験最終レポート \\
-       |\large{クライアントサーバーモデルで動作する名簿管理プログラムの作成}|}
+\title{情報工学実験C コンパイラ実験最終レポート}
 
 % ToDo: 自分自身の氏名と学生番号に書き換える
 \author{氏名: 寺岡 久騎 (TERAOKA, Hisaki) \\
@@ -50,11 +49,262 @@
 %--------------------------------------------------------------------%
 \section{本実験の目的}
 % 講義資料No.1を参考
+本実験の目的は，これまで学んできたC言語についての知識を再確認するとともに，
+それを使って，
+\begin{itemize}
+  \item ソフトウェア全体の仕様の決定
+  \item プログラムで利用するデータ構造，アルゴリズムの考案と実装
+  \item 動作のテスト，デバッグの作業
+\end{itemize}
+これら一連の作業を通して大規模なプログラムの作成の経験をすること，そして
+lex，yaccといったプログラムジェネレータを使用した
+コンパイラプログラムの作成を通して，コード解析やファイルシステムに
+利用される木構造の取り扱い，ソースコードとアセンブリ言語との対応について
+の理解と習熟を深めることである．
 
 %--------------------------------------------------------------------%
 \section{作成した言語の定義}
+以下に作成した言語の定義として，文法規則を記述したyaccのルールを示す．
+言語は，最終課題1--5が実行できる実装となっている．
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+                    fontsize=\small, baselinestretch=0.8]
+%union {
+  struct node *np;
+  char* sp;
+  int   ival;
+}
+
+%type <np> program declarations func_define decl_statement decl_part
+           statements statement func_var_decl func_arg_part
+           assignment_stmt assignment loop_stmt cond_stmt func_call 
+           while_stmt if_stmt else_stmt elif_stmt for_stmt
+           expressions expression 
+           condition array array_index term factor unary_factor 
+           comp_op unary_op bit_op var idents
+
+%type <ival> add_op mul_op
+
+%token DEFINE ASSIGN ARRAY_DEF 
+        L_BRACKET R_BRACKET L_PARAN R_PARAN L_BRACE R_BRACE
+        SEMIC COMMA ADD SUB MUL DIV REM INCREM DECREM EQ NE LT GT LTE GTE
+        AND OR XOR NOT L_SHIFT R_SHIFT
+        FUNCDECL FUNCCALL
+        FOR WHILE IF ELSE
+
+%token <sp> IDENT
+%token <ival> NUMBER
+
+%define parse.error verbose
+
+%%
+
+program
+  : declarations statements 
+  | declarations           
+;
+
+declarations
+  : decl_statement declarations 
+  | decl_statement             
+;
+
+array_index
+  : L_BRACKET expression R_BRACKET 
+  | L_BRACKET expression R_BRACKET L_BRACKET expression R_BRACKET 
+  | L_BRACKET R_BRACKET 
+;
+
+array
+  : IDENT array_index 
+;
+
+decl_part
+  : DEFINE idents 
+  | ARRAY_DEF array 
+;
+
+func_arg_part
+  : DEFINE IDENT
+  | ARRAY_DEF array 
+;
+
+decl_statement
+  : decl_part SEMIC 
+  | func_define     
+;
+
+func_var_decl
+  : func_arg_part         
+  | func_arg_part COMMA func_var_decl 
+;
+
+func_define
+  : FUNCDECL IDENT L_PARAN func_var_decl R_PARAN L_BRACE declarations statements R_BRACE 
+  | FUNCDECL IDENT L_PARAN R_PARAN L_BRACE declarations statements R_BRACE
+;
+
+func_call
+  : FUNCCALL IDENT L_PARAN expressions R_PARAN SEMIC 
+  | FUNCCALL IDENT L_PARAN  R_PARAN SEMIC 
+;
+
+statements
+  : statement statements 
+  | statement          
+;
+
+statement
+  : assignment_stmt
+  | loop_stmt       
+  | cond_stmt
+  | func_call       
+;
+
+assignment
+  : IDENT ASSIGN expression 
+  | array ASSIGN expression  
+  | unary_factor 
+;
+
+assignment_stmt
+  : assignment SEMIC 
+;
+
+expressions
+  : expression COMMA expressions 
+  | expression                   
+;
+
+expression
+  : expression add_op term 
+  | term                   
+;
+
+term
+  : term mul_op factor
+  | term bit_op factor 
+  | factor             
+;
+
+unary_factor
+  : IDENT unary_op 
+  | unary_op IDENT 
+;
+
+factor
+  : var                         
+  | L_PARAN expression R_PARAN                 
+  | unary_factor                
+  | NOT IDENT
+; 
+
+add_op
+  : ADD 
+  | SUB 
+;
+
+mul_op
+  : MUL 
+  | DIV 
+  | REM 
+
+unary_op
+  : INCREM 
+  | DECREM 
+;
+
+bit_op
+  : AND     
+  | OR      
+  | XOR     
+  | L_SHIFT 
+  | R_SHIFT 
+;
+
+var
+  : IDENT                       
+  | NUMBER                      
+  | IDENT array_index
+;
+
+loop_stmt
+  : while_stmt
+  | for_stmt
+;
+
+while_stmt
+  : WHILE L_PARAN condition R_PARAN L_BRACE statements R_BRACE 
+;
+
+for_stmt
+  : FOR L_PARAN assignment SEMIC condition SEMIC assignment R_PARAN 
+  L_BRACE statements R_BRACE 
+;
+
+cond_stmt
+  : if_stmt   
+  | elif_stmt 
+;
+
+if_stmt
+  : IF L_PARAN condition R_PARAN L_BRACE statements 
+;
+
+else_stmt
+  : ELSE L_BRACE statements R_BRACE
+;
+
+elif_stmt
+  : if_stmt else_stmt 
+;
+
+condition
+  : expression comp_op expression 
+;
+
+comp_op
+  : EQ  
+  | NE  
+  | LT  
+  | GT  
+  | LTE 
+  | GTE 
+;
+
+idents
+  : IDENT COMMA idents 
+  | IDENT
+;
+
+%%
+\end{Verbatim}
 
 \subsection{定義した言語で受理されるプログラム}
+
+\subsubsection{全体の構造}
+作成した言語では，プログラム全体はまず
+\begin{itemize}
+  \item 変数宣言部
+  \item 処理文集合
+\end{itemize}
+からなる仕様となっており，使用される変数はプログラムの冒頭で
+全て宣言され，その後に
+変数が使用される様々な処理文の集合が記述される．従って，文集合中に変数宣言は行われない．
+
+\subsubsection{変数の宣言}
+プログラムの変数宣言部では，4バイトの整数値を格納できる通常の変数と
+，この整数値を複数格納できる配列(1次元，2次元)が記述される．
+yaccの規則から，プログラムにおいて変数の宣言として以下の記述ができる．
+ここで，\verb|<識別子名>|は変数名であり，先頭がアルファベットの英数字列である．
+\begin{description}
+  \item[整数変数:] \verb|define <識別子名>;|
+  \item[整数変数(複数):] \verb|define <識別子名>, ...;|
+  \item[配列(1次元):] \verb|array <識別子名>[自然数];|
+  \item[配列(2次元):] \verb|array <識別子名>[自然数][自然数];|
+\end{description}
+
+\subsubsection{}
 
 %--------------------------------------------------------------------%
 \section{コード生成の概要}
@@ -67,10 +317,12 @@
 
 % この章にコンパイラのソースプログラムがある場所を記述
 
+\section{工夫した点について}
+
+
 %--------------------------------------------------------------------%
 \section{最終課題のプログラム及び実行結果}
 
-\section{工夫した点について}
 
 %--------------------------------------------------------------------%
 \section{考察}

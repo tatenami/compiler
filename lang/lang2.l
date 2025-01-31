@@ -128,23 +128,29 @@
 }
 
   /* char */
-\'[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]\' {
-  yylval.chara = yytext[1];
-  return CHAR;
-}
+  /*
+  \'[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]\' {
+    yylval.chara = yytext[1];
+    return CHAR;
+  }
+  */
 
   /* str */
-\"[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]+\" {
-  yylval.str = (char*)malloc(sizeof(char) * (yyleng - 2));
-  strncpy(yylval.str, &yytext[1], yyleng);
-  yylval.str[yyleng - 2] = 0;
-  return STRING;
-}
+  /*
+  \"[0-9a-zA-Z !"#$%&'()\*\+\-\.,\/:;<=>?@\[\\\]^_`{|}~]+\" {
+    yylval.str = (char*)malloc(sizeof(char) * (yyleng - 2));
+    strncpy(yylval.str, &yytext[1], yyleng);
+    yylval.str[yyleng - 2] = 0;
+    return STRING;
+  }
+  */
+  /*
+  [0-9]+[.][0-9]+ {
+    yylval.fval = atof(yytext); 
+    return FLOAT;
+  }
+  */
 
-[0-9]+[.][0-9]+ {
-  yylval.fval = atof(yytext); 
-  return FLOAT;
-}
 
 [ \t]+
  

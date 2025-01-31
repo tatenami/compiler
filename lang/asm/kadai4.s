@@ -40,18 +40,17 @@ $WHILE0:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep val (N) to stack
   lw $t3, 0($t0)
   nop
-  sw $t3, 8($sp)
+  sw $t3, -4($sp)
   nop
   # pop stack
-  lw $t3, 8($sp)
-  nop
+  lw $t3, -4($sp)
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # comp '<='
   sub $t1, $t2, $t3
@@ -64,10 +63,10 @@ $WHILE0:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   li $t3, 4  # mul exp
   mult $t2, $t3
@@ -82,20 +81,20 @@ $WHILE0:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep imm val (1) to stack
   li $t3, 1
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # add exp
   add $v0, $t2, $t3
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [i] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 4($t0)
   nop
@@ -110,28 +109,27 @@ $WHILE1:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep val (N) to stack
   lw $t2, 0($t0)
   nop
-  sw $t2, 8($sp)
+  sw $t2, -4($sp)
   nop
   # keep imm val (2) to stack
   li $t3, 2
   # pop stack
-  lw $t2, 8($sp)
+  lw $t2, -4($sp)
   nop
   # div exp
   div $t2, $t3
   mflo $v0
-  sw $v0, 8($sp)
+  sw $v0, -4($sp)
   nop
   # pop stack
-  lw $t3, 8($sp)
-  nop
+  lw $t3, -4($sp)
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # comp '<='
   sub $t1, $t2, $t3
@@ -146,34 +144,32 @@ $WHILE2:
   # keep val (j) to stack
   lw $t2, 8($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep val (N) to stack
   lw $t2, 0($t0)
   nop
-  sw $t2, 8($sp)
+  sw $t2, -4($sp)
   nop
   # keep val (i) to stack
   lw $t3, 4($t0)
   nop
-  sw $t3, 12($sp)
+  sw $t3, -8($sp)
   nop
   # pop stack
-  lw $t3, 12($sp)
-  nop
+  lw $t3, -8($sp)
   # pop stack
-  lw $t2, 8($sp)
+  lw $t2, -4($sp)
   nop
   # div exp
   div $t2, $t3
   mflo $v0
-  sw $v0, 8($sp)
+  sw $v0, -4($sp)
   nop
   # pop stack
-  lw $t3, 8($sp)
-  nop
+  lw $t3, -4($sp)
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # comp '<='
   sub $t1, $t2, $t3
@@ -183,27 +179,26 @@ $WHILE2:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep val (j) to stack
   lw $t3, 8($t0)
   nop
-  sw $t3, 8($sp)
+  sw $t3, -4($sp)
   nop
   # pop stack
-  lw $t3, 8($sp)
-  nop
+  lw $t3, -4($sp)
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # mul exp
   mult $t2, $t3
   mflo $v0
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [k] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 12($t0)
   nop
@@ -213,10 +208,10 @@ $WHILE2:
   # keep val (k) to stack
   lw $t2, 12($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   li $t3, 4  # mul exp
   mult $t2, $t3
@@ -231,20 +226,20 @@ $WHILE2:
   # keep val (j) to stack
   lw $t2, 8($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep imm val (1) to stack
   li $t3, 1
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # add exp
   add $v0, $t2, $t3
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [j] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 8($t0)
   nop
@@ -254,27 +249,26 @@ $ENDWHILE2:
   # keep val (i) to stack
   lw $t2, 4($t0)
   nop
-  sw $t2, 4($sp)
+  sw $t2, 0($sp)
   nop
   # keep imm val (1) to stack
   li $t3, 1
   # pop stack
-  lw $t2, 4($sp)
+  lw $t2, 0($sp)
   nop
   # add exp
   add $v0, $t2, $t3
-  sw $v0, 4($sp)
+  sw $v0, 0($sp)
   nop
   # assignment [i] <- exp val
   # pop stack
-  lw $v0, 4($sp)
+  lw $v0, 0($sp)
   nop
   sw $v0, 4($t0)
   nop
   j $WHILE1
   nop
 $ENDWHILE1:
-
  li $v0, stop_service
  syscall
  nop

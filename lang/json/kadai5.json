@@ -50,320 +50,319 @@
 "IDENTS_AST_28": {
 "IDENT_AST(i)_29": {
 }
+, "IDENTS_AST_30": {
+"IDENT_AST(j)_31": {
 }
+, "IDENTS_AST_32": {
+"IDENT_AST(k)_33": {
 }
 }
-, "DECLARATIONS_AST_30": {
-"DECL_STATEMENT_AST_31": {
-"DECL_PART_AST_32": {
-"IDENTS_AST_33": {
-"IDENT_AST(j)_34": {
 }
 }
 }
 }
-, "DECLARATIONS_AST_35": {
-"DECL_STATEMENT_AST_36": {
-"DECL_PART_AST_37": {
-"IDENTS_AST_38": {
-"IDENT_AST(k)_39": {
 }
 }
 }
 }
+, "STATEMENTS_AST_34": {
+"STATEMENT_AST_35": {
+"ASSIGNMENT_AST_36": {
+"ARRAY_AST_37": {
+"IDENT_AST(matrix1)_38": {
 }
+, "ARRAY_INDEX_39": {
+"NUMBER_AST(0)_40": {
 }
+, "NUMBER_AST(0)_41": {
 }
 }
 }
+, "NUMBER_AST(1)_42": {
 }
-, "STATEMENTS_AST_40": {
-"STATEMENT_AST_41": {
-"ASSIGNMENT_AST_42": {
-"ARRAY_AST_43": {
-"IDENT_AST(matrix1)_44": {
 }
-, "ARRAY_INDEX_45": {
-"NUMBER_AST(0)_46": {
 }
-, "NUMBER_AST(0)_47": {
+, "STATEMENTS_AST_43": {
+"STATEMENT_AST_44": {
+"ASSIGNMENT_AST_45": {
+"ARRAY_AST_46": {
+"IDENT_AST(matrix1)_47": {
 }
+, "ARRAY_INDEX_48": {
+"NUMBER_AST(0)_49": {
 }
+, "NUMBER_AST(1)_50": {
 }
-, "NUMBER_AST(1)_48": {
 }
 }
+, "NUMBER_AST(2)_51": {
 }
-, "STATEMENTS_AST_49": {
-"STATEMENT_AST_50": {
-"ASSIGNMENT_AST_51": {
-"ARRAY_AST_52": {
-"IDENT_AST(matrix1)_53": {
 }
-, "ARRAY_INDEX_54": {
-"NUMBER_AST(0)_55": {
 }
-, "NUMBER_AST(1)_56": {
+, "STATEMENTS_AST_52": {
+"STATEMENT_AST_53": {
+"ASSIGNMENT_AST_54": {
+"ARRAY_AST_55": {
+"IDENT_AST(matrix1)_56": {
 }
+, "ARRAY_INDEX_57": {
+"NUMBER_AST(1)_58": {
 }
+, "NUMBER_AST(0)_59": {
 }
-, "NUMBER_AST(2)_57": {
 }
 }
+, "NUMBER_AST(3)_60": {
 }
-, "STATEMENTS_AST_58": {
-"STATEMENT_AST_59": {
-"ASSIGNMENT_AST_60": {
-"ARRAY_AST_61": {
-"IDENT_AST(matrix1)_62": {
 }
-, "ARRAY_INDEX_63": {
-"NUMBER_AST(1)_64": {
 }
-, "NUMBER_AST(0)_65": {
+, "STATEMENTS_AST_61": {
+"STATEMENT_AST_62": {
+"ASSIGNMENT_AST_63": {
+"ARRAY_AST_64": {
+"IDENT_AST(matrix1)_65": {
 }
+, "ARRAY_INDEX_66": {
+"NUMBER_AST(1)_67": {
 }
+, "NUMBER_AST(1)_68": {
 }
-, "NUMBER_AST(3)_66": {
 }
 }
+, "NUMBER_AST(4)_69": {
 }
-, "STATEMENTS_AST_67": {
-"STATEMENT_AST_68": {
-"ASSIGNMENT_AST_69": {
-"ARRAY_AST_70": {
-"IDENT_AST(matrix1)_71": {
 }
-, "ARRAY_INDEX_72": {
-"NUMBER_AST(1)_73": {
 }
-, "NUMBER_AST(1)_74": {
+, "STATEMENTS_AST_70": {
+"STATEMENT_AST_71": {
+"ASSIGNMENT_AST_72": {
+"ARRAY_AST_73": {
+"IDENT_AST(matrix2)_74": {
 }
+, "ARRAY_INDEX_75": {
+"NUMBER_AST(0)_76": {
 }
+, "NUMBER_AST(0)_77": {
 }
-, "NUMBER_AST(4)_75": {
 }
 }
+, "NUMBER_AST(5)_78": {
 }
-, "STATEMENTS_AST_76": {
-"STATEMENT_AST_77": {
-"ASSIGNMENT_AST_78": {
-"ARRAY_AST_79": {
-"IDENT_AST(matrix2)_80": {
 }
-, "ARRAY_INDEX_81": {
-"NUMBER_AST(0)_82": {
 }
-, "NUMBER_AST(0)_83": {
+, "STATEMENTS_AST_79": {
+"STATEMENT_AST_80": {
+"ASSIGNMENT_AST_81": {
+"ARRAY_AST_82": {
+"IDENT_AST(matrix2)_83": {
 }
+, "ARRAY_INDEX_84": {
+"NUMBER_AST(0)_85": {
 }
+, "NUMBER_AST(1)_86": {
 }
-, "NUMBER_AST(5)_84": {
 }
 }
+, "NUMBER_AST(6)_87": {
 }
-, "STATEMENTS_AST_85": {
-"STATEMENT_AST_86": {
-"ASSIGNMENT_AST_87": {
-"ARRAY_AST_88": {
-"IDENT_AST(matrix2)_89": {
 }
-, "ARRAY_INDEX_90": {
-"NUMBER_AST(0)_91": {
 }
-, "NUMBER_AST(1)_92": {
+, "STATEMENTS_AST_88": {
+"STATEMENT_AST_89": {
+"ASSIGNMENT_AST_90": {
+"ARRAY_AST_91": {
+"IDENT_AST(matrix2)_92": {
 }
+, "ARRAY_INDEX_93": {
+"NUMBER_AST(1)_94": {
 }
+, "NUMBER_AST(0)_95": {
 }
-, "NUMBER_AST(6)_93": {
 }
 }
+, "NUMBER_AST(7)_96": {
 }
-, "STATEMENTS_AST_94": {
-"STATEMENT_AST_95": {
-"ASSIGNMENT_AST_96": {
-"ARRAY_AST_97": {
-"IDENT_AST(matrix2)_98": {
 }
-, "ARRAY_INDEX_99": {
-"NUMBER_AST(1)_100": {
 }
-, "NUMBER_AST(0)_101": {
+, "STATEMENTS_AST_97": {
+"STATEMENT_AST_98": {
+"ASSIGNMENT_AST_99": {
+"ARRAY_AST_100": {
+"IDENT_AST(matrix2)_101": {
 }
+, "ARRAY_INDEX_102": {
+"NUMBER_AST(1)_103": {
 }
+, "NUMBER_AST(1)_104": {
 }
-, "NUMBER_AST(7)_102": {
 }
 }
+, "NUMBER_AST(8)_105": {
 }
-, "STATEMENTS_AST_103": {
-"STATEMENT_AST_104": {
-"ASSIGNMENT_AST_105": {
-"ARRAY_AST_106": {
-"IDENT_AST(matrix2)_107": {
 }
-, "ARRAY_INDEX_108": {
-"NUMBER_AST(1)_109": {
 }
-, "NUMBER_AST(1)_110": {
+, "STATEMENTS_AST_106": {
+"STATEMENT_AST_107": {
+"FOR_STMT_AST_108": {
+"ASSIGNMENT_AST_109": {
+"IDENT_AST(i)_110": {
 }
+, "NUMBER_AST(0)_111": {
 }
 }
-, "NUMBER_AST(8)_111": {
+, "CONDITION_AST_112": {
+"LT_AST_113": {
+"IDENT_AST(i)_114": {
 }
+, "NUMBER_AST(2)_115": {
 }
 }
-, "STATEMENTS_AST_112": {
-"STATEMENT_AST_113": {
-"FOR_STMT_AST_114": {
-"ASSIGNMENT_AST_115": {
-"IDENT_AST(i)_116": {
 }
-, "NUMBER_AST(0)_117": {
+, "ASSIGNMENT_AST_116": {
+"UNARY_OP_AST_117": {
+"B_INCREM_AST_118": {
 }
+, "IDENT_AST(i)_119": {
 }
-, "CONDITION_AST_118": {
-"LT_AST_119": {
-"IDENT_AST(i)_120": {
 }
-, "NUMBER_AST(2)_121": {
 }
+, "STATEMENTS_AST_120": {
+"STATEMENT_AST_121": {
+"FOR_STMT_AST_122": {
+"ASSIGNMENT_AST_123": {
+"IDENT_AST(j)_124": {
 }
+, "NUMBER_AST(0)_125": {
 }
-, "ASSIGNMENT_AST_122": {
-"UNARY_OP_AST_123": {
-"B_INCREM_AST_124": {
 }
-, "IDENT_AST(i)_125": {
+, "CONDITION_AST_126": {
+"LT_AST_127": {
+"IDENT_AST(j)_128": {
 }
+, "NUMBER_AST(2)_129": {
 }
 }
-, "STATEMENTS_AST_126": {
-"STATEMENT_AST_127": {
-"FOR_STMT_AST_128": {
-"ASSIGNMENT_AST_129": {
-"IDENT_AST(j)_130": {
 }
-, "NUMBER_AST(0)_131": {
+, "ASSIGNMENT_AST_130": {
+"UNARY_OP_AST_131": {
+"B_INCREM_AST_132": {
 }
+, "IDENT_AST(j)_133": {
 }
-, "CONDITION_AST_132": {
-"LT_AST_133": {
-"IDENT_AST(j)_134": {
 }
-, "NUMBER_AST(2)_135": {
 }
+, "STATEMENTS_AST_134": {
+"STATEMENT_AST_135": {
+"ASSIGNMENT_AST_136": {
+"ARRAY_AST_137": {
+"IDENT_AST(matrix3)_138": {
 }
+, "ARRAY_INDEX_139": {
+"IDENT_AST(i)_140": {
 }
-, "ASSIGNMENT_AST_136": {
-"UNARY_OP_AST_137": {
-"B_INCREM_AST_138": {
+, "IDENT_AST(j)_141": {
 }
-, "IDENT_AST(j)_139": {
 }
 }
+, "NUMBER_AST(0)_142": {
 }
-, "STATEMENTS_AST_140": {
-"STATEMENT_AST_141": {
-"ASSIGNMENT_AST_142": {
-"ARRAY_AST_143": {
-"IDENT_AST(matrix3)_144": {
 }
-, "ARRAY_INDEX_145": {
-"IDENT_AST(i)_146": {
 }
-, "IDENT_AST(j)_147": {
 }
 }
+}
+}
+}
+}
+, "STATEMENTS_AST_143": {
+"STATEMENT_AST_144": {
+"FOR_STMT_AST_145": {
+"ASSIGNMENT_AST_146": {
+"IDENT_AST(i)_147": {
 }
 , "NUMBER_AST(0)_148": {
 }
 }
+, "CONDITION_AST_149": {
+"LT_AST_150": {
+"IDENT_AST(i)_151": {
+}
+, "NUMBER_AST(2)_152": {
 }
 }
 }
+, "ASSIGNMENT_AST_153": {
+"UNARY_OP_AST_154": {
+"B_INCREM_AST_155": {
+}
+, "IDENT_AST(i)_156": {
 }
 }
 }
+, "STATEMENTS_AST_157": {
+"STATEMENT_AST_158": {
+"FOR_STMT_AST_159": {
+"ASSIGNMENT_AST_160": {
+"IDENT_AST(j)_161": {
 }
-, "STATEMENTS_AST_149": {
-"STATEMENT_AST_150": {
-"FOR_STMT_AST_151": {
-"ASSIGNMENT_AST_152": {
-"IDENT_AST(i)_153": {
-}
-, "NUMBER_AST(0)_154": {
-}
-}
-, "CONDITION_AST_155": {
-"LT_AST_156": {
-"IDENT_AST(i)_157": {
-}
-, "NUMBER_AST(2)_158": {
+, "NUMBER_AST(0)_162": {
 }
 }
+, "CONDITION_AST_163": {
+"LT_AST_164": {
+"IDENT_AST(j)_165": {
 }
-, "ASSIGNMENT_AST_159": {
-"UNARY_OP_AST_160": {
-"B_INCREM_AST_161": {
-}
-, "IDENT_AST(i)_162": {
+, "NUMBER_AST(2)_166": {
 }
 }
 }
-, "STATEMENTS_AST_163": {
-"STATEMENT_AST_164": {
-"FOR_STMT_AST_165": {
-"ASSIGNMENT_AST_166": {
-"IDENT_AST(j)_167": {
+, "ASSIGNMENT_AST_167": {
+"UNARY_OP_AST_168": {
+"B_INCREM_AST_169": {
 }
-, "NUMBER_AST(0)_168": {
-}
-}
-, "CONDITION_AST_169": {
-"LT_AST_170": {
-"IDENT_AST(j)_171": {
-}
-, "NUMBER_AST(2)_172": {
+, "IDENT_AST(j)_170": {
 }
 }
 }
-, "ASSIGNMENT_AST_173": {
-"UNARY_OP_AST_174": {
-"B_INCREM_AST_175": {
+, "STATEMENTS_AST_171": {
+"STATEMENT_AST_172": {
+"FOR_STMT_AST_173": {
+"ASSIGNMENT_AST_174": {
+"IDENT_AST(k)_175": {
 }
-, "IDENT_AST(j)_176": {
-}
-}
-}
-, "STATEMENTS_AST_177": {
-"STATEMENT_AST_178": {
-"FOR_STMT_AST_179": {
-"ASSIGNMENT_AST_180": {
-"IDENT_AST(k)_181": {
-}
-, "NUMBER_AST(0)_182": {
+, "NUMBER_AST(0)_176": {
 }
 }
-, "CONDITION_AST_183": {
-"LT_AST_184": {
-"IDENT_AST(k)_185": {
+, "CONDITION_AST_177": {
+"LT_AST_178": {
+"IDENT_AST(k)_179": {
 }
-, "NUMBER_AST(2)_186": {
+, "NUMBER_AST(2)_180": {
 }
 }
 }
-, "ASSIGNMENT_AST_187": {
-"UNARY_OP_AST_188": {
-"B_INCREM_AST_189": {
+, "ASSIGNMENT_AST_181": {
+"UNARY_OP_AST_182": {
+"B_INCREM_AST_183": {
 }
-, "IDENT_AST(k)_190": {
+, "IDENT_AST(k)_184": {
 }
 }
 }
-, "STATEMENTS_AST_191": {
-"STATEMENT_AST_192": {
-"ASSIGNMENT_AST_193": {
+, "STATEMENTS_AST_185": {
+"STATEMENT_AST_186": {
+"ASSIGNMENT_AST_187": {
+"ARRAY_AST_188": {
+"IDENT_AST(matrix3)_189": {
+}
+, "ARRAY_INDEX_190": {
+"IDENT_AST(i)_191": {
+}
+, "IDENT_AST(j)_192": {
+}
+}
+}
+, "ADD_AST_193": {
 "ARRAY_AST_194": {
 "IDENT_AST(matrix3)_195": {
 }
@@ -374,35 +373,24 @@
 }
 }
 }
-, "ADD_AST_199": {
+, "MUL_AST_199": {
 "ARRAY_AST_200": {
-"IDENT_AST(matrix3)_201": {
+"IDENT_AST(matrix1)_201": {
 }
 , "ARRAY_INDEX_202": {
 "IDENT_AST(i)_203": {
 }
-, "IDENT_AST(j)_204": {
+, "IDENT_AST(k)_204": {
 }
 }
 }
-, "MUL_AST_205": {
-"ARRAY_AST_206": {
-"IDENT_AST(matrix1)_207": {
+, "ARRAY_AST_205": {
+"IDENT_AST(matrix2)_206": {
 }
-, "ARRAY_INDEX_208": {
-"IDENT_AST(i)_209": {
+, "ARRAY_INDEX_207": {
+"IDENT_AST(k)_208": {
 }
-, "IDENT_AST(k)_210": {
-}
-}
-}
-, "ARRAY_AST_211": {
-"IDENT_AST(matrix2)_212": {
-}
-, "ARRAY_INDEX_213": {
-"IDENT_AST(k)_214": {
-}
-, "IDENT_AST(j)_215": {
+, "IDENT_AST(j)_209": {
 }
 }
 }
