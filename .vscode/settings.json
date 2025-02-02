@@ -1,5 +1,7 @@
 {
   "files.associations": {
-    "kadai6": "cpp"
+    "kadai6": "cpp",
+    "chrono": "c",
+    "variant": "c"
   }
 }

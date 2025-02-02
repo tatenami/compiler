@@ -28,45 +28,33 @@ stop: # if syscall return
  .text 0x00001000 # 以降のコードを 0から配置 x00001000
 main:
  la $t0, RESULT # $t0 <-0x10004000
+  # assignment [N] <- val
+  # keep imm val (1000) to reg($v0)
   li $v0, 1000
-  # assignment [N] <- imm (1000)
   sw $v0, 0($t0)
   nop
+  # assignment [i] <- val
+  # keep imm val (1) to reg($v0)
   li $v0, 1
-  # assignment [i] <- imm (1)
   sw $v0, 4($t0)
   nop
 $WHILE0:
-  # keep val (i) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep val (N) to stack
+  # keep val (N) to reg($t3)
   lw $t3, 0($t0)
-  nop
-  sw $t3, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # comp '<='
   sub $t1, $t2, $t3
   slti $t1, $t1, 1
   beq $t1, $zero, $ENDWHILE0
   nop
+  # assignment [a] <- val
+  # keep imm val (1) to reg($v0)
   li $v0, 1
-  # assignment [a] <- imm (1)
   # clac array offset of [a]
-  # keep val (i) to stack
+  # keep val (i) to reg($t2)
   lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # pop stack
-  lw $t2, 0($sp)
   nop
   li $t3, 4  # mul exp
   mult $t2, $t3
@@ -78,21 +66,16 @@ $WHILE0:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
-  # keep val (i) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [i] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [i] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
@@ -101,117 +84,80 @@ $WHILE0:
   j $WHILE0
   nop
 $ENDWHILE0:
+  # assignment [i] <- val
+  # keep imm val (2) to reg($v0)
   li $v0, 2
-  # assignment [i] <- imm (2)
   sw $v0, 4($t0)
   nop
 $WHILE1:
-  # keep val (i) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep val (N) to stack
-  lw $t2, 0($t0)
-  nop
-  sw $t2, -4($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, -4($sp)
+  # keep val (N) to reg($t2)
+  lw $t2, 0($t0)
   nop
   # div exp
   div $t2, $t3
   mflo $v0
-  sw $v0, -4($sp)
+  sw $v0, 0($sp)
   nop
   # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
+  lw $t3, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # comp '<='
   sub $t1, $t2, $t3
   slti $t1, $t1, 1
   beq $t1, $zero, $ENDWHILE1
   nop
+  # assignment [j] <- val
+  # keep imm val (2) to reg($v0)
   li $v0, 2
-  # assignment [j] <- imm (2)
   sw $v0, 8($t0)
   nop
 $WHILE2:
-  # keep val (j) to stack
-  lw $t2, 8($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep val (N) to stack
-  lw $t2, 0($t0)
-  nop
-  sw $t2, -4($sp)
-  nop
-  # keep val (i) to stack
+  # keep val (i) to reg($t3)
   lw $t3, 4($t0)
-  nop
-  sw $t3, -8($sp)
-  nop
-  # pop stack
-  lw $t3, -8($sp)
-  # pop stack
-  lw $t2, -4($sp)
+  # keep val (N) to reg($t2)
+  lw $t2, 0($t0)
   nop
   # div exp
   div $t2, $t3
   mflo $v0
-  sw $v0, -4($sp)
+  sw $v0, 0($sp)
   nop
   # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
+  lw $t3, 0($sp)
+  # keep val (j) to reg($t2)
+  lw $t2, 8($t0)
   nop
   # comp '<='
   sub $t1, $t2, $t3
   slti $t1, $t1, 1
   beq $t1, $zero, $ENDWHILE2
   nop
-  # keep val (i) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep val (j) to stack
+  # assignment [k] <- val
+  # keep val (j) to reg($t3)
   lw $t3, 8($t0)
-  nop
-  sw $t3, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # mul exp
   mult $t2, $t3
   mflo $v0
   sw $v0, 0($sp)
   nop
-  # assignment [k] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
   sw $v0, 12($t0)
   nop
+  # assignment [a] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [a] <- imm (0)
   # clac array offset of [a]
-  # keep val (k) to stack
+  # keep val (k) to reg($t2)
   lw $t2, 12($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # pop stack
-  lw $t2, 0($sp)
   nop
   li $t3, 4  # mul exp
   mult $t2, $t3
@@ -223,21 +169,16 @@ $WHILE2:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
-  # keep val (j) to stack
-  lw $t2, 8($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [j] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (j) to reg($t2)
+  lw $t2, 8($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [j] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
@@ -246,21 +187,16 @@ $WHILE2:
   j $WHILE2
   nop
 $ENDWHILE2:
-  # keep val (i) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [i] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [i] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop

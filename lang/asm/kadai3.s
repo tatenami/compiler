@@ -28,58 +28,53 @@ stop: # if syscall return
  .text 0x00001000 # 以降のコードを 0から配置 x00001000
 main:
  la $t0, RESULT # $t0 <-0x10004000
+  # assignment [fizz] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [fizz] <- imm (0)
   sw $v0, 0($t0)
   nop
+  # assignment [buzz] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [buzz] <- imm (0)
   sw $v0, 4($t0)
   nop
+  # assignment [fizzbuzz] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [fizzbuzz] <- imm (0)
   sw $v0, 8($t0)
   nop
+  # assignment [others] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [others] <- imm (0)
   sw $v0, 12($t0)
   nop
+  # assignment [i] <- val
+  # keep imm val (1) to reg($v0)
   li $v0, 1
-  # assignment [i] <- imm (1)
   sw $v0, 16($t0)
   nop
 $WHILE0:
-  # keep val (i) to stack
-  lw $t2, 16($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (31) to stack
+  # keep imm val (31) to reg($t3)
   li $t3, 31
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 16($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDWHILE0
   nop
   # --- [START] if-else stmt ---
-  # keep val (i) to stack
-  lw $t2, 16($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (15) to stack
+  # keep imm val (15) to reg($t3)
   li $t3, 15
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 16($t0)
   nop
   # div exp
   div $t2, $t3
   mfhi $v0
   sw $v0, 0($sp)
   nop
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   # pop stack
   lw $t2, 0($sp)
@@ -91,22 +86,17 @@ $WHILE0:
   bne $t1, $zero, $IF0
   nop
   # --- [START] if-else stmt ---
-  # keep val (i) to stack
-  lw $t2, 16($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (3) to stack
+  # keep imm val (3) to reg($t3)
   li $t3, 3
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 16($t0)
   nop
   # div exp
   div $t2, $t3
   mfhi $v0
   sw $v0, 0($sp)
   nop
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   # pop stack
   lw $t2, 0($sp)
@@ -118,22 +108,17 @@ $WHILE0:
   bne $t1, $zero, $IF1
   nop
   # --- [START] if-else stmt ---
-  # keep val (i) to stack
-  lw $t2, 16($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (5) to stack
+  # keep imm val (5) to reg($t3)
   li $t3, 5
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 16($t0)
   nop
   # div exp
   div $t2, $t3
   mfhi $v0
   sw $v0, 0($sp)
   nop
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   # pop stack
   lw $t2, 0($sp)
@@ -144,21 +129,16 @@ $WHILE0:
   # else stmt
   bne $t1, $zero, $IF2
   nop
-  # keep val (others) to stack
-  lw $t2, 12($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [others] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (others) to reg($t2)
+  lw $t2, 12($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [others] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
@@ -168,21 +148,16 @@ $WHILE0:
   nop
   # if stmt
 $IF2:
-  # keep val (buzz) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [buzz] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (buzz) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [buzz] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
@@ -193,21 +168,16 @@ $END_IF2:
   nop
   # if stmt
 $IF1:
-  # keep val (fizz) to stack
-  lw $t2, 0($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [fizz] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (fizz) to reg($t2)
+  lw $t2, 0($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [fizz] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
@@ -218,42 +188,32 @@ $END_IF1:
   nop
   # if stmt
 $IF0:
-  # keep val (fizzbuzz) to stack
-  lw $t2, 8($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [fizzbuzz] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (fizzbuzz) to reg($t2)
+  lw $t2, 8($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [fizzbuzz] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
   sw $v0, 8($t0)
   nop
 $END_IF0:
-  # keep val (i) to stack
-  lw $t2, 16($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [i] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 16($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [i] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop

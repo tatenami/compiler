@@ -25,69 +25,51 @@ stop: # if syscall return
  .text 0x00001000 # 以降のコードを 0から配置 x00001000
 main:
  la $t0, RESULT # $t0 <-0x10004000
+  # assignment [sum] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [sum] <- imm (0)
   sw $v0, 4($t0)
   nop
+  # assignment [i] <- val
+  # keep imm val (1) to reg($v0)
   li $v0, 1
-  # assignment [i] <- imm (1)
   sw $v0, 0($t0)
   nop
 $WHILE0:
-  # keep val (i) to stack
-  lw $t2, 0($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (11) to stack
+  # keep imm val (11) to reg($t3)
   li $t3, 11
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 0($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDWHILE0
   nop
-  # keep val (sum) to stack
-  lw $t2, 4($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep val (i) to stack
+  # assignment [sum] <- val
+  # keep val (i) to reg($t3)
   lw $t3, 0($t0)
-  nop
-  sw $t3, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (sum) to reg($t2)
+  lw $t2, 4($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [sum] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop
   sw $v0, 4($t0)
   nop
-  # keep val (i) to stack
-  lw $t2, 0($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (1) to stack
+  # assignment [i] <- val
+  # keep imm val (1) to reg($t3)
   li $t3, 1
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 0($t0)
   nop
   # add exp
   add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [i] <- exp val
   # pop stack
   lw $v0, 0($sp)
   nop

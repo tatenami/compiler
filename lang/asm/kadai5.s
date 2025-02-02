@@ -29,15 +29,16 @@ stop: # if syscall return
  .text 0x00001000 # 以降のコードを 0から配置 x00001000
 main:
  la $t0, RESULT # $t0 <-0x10004000
+  # assignment [matrix1] <- val
+  # keep imm val (1) to reg($v0)
   li $v0, 1
-  # assignment [matrix1] <- imm (1)
   # clac array offset of [matrix1]
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t2)
   li $t2, 0
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   li $t4, 8  # mul exp
   mult $t3, $t4
@@ -51,16 +52,17 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [matrix1] <- val
+  # keep imm val (2) to reg($v0)
   li $v0, 2
-  # assignment [matrix1] <- imm (2)
   # clac array offset of [matrix1]
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t2)
   li $t2, 1
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (0) to stack
-  li $t3, 0
+  # keep imm val (1) to reg($t3)
+  li $t3, 1
   li $t4, 8  # mul exp
   mult $t3, $t4
   mflo $t3
@@ -73,16 +75,17 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [matrix1] <- val
+  # keep imm val (3) to reg($v0)
   li $v0, 3
-  # assignment [matrix1] <- imm (3)
   # clac array offset of [matrix1]
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t2)
   li $t2, 0
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (1) to stack
-  li $t3, 1
+  # keep imm val (0) to reg($t3)
+  li $t3, 0
   li $t4, 8  # mul exp
   mult $t3, $t4
   mflo $t3
@@ -95,15 +98,16 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [matrix1] <- val
+  # keep imm val (4) to reg($v0)
   li $v0, 4
-  # assignment [matrix1] <- imm (4)
   # clac array offset of [matrix1]
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t2)
   li $t2, 1
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t3)
   li $t3, 1
   li $t4, 8  # mul exp
   mult $t3, $t4
@@ -117,15 +121,16 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [matrix2] <- val
+  # keep imm val (5) to reg($v0)
   li $v0, 5
-  # assignment [matrix2] <- imm (5)
   # clac array offset of [matrix2]
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t2)
   li $t2, 0
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (0) to stack
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   li $t4, 8  # mul exp
   mult $t3, $t4
@@ -139,15 +144,39 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [matrix2] <- val
+  # keep imm val (6) to reg($v0)
   li $v0, 6
-  # assignment [matrix2] <- imm (6)
   # clac array offset of [matrix2]
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t2)
   li $t2, 1
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (0) to stack
+  # keep imm val (1) to reg($t3)
+  li $t3, 1
+  li $t4, 8  # mul exp
+  mult $t3, $t4
+  mflo $t3
+  # add exp
+  add $t2, $t2, $t3
+  li $t3, 16  # add exp
+  add $t2, $t2, $t3
+  # add exp
+  add $t2, $t0, $t2
+  # array offset -> [$t2]
+  sw $v0, 0($t2)
+  nop
+  # assignment [matrix2] <- val
+  # keep imm val (7) to reg($v0)
+  li $v0, 7
+  # clac array offset of [matrix2]
+  # keep imm val (0) to reg($t2)
+  li $t2, 0
+  li $t4, 4  # mul exp
+  mult $t2, $t4
+  mflo $t2
+  # keep imm val (0) to reg($t3)
   li $t3, 0
   li $t4, 8  # mul exp
   mult $t3, $t4
@@ -161,37 +190,16 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
-  li $v0, 7
-  # assignment [matrix2] <- imm (7)
-  # clac array offset of [matrix2]
-  # keep imm val (0) to stack
-  li $t2, 0
-  li $t3, 4  # mul exp
-  mult $t2, $t3
-  mflo $t2
-  # keep imm val (1) to stack
-  li $t3, 1
-  li $t4, 8  # mul exp
-  mult $t3, $t4
-  mflo $t3
-  # add exp
-  add $t2, $t2, $t3
-  li $t3, 16  # add exp
-  add $t2, $t2, $t3
-  # add exp
-  add $t2, $t0, $t2
-  # array offset -> [$t2]
-  sw $v0, 0($t2)
-  nop
+  # assignment [matrix2] <- val
+  # keep imm val (8) to reg($v0)
   li $v0, 8
-  # assignment [matrix2] <- imm (8)
   # clac array offset of [matrix2]
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t2)
   li $t2, 1
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep imm val (1) to stack
+  # keep imm val (1) to reg($t3)
   li $t3, 1
   li $t4, 8  # mul exp
   mult $t3, $t4
@@ -205,65 +213,48 @@ main:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
+  # assignment [i] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [i] <- imm (0)
   sw $v0, 48($t0)
   nop
 $FOR0:
-  # keep val (i) to stack
-  lw $t2, 48($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 48($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDFOR0
   nop
+  # assignment [j] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [j] <- imm (0)
   sw $v0, 52($t0)
   nop
 $FOR1:
-  # keep val (j) to stack
-  lw $t2, 52($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (j) to reg($t2)
+  lw $t2, 52($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDFOR1
   nop
+  # assignment [matrix3] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [matrix3] <- imm (0)
   # clac array offset of [matrix3]
-  # keep val (j) to stack
+  # keep val (j) to reg($t2)
   lw $t2, 52($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # pop stack
-  lw $t2, 0($sp)
-  nop
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep val (i) to stack
-  lw $t3, 48($t0)
+  # keep val (j) to reg($t3)
+  lw $t3, 52($t0)
   nop
-  sw $t3, 0($sp)
-  nop
-  # pop stack
-  lw $t3, 0($sp)
   li $t4, 8  # mul exp
   mult $t3, $t4
   mflo $t3
@@ -276,7 +267,7 @@ $FOR1:
   # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
-  # keep val (j) to stack
+  # keep val (j) to reg($v0)
   lw $v0, 52($t0)
   nop
   # unary operation
@@ -286,7 +277,7 @@ $FOR1:
   j $FOR1
   nop
 $ENDFOR1:
-  # keep val (i) to stack
+  # keep val (i) to reg($v0)
   lw $v0, 48($t0)
   nop
   # unary operation
@@ -296,150 +287,61 @@ $ENDFOR1:
   j $FOR0
   nop
 $ENDFOR0:
+  # assignment [i] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [i] <- imm (0)
   sw $v0, 48($t0)
   nop
 $FOR2:
-  # keep val (i) to stack
-  lw $t2, 48($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (i) to reg($t2)
+  lw $t2, 48($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDFOR2
   nop
+  # assignment [j] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [j] <- imm (0)
   sw $v0, 52($t0)
   nop
 $FOR3:
-  # keep val (j) to stack
-  lw $t2, 52($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (j) to reg($t2)
+  lw $t2, 52($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDFOR3
   nop
+  # assignment [k] <- val
+  # keep imm val (0) to reg($v0)
   li $v0, 0
-  # assignment [k] <- imm (0)
   sw $v0, 56($t0)
   nop
 $FOR4:
-  # keep val (k) to stack
-  lw $t2, 56($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # keep imm val (2) to stack
+  # keep imm val (2) to reg($t3)
   li $t3, 2
-  # pop stack
-  lw $t2, 0($sp)
+  # keep val (k) to reg($t2)
+  lw $t2, 56($t0)
   nop
   # comp '<'
   slt $t1, $t2, $t3
   beq $t1, $zero, $ENDFOR4
   nop
-  # clac array offset of [matrix3]
-  # keep val (j) to stack
-  lw $t2, 52($t0)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # pop stack
-  lw $t2, 0($sp)
-  nop
-  li $t3, 4  # mul exp
-  mult $t2, $t3
-  mflo $t2
-  # keep val (i) to stack
-  lw $t3, 48($t0)
-  nop
-  sw $t3, 0($sp)
-  nop
-  # pop stack
-  lw $t3, 0($sp)
-  li $t4, 8  # mul exp
-  mult $t3, $t4
-  mflo $t3
-  # add exp
-  add $t2, $t2, $t3
-  li $t3, 32  # add exp
-  add $t2, $t2, $t3
-  # add exp
-  add $t2, $t0, $t2
-  # array offset -> [$t2]
-  # keep element of array(matrix3) to stack
-  lw $t2, 0($t2)
-  nop
-  sw $t2, 0($sp)
-  nop
-  # clac array offset of [matrix1]
-  # keep val (k) to stack
-  lw $t2, 56($t0)
-  nop
-  sw $t2, -4($sp)
-  nop
-  # pop stack
-  lw $t2, -4($sp)
-  nop
-  li $t3, 4  # mul exp
-  mult $t2, $t3
-  mflo $t2
-  # keep val (i) to stack
-  lw $t3, 48($t0)
-  nop
-  sw $t3, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
-  li $t4, 8  # mul exp
-  mult $t3, $t4
-  mflo $t3
-  # add exp
-  add $t2, $t2, $t3
-  li $t3, 0  # add exp
-  add $t2, $t2, $t3
-  # add exp
-  add $t2, $t0, $t2
-  # array offset -> [$t2]
-  # keep element of array(matrix1) to stack
-  lw $t2, 0($t2)
-  nop
-  sw $t2, -4($sp)
-  nop
+  # assignment [matrix3] <- val
   # clac array offset of [matrix2]
-  # keep val (j) to stack
+  # keep val (j) to reg($t2)
   lw $t2, 52($t0)
-  nop
-  sw $t2, -8($sp)
-  nop
-  # pop stack
-  lw $t2, -8($sp)
-  nop
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep val (k) to stack
-  lw $t3, 56($t0)
+  # keep val (j) to reg($t3)
+  lw $t3, 52($t0)
   nop
-  sw $t3, -8($sp)
-  nop
-  # pop stack
-  lw $t3, -8($sp)
   li $t4, 8  # mul exp
   mult $t3, $t4
   mflo $t3
@@ -450,50 +352,46 @@ $FOR4:
   # add exp
   add $t3, $t0, $t2
   # array offset -> [$t3]
-  # keep element of array(matrix2) to stack
+  # keep element of array(matrix2) to reg($t3)
   lw $t3, 0($t3)
+  # clac array offset of [matrix1]
+  # keep val (k) to reg($t2)
+  lw $t2, 56($t0)
+  li $t4, 4  # mul exp
+  mult $t2, $t4
+  mflo $t2
+  # keep val (k) to reg($t3)
+  lw $t3, 56($t0)
   nop
-  sw $t3, -8($sp)
-  nop
-  # pop stack
-  lw $t3, -8($sp)
-  # pop stack
-  lw $t2, -4($sp)
+  li $t4, 8  # mul exp
+  mult $t3, $t4
+  mflo $t3
+  # add exp
+  add $t2, $t2, $t3
+  li $t3, 0  # add exp
+  add $t2, $t2, $t3
+  # add exp
+  add $t2, $t0, $t2
+  # array offset -> [$t2]
+  # keep element of array(matrix1) to reg($t2)
+  lw $t2, 0($t2)
   nop
   # mul exp
   mult $t2, $t3
   mflo $v0
-  sw $v0, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
-  # pop stack
-  lw $t2, 0($sp)
-  nop
-  # add exp
-  add $v0, $t2, $t3
   sw $v0, 0($sp)
   nop
-  # assignment [matrix3] <- exp val
+  # pop stack
+  lw $t3, 0($sp)
   # clac array offset of [matrix3]
-  # keep val (j) to stack
+  # keep val (j) to reg($t2)
   lw $t2, 52($t0)
-  nop
-  sw $t2, -4($sp)
-  nop
-  # pop stack
-  lw $t2, -4($sp)
-  nop
-  li $t3, 4  # mul exp
-  mult $t2, $t3
+  li $t4, 4  # mul exp
+  mult $t2, $t4
   mflo $t2
-  # keep val (i) to stack
-  lw $t3, 48($t0)
+  # keep val (j) to reg($t3)
+  lw $t3, 52($t0)
   nop
-  sw $t3, -4($sp)
-  nop
-  # pop stack
-  lw $t3, -4($sp)
   li $t4, 8  # mul exp
   mult $t3, $t4
   mflo $t3
@@ -504,12 +402,38 @@ $FOR4:
   # add exp
   add $t2, $t0, $t2
   # array offset -> [$t2]
+  # keep element of array(matrix3) to reg($t2)
+  lw $t2, 0($t2)
+  nop
+  # add exp
+  add $v0, $t2, $t3
+  sw $v0, 0($sp)
+  nop
   # pop stack
   lw $v0, 0($sp)
   nop
+  # clac array offset of [matrix3]
+  # keep val (j) to reg($t2)
+  lw $t2, 52($t0)
+  li $t4, 4  # mul exp
+  mult $t2, $t4
+  mflo $t2
+  # keep val (j) to reg($t3)
+  lw $t3, 52($t0)
+  nop
+  li $t4, 8  # mul exp
+  mult $t3, $t4
+  mflo $t3
+  # add exp
+  add $t2, $t2, $t3
+  li $t3, 32  # add exp
+  add $t2, $t2, $t3
+  # add exp
+  add $t2, $t0, $t2
+  # array offset -> [$t2]
   sw $v0, 0($t2)
   nop
-  # keep val (k) to stack
+  # keep val (k) to reg($v0)
   lw $v0, 56($t0)
   nop
   # unary operation
@@ -519,7 +443,7 @@ $FOR4:
   j $FOR4
   nop
 $ENDFOR4:
-  # keep val (j) to stack
+  # keep val (j) to reg($v0)
   lw $v0, 52($t0)
   nop
   # unary operation
@@ -529,7 +453,7 @@ $ENDFOR4:
   j $FOR3
   nop
 $ENDFOR3:
-  # keep val (i) to stack
+  # keep val (i) to reg($v0)
   lw $v0, 48($t0)
   nop
   # unary operation

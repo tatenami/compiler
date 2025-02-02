@@ -13,6 +13,8 @@
 % 設定：図の挿入
 % http://www.edu.cs.okayama-u.ac.jp/info/tool_guide/tex.html#graphicx
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
 
 % 設定：ソースコードの挿入
 % http://www.edu.cs.okayama-u.ac.jp/info/tool_guide/tex.html#fancyvrb
@@ -62,6 +64,11 @@ lex，yaccといったプログラムジェネレータを使用した
 利用される木構造の取り扱い，ソースコードとアセンブリ言語との対応について
 の理解と習熟を深めることである．
 
+今回作成したコンパイラプログラムの実行ファイルは，
+演習室のPCの \\
+\verb|/home/users/ecs/09B22433/exp-c/compiler/lang|ディレクトリに
+\verb|lang2|という名前で保存している．
+
 %--------------------------------------------------------------------%
 \section{作成した言語の定義}
 以下に作成した言語の定義として，文法規則を記述したyaccのルールを示す．
@@ -75,9 +82,9 @@ lex，yaccといったプログラムジェネレータを使用した
   int   ival;
 }
 
-%type <np> program declarations func_define decl_statement decl_part
-           statements statement func_var_decl func_arg_part
-           assignment_stmt assignment loop_stmt cond_stmt func_call 
+%type <np> program declarations decl_statement decl_part
+           statements statement 
+           assignment_stmt assignment loop_stmt cond_stmt 
            while_stmt if_stmt else_stmt elif_stmt for_stmt
            expressions expression 
            condition array array_index term factor unary_factor 
@@ -89,7 +96,6 @@ lex，yaccといったプログラムジェネレータを使用した
         L_BRACKET R_BRACKET L_PARAN R_PARAN L_BRACE R_BRACE
         SEMIC COMMA ADD SUB MUL DIV REM INCREM DECREM EQ NE LT GT LTE GTE
         AND OR XOR NOT L_SHIFT R_SHIFT
-        FUNCDECL FUNCCALL
         FOR WHILE IF ELSE
 
 %token <sp> IDENT
@@ -112,7 +118,6 @@ declarations
 array_index
   : L_BRACKET expression R_BRACKET 
   | L_BRACKET expression R_BRACKET L_BRACKET expression R_BRACKET 
-  | L_BRACKET R_BRACKET 
 ;
 
 array
@@ -124,29 +129,8 @@ decl_part
   | ARRAY_DEF array 
 ;
 
-func_arg_part
-  : DEFINE IDENT
-  | ARRAY_DEF array 
-;
-
 decl_statement
-  : decl_part SEMIC 
-  | func_define     
-;
-
-func_var_decl
-  : func_arg_part         
-  | func_arg_part COMMA func_var_decl 
-;
-
-func_define
-  : FUNCDECL IDENT L_PARAN func_var_decl R_PARAN L_BRACE declarations statements R_BRACE 
-  | FUNCDECL IDENT L_PARAN R_PARAN L_BRACE declarations statements R_BRACE
-;
-
-func_call
-  : FUNCCALL IDENT L_PARAN expressions R_PARAN SEMIC 
-  | FUNCCALL IDENT L_PARAN  R_PARAN SEMIC 
+  : decl_part SEMIC   
 ;
 
 statements
@@ -157,8 +141,7 @@ statements
 statement
   : assignment_stmt
   | loop_stmt       
-  | cond_stmt
-  | func_call       
+  | cond_stmt     
 ;
 
 assignment
@@ -304,24 +287,682 @@ yaccの規則から，プログラムにおいて変数の宣言として以下�
   \item[配列(2次元):] \verb|array <識別子名>[自然数][自然数];|
 \end{description}
 
-\subsubsection{}
+\subsubsection{処理文}
+文集合では，C言語と同様の
+\begin{itemize}
+  \item 代入文
+  \item ループ文(\verb|while|，\verb|for|)
+  \item 条件分岐文(\verb|if|，\verb|if-else|)
+  \item 算術式
+  \item 条件式
+\end{itemize}
+による処理が記述できる．
+式については，
+条件式では比較演算子が，
+そして算術式では算術演算子が利用できる．
+以下，実装した各種演算子についての概説を行う．
+
+\paragraph*{算術演算子}
+以下，それぞれ実装した
+算術式における演算子を示す．\verb|a|及び\verb|b|は被演算子であり，
+整数の即値，変数，算術式(の演算結果)が対象となる．また，
+演算対象とその演算結果は4バイトの符号付き整数である．
+\begin{itemize}
+  \item \texttt{a + b}： \ \verb|a|と\verb|b|の値を加算する
+  \item \texttt{a - b}： \ \verb|a|の値から\verb|b|の値を減する
+  \item \texttt{a * b}： \ \verb|a|と\verb|b|の値を乗算する
+  \item \texttt{a / b}： \ \verb|a|の値を\verb|b|で除する
+  \item \texttt{a \% b}： \ \verb|a|の値を\verb|b|の値で割った時の剰余を計算する  
+  \item \texttt{a++・(a--)}： \ \verb|a|の値を1だけ増加(減少)する．ただし，この処理は\verb|a|を被演算子や対象とする代入・算術処理の後に行われる．     
+  \item \texttt{++a・(--a)}： \ \verb|a|の値を1だけ増加(減少)する．ただし，この処理は\verb|a|を被演算子や対象とする代入・算術処理の前に行われる．     
+\end{itemize}
+
+\paragraph*{比較演算子}
+比較式において，その式の結果は
+条件が成立する場合は1，成立しない場合は0となる(詳細は第\ref{sec:reg}節に示す)．
+以下，それぞれ実装した演算子を示す．
+\verb|a|及び\verb|b|は被演算子であり，
+整数の即値，変数，算術式(の演算結果)が対象となる．
+\begin{itemize}
+  \item \texttt{a == b}： \ \verb|a|と\verb|b|の値が一致しているを比較する
+  \item \texttt{a != b}： \ \verb|a|と\verb|b|の値を一致していないかを比較する
+  \item \texttt{a < b}： \ \verb|a|の値より\verb|b|の値が大きいかを比較する
+  \item \texttt{a > b}： \ \verb|a|の値が\verb|b|の値より大きいかを比較する
+  \item \texttt{a <= b}： \ \verb|a|の値が\verb|b|の値以下であるかを比較する     
+  \item \texttt{a >= b}： \ \verb|a|の値が\verb|b|の値以上であるかを比較する     
+\end{itemize}
+
+\subsubsection{受理されるプログラムの例}
+以上の定義した言語の使用から，実際に作成したコンパイラに受理されるプログラムの例を示す．
+ただし，プログラム自体は意味のある処理を行うものではない．
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+define i;
+define j, k;
+array  m1[10];
+araay  m2[3][3];
+i = 1;
+j = i + 1;
+k = i * j;
+
+while (i <= 100) {
+  i = i + 2;
+  if (i % 2 == 1) {
+    j = i / j - 1;
+  }
+  else {
+    --k;
+  }
+}
+
+for (i = 1; k != 10; k++) {
+  if (i > j) {
+    j = k - i--;
+  }
+}
+\end{Verbatim}
+
 
 %--------------------------------------------------------------------%
 \section{コード生成の概要}
+作成したコンパイラプログラムでは，以下の一連の流れで処理を行う．
+\begin{enumerate}
+  \item 入力された文字列について，
+  lexファイルで定義した文字列でトークンに該当するものをトークンへ置換，そして全体をトークン列に置換する
+  \item プログラムのトークン列に対してyaccで記述した文法規則に従って還元を行い，
+  この時に生成規則のアクション部に記述したC言語の処理により，各トークンをノードとし，
+  プログラム全体のトークンからコード生成に必要な要素を残して抽象構文木を
+  作成する．
+  \item 構成された抽象構文木をたどり，ノードの構成などから
+  プログラム実行に必要な処理を出力対象のファイルへmapsで実行可能なアセンブリ言語の命令を記述する．
+\end{enumerate}
+
+入力されたプログラムのコード生成(ファイルの作成)は，上記の項目3の抽象構文木の解析・命令の記述，及び
+この前後に行う以下の処理により行われる．
+\begin{itemize}
+  \item (項目3実行前) 抽象構文木からプログラムで使用する変数の記号表の作成
+  \item (項目3実行前) mapsプログラム実行に必要なテキストセグメント宣言等の初期化処理の記述
+  \item (項目3実行後) mapsプログラム正常終了に必要な処理，データセグメントの記述
+\end{itemize}
+
+mapsで実行可能なコードの生成について，上記の
+抽象構文木を用いた解析に基づく命令の記述と前後処理を踏まえて，以下の項目に分けて解説を行う．
+\begin{itemize}
+  \item メモリ領域の使用方法
+  \item mapsの汎用レジスタの使用方法
+  \item 算術式のコード生成の方法
+\end{itemize}
 
 \subsection{メモリの使用方法}
+プログラムにおいて，メモリ領域は主に用途により
+\begin{itemize}
+  \item 実行する命令が配置されるテキストセグメント
+  \item プログラムで使用される変数が格納されるデータセグメント
+  \item 算術式等の計算結果の一時保存に使用するスタック領域
+\end{itemize}
+に分けられる．以下，上記の用途によるメモリの利用について概説を行う．
 
-\subsection{汎用レジスタの使用方法}
+\subsubsection{テキストセグメントの利用}
+テキストセグメントについて，mapsでプログラムを正常終了するための初期化処理
+をコード生成の直前に，以下の処理を記述する
+\begin{itemize}
+  \item グローバルポインタと後述するスタックポインタの値の設定
+  \item テキストセグメントの配置を制御するアセンブラ命令(\verb|.text|)
+  \item グローバルポインター・スタックポインタのレジスタへの格納
+  \item プログラム終了前に行う処理
+\end{itemize}
+そして，その直後にソースコードで実行される
+テキストセグメントの配置を制御するアセンブラ命令を記述する．
+このセグメントのアドレスは上記の初期化処理の命令を考慮し，\verb|0x00001000|
+として設定した．
+即ち，ソースコードから生成した命令が配置されるのは，メモリにおいて
+\verb|0x00001000|から後述するデータセグメントまでの領域としている．
+
+\subsubsection{データセグメントの利用}
+データセグメントについては，メモリ領域の\verb|0x10004000|領域以降の
+アドレスを利用している．実際に生成するコードではこの
+アドレスを保持した汎用レジスタを利用と，
+先述の変数の記号表で保持している変数のデータセグメントの先頭からのオフセット
+を利用して，この領域に各変数を格納する．
+変数の記号表は，ソースコードに宣言された順にサイズと
+オフセットをそれぞれ計算しており，この際始めに宣言された変数はデータセグメントの先頭アドレスを
+以降の変数は直前に宣言された変数のオフセットを格納する領域のアドレスとしているため，
+データセグメントは，先頭アドレスから順に変数を並んで格納するように使用される．
+
+以下，例として通常の変数(4バイト)を3つ使用する際のデータセグメントにあたるメモリ領域の使用状態を示す．
+順に\verb|a|，\verb|b|，\verb|c|と宣言したとする．
+
+\begin{itemize}
+  \item\texttt{0x10004000} -- \texttt{0x10004003}： \verb|a| (4Byte) 
+  \item\texttt{0x10004004} -- \texttt{0x10004007}： \verb|b| (4Byte) 
+  \item\texttt{0x10004008} -- \texttt{0x1000400b}： \verb|c| (4Byte) 
+\end{itemize}
+
+\subsubsection{スタック領域の利用}
+プログラムの算術式等の処理で一時的なデータの保存に利用するスタック
+領域の先頭アドレスは\verb|0x7ffffffc|としている．
+先述の2つの領域とは異なり，データをスタックに積む処理を行う場合は
+このアドレスよりも小さいアドレスへ変数のデータを格納する．
+
+以下，例として通常の変数(4バイト)を3を一時的にスタックへ積む処理を行った際のメモリ領域の使用状態を示す．
+順に変数として\verb|a|，\verb|b|，\verb|c|を順に格納したとする．
+
+\begin{itemize}
+  \item\texttt{0x7ffffff4} -- \texttt{0x7ffffff7}： \verb|c| (4Byte) 
+  \item\texttt{0x7ffffff8} -- \texttt{0x7ffffffb}： \verb|b| (4Byte) 
+  \item\texttt{0x7ffffffc} -- \texttt{0x7fffffff}： \verb|a| (4Byte) 
+\end{itemize}
+仮に\verb|c|がスタックから取り出すことに該当する処理が行われた場合，次にスタックへ積まれるデータは
+\verb|c|のデータがあった領域に格納される．
+
+\subsection{レジスタの使用方法} \label{sec:reg}
+プログラムコードでは様々な処理で一時的にデータを保持する必要があるため，
+mipsで使用できる汎用レジスタを利用した．
+レジスタについてはコンパイラプログラムのコード生成の処理の複雑化を避けるために，
+その一部に固定の役割を与えて使用した．
+表\ref{tab:register-tab}に使用した汎用レジスタとその役割・用途について示す．
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+      レジスタ & 役割・用途 \\
+    \hline
+    \hline
+      \verb|$t0| & データセグメントの先頭アドレス(\verb|0x10004000|)を保持する \\
+    \hline
+      \verb|$t1| & 比較演算の演算結果の値の格納先 \\
+    \hline
+      \verb|$t2| & 算術式・条件式の第1オペランド(左側)の値の格納先 \\
+    \hline
+      \verb|$t3| & 算術式・条件式の第2オペランド(右側)の値の格納先 \\
+    \hline
+      \verb|$v0| & 算術式の計算結果の一時的な保持 \\
+    \hline
+  \end{tabular}
+  \caption{汎用レジスタの役割・用途}
+  \label{tab:register-tab}
+\end{table}
+
+\verb|$t0|レジスタはプログラム実行時の始めにデータセグメントの先頭アドレスを
+格納し，以降はデータセグメントの領域に格納されている変数に対してロードやストアを
+行う際のアドレスとして利用する．そのため，プログラムの処理で値を変更しない．
+
+\verb|$t1|レジスタは条件式の演算結果の格納先としている．
+これにより，ループ文や分岐処理文においてジャンプ命令・比較演算の
+コードの生成がこれレジスタを必ず参照するようにすることで
+条件式の生成処理に依存せず，コンパイラプログラム全体の処理の拡張・修正の
+実装が容易に行えるようにした．
+
+\verb|$t2|及び\verb|$t3|は演算処理においてオペランドの値の格納先として
+利用した．これにより，オペランドに更に算術式が連なる複雑な式の再帰的な生成処理において，
+使用するレジスタの削減と算術式関連のプログラムの複雑化を避けた．
 
 \subsection{算術式のコード生成の方法}
+算術式は，抽象構文木において演算子を親ノードとし，
+演算対象となる2つのオペランドのノードが子ノードとなる2分木の構造となっている．
+そのため，演算処理のコードの生成にあたってはオペランドの値を
+第\ref{sec:reg}節に示したレジスタに格納した上で，それを対象として各計算の
+命令を記述する．計算結果は\verb|$v0|に格納し，その値をスタックへプッシュする．
 
-% この章にコンパイラのソースプログラムがある場所を記述
+演算子の対象となるオペランドのノードには以下のいずれかが該当する．
+\begin{itemize}
+  \item 整数の即値のノード
+  \item 変数のノード(通常の変数・配列の1要素)
+  \item 算術式の演算子のノード
+\end{itemize}
+オペランドとして更に算術式が連なっている場合があり，この場合ではより深い側の演算は
+計算の優先順序が高いため，
+正しい計算順序でコードの生成を行うには，木の
+より深い側の演算から行う必要がある．
+これと先述の算術式に関する値の格納に使用するレジスタの扱いを考慮すると，
+算術式のコード生成の処理は以下の流れで行われるよう実装した．
+
+\begin{enumerate}
+  \item 親にあたる演算子のノードの2つの子ノードが算術演算子であるかを確認する
+  \begin{itemize}
+    \item 子ノードが算術演算子の場合，1の処理からはじまる一連の処理を，このノードを親ノードとして再帰的に呼び出す
+    (第1オペランド，第2オペランドの順でこの処理を行う)
+  \end{itemize}
+  \item 第2オペランドのノードが算術演算子であるかを確認し，該当するかどうかで以下処理を行う
+  \begin{description}
+    \item[算術演算子の場合:] 演算結果がスタックに積まれているため，そのデータをスタックからポップして\verb|$t3|レジスタ 
+    へロードする
+    \item[算術演算子でない場合:] 該当の数値や変数の値を\verb|$t3|レジスタに格納する   
+  \end{description}
+  \item 第1オペランドに対して2の処理を行う(格納先のレジスタは\verb|$t2|となる)
+  \item オペランドの値が格納された\verb|$t2|レジスタ，\verb|$t3|レジスタを利用して
+  演算子に対応した命令を記述する．ここで計算結果の格納先は\verb|$v0|レジスタとする
+  \item 計算結果が格納された\verb|$v0|レジスタの値をスタックへプッシュする
+\end{enumerate}
+以上の処理により，算術式に対してオペランドに算術式が続くような形であっても，
+深さ優先探索の要領で優先順序が高い計算を実行する命令が先に記述され，計算結果が
+スタックに保存された状態になり，その後にこの計算結果を取り出して使用
+する親側の算術式が記述される．
+これによって算術演算が連なる式であっても正しい順序で計算が行われる．
 
 \section{工夫した点について}
+
+合計命令数
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{|c|r|r|r|r|}
+    \hline
+      課題 & 最適化なし & 最適化1 & 最適化2 & 最適化1・2 \\
+    \hline
+    \hline
+      課題1 & 561  & 530 & 303 & 303 \\
+    \hline
+      課題2 & 301 & 285 & 168 & 168 \\
+    \hline
+      課題3 & 3756 & 3509 & 2092 & 2092 \\
+    \hline
+      課題4 & 510795 & 486017 & 300927 & 294858 \\
+    \hline
+      課題5 & 1837 & 1747 & 1105 & 1097 \\
+    \hline
+  \end{tabular}
+  \caption{最適化によるプログラムの合計命令数}
+  \label{tab:inst-tab}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{|c|r|r|r|r|}
+    \hline
+      課題 & 最適化なし & 最適化1 & 最適化2 & 最適化1・2 \\
+    \hline
+    \hline
+      課題1 & 2325 & 2201 & 1231 & 1231 \\
+    \hline
+      課題2 & 1245 & 1181 & 681 & 681 \\
+    \hline
+      課題3 & 15341 & 14353 & 8269 & 8269 \\
+    \hline
+      課題4 & 2125655 & 2026543 & 1236626 & 1212350\\
+    \hline
+      課題5 & 7582 & 7222 & 4482 & 4450\\
+    \hline
+  \end{tabular}
+  \caption{最適化によるプログラムの合計実行サイクル数}
+  \label{tab:cycle-tab}
+\end{table}
 
 
 %--------------------------------------------------------------------%
 \section{最終課題のプログラム及び実行結果}
+定義した言語及びそれを対象としたコンパイラプログラムに
+より実行が可能な課題として，以下の最終課題に取り組んだ．
+\begin{description}
+  \item[課題1] 1から10までの数の和の計算
+  \item[課題2] 5の階乗の計算
+  \item[課題3] FizzBuzz問題
+  \item[課題4] エラトステネスのふるいを用いた素数の探索
+  \item[課題5] 2つの$2 \times 2$行列の積の計算 
+\end{description}
+
+これら最終課題を解くにあたって記述したプログラムのコードと，
+それを作成したコンパイラによりmapsアセンブリ言語へ変換したコードについて，
+\begin{itemize}
+  \item シミュレーション上での実行によるサイクル数・命令数の出力結果
+  \item コンパイル時に出力する，プログラムで使用した変数の情報
+  \item 実行後の変数に関するメモリ領域の出力結果
+\end{itemize}
+を示す．
+
+\subsection{課題1 1から10までの数の和の計算}
+
+\paragraph*{ソースコード}
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+                    fontsize=\small, baselinestretch=0.8]
+define i;
+define sum;
+sum = 0;
+i = 1;
+while(i < 11) {
+  sum = sum + i;
+  i = i + 1;
+}
+\end{Verbatim}
+
+\subsubsection{実行・出力結果}
+実行の結果，合計$1231$サイクル(ステップ)で処理が終了した．
+プログラムでは，\verb|sum|は和を格納する変数として，
+変数\verb|i|は加算する数として使用される．\verb|i|は
+\verb|while|文中で1ずつ加算され，値が$11$となった
+時点で処理が終了する．
+実行後の変数のメモリから，\verb|i|は$b_{(16)} = 11$，
+\verb|sum|が$37_{(16)} = 55$となっており，
+正しく1から10までの和が計算されたことが確認できた．
+
+\paragraph*{実行時の命令・サイクル数}
+
+\begin{Verbatim}[numbers=none, frame=single,
+fontsize=\small, baselinestretch=0.8]
+*** multicycle statistics ***
+*** total inst. count:          303
+*** total cycle count:         1231
+***               IPC:   0.246 (inst/cycle)
+***               CPI:   4.061 (cycle/inst)  
+\end{Verbatim}
+
+\paragraph*{使用した変数の情報}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# ------ [ Symbols ] ------
+# 	symbol_0 	size: 4 	offset:     0(0) 	[i]
+# 	symbol_1 	size: 4 	offset:   0x4(4) 	[sum]
+\end{Verbatim}
+
+\paragraph*{実行後の変数メモリ}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# tag=256 index=4
+10004000: 0000000b 00000037 00000000 00000000
+\end{Verbatim}
+
+\subsection{課題2 5の階乗の計算}
+\paragraph*{ソースコード}
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+define i;
+define fact;
+fact = 1;
+i = 1;
+while(i < 6) {
+  fact = fact * i;
+  i = i + 1;
+}
+\end{Verbatim}
+
+\subsubsection{実行・出力結果}
+実行の結果，合計$681$サイクル(ステップ)で処理が終了した．
+プログラムでは，\verb|fact|は階乗の値を格納する変数として，
+変数\verb|i|は乗算する数として使用される．\verb|i|は
+\verb|while|文中で1ずつ加算され，値が$6$となった
+時点で処理が終了する．
+実行後の変数のメモリから，\verb|i|は$6$，
+\verb|sum|が$78_{(16)} = 120$となっており，
+1から5が乗算され，正しく階乗の計算が行われたことが確認できた．
+
+\paragraph*{実行時の命令・サイクル数}
+\begin{Verbatim}[numbers=none, frame=single,
+fontsize=\small, baselinestretch=0.8]
+*** multicycle statistics ***
+*** total inst. count:          168
+*** total cycle count:          681
+***               IPC:   0.247 (inst/cycle)
+***               CPI:   4.052 (cycle/inst)
+\end{Verbatim}
+
+\paragraph*{使用した変数の情報}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# ------ [ Symbols ] ------
+# 	symbol_0 	size: 4 	offset:     0(0) 	[i]
+# 	symbol_1 	size: 4 	offset:   0x4(4) 	[fact]  
+\end{Verbatim}
+
+\paragraph*{実行後の変数メモリ}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# tag=256 index=4
+10004000: 00000006 00000078 00000000 00000000
+\end{Verbatim}
+
+\subsection{課題3 FizzBuzz問題}
+本課題は，基本言語仕様を拡張して実装した剰余演算子を
+用いて記述した．
+
+\paragraph*{ソースコード}
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+define fizz;
+define buzz;
+define fizzbuzz;
+define others;
+define i;
+fizz = 0;
+buzz = 0;
+fizzbuzz = 0;
+others = 0;
+i = 1;
+while(i < 31){
+  if (i % 15 == 0){
+    fizzbuzz = fizzbuzz + 1;
+  } else {
+    if (i % 3 == 0){
+      fizz = fizz + 1;
+    } else {
+      if (i % 5 == 0){
+        buzz = buzz + 1;
+      } else {
+        others = others + 1;
+      }
+    }
+  }
+  i = i + 1;
+}  
+\end{Verbatim}
+
+\subsubsection{実行・出力結果}
+実行の結果，合計$8269$サイクル(ステップ)で処理が終了した．
+プログラムにおいてFizzBuzz問題の対象は1から30であり，
+15の倍数は2個存在するため，FizzBuzzの該当数は2となる．
+このことから，Fizzは$30 / 3 - 2$で8，Buzzは$30 / 5 - 2$
+で4となる．実行後の変数メモリでは，
+\verb|Fizz|が8，\verb|Buzz|が4，\verb|FizzBuzz|が2，
+となっており，対象の数として\verb|while|文の処理で1加算される
+\verb|i|が$\verb|1f|_{(16)} = 31$となっており，
+正しく処理が行われたことが確認できた．
+
+\paragraph*{実行時の命令・サイクル数}
+\begin{Verbatim}[numbers=none, frame=single,
+fontsize=\small, baselinestretch=0.8]
+*** multicycle statistics ***
+*** total inst. count:         2092
+*** total cycle count:         8269
+***               IPC:   0.253 (inst/cycle)
+***               CPI:   3.953 (cycle/inst)
+\end{Verbatim}
+
+\paragraph*{使用した変数の情報}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# ------ [ Symbols ] ------
+# 	symbol_0 	size: 4 	offset:     0(0) 	[fizz]
+# 	symbol_1 	size: 4 	offset:   0x4(4) 	[buzz]
+# 	symbol_2 	size: 4 	offset:   0x8(8) 	[fizzbuzz]
+# 	symbol_3 	size: 4 	offset:   0xc(12) 	[others]
+# 	symbol_4 	size: 4 	offset:  0x10(16) 	[i]  
+\end{Verbatim}
+
+\paragraph*{実行後の変数メモリ}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# tag=256 index=4
+10004000: 00000008 00000004 00000002 00000010
+10004010: 0000001f 00000000 00000000 00000000
+\end{Verbatim}
+
+\subsection{課題4 エラトステネスのふるいを用いた素数の探索}
+本課題では，1から1000までの数を対象となっている．
+\paragraph*{ソースコード}
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+define N;
+define i;
+define j;
+define k;
+array a[1001];
+N = 1000;
+i = 1;
+while (i <= N) {
+  a[i] = 1;
+  i = i + 1;
+}
+i = 2;
+while(i <= N/2) {
+  j = 2;
+  while(j <= N/i){
+    k = i * j;
+    a[k] = 0;
+    j = j + 1;
+  }
+  i = i + 1;
+}
+\end{Verbatim}
+
+\subsubsection{実行・出力結果}
+このプログラムでは，配列の\verb|a|の
+素数に該当する数の要素が1，そうでない合成数の要素が
+0となる．
+配列\verb|a|はアドレス\verb|0x10004010|から
+はじまる領域に格納され，各要素が4バイトとなっており，
+変数のメモリにおいて，最初の4バイトが添字として0に
+該当する要素である.このことから，
+実行後の変数メモリで0，1番目の要素を除いて
+2，3，5，7，11，13，17，19，23番目の値が1となっており，
+正しく素数の探索処理が行えたことが確認できる．
+
+\paragraph*{実行時の命令・サイクル数}
+\begin{Verbatim}[numbers=none, frame=single,
+fontsize=\small, baselinestretch=0.8]
+*** multicycle statistics ***
+*** total inst. count:       294858
+*** total cycle count:      1212350
+***               IPC:   0.243 (inst/cycle)
+***               CPI:   4.107 (cycle/inst)
+\end{Verbatim}
+
+\paragraph*{使用した変数の情報}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# ------ [ Symbols ] ------
+# 	symbol_0 	size: 4 	offset:     0(0) 	[N]
+# 	symbol_1 	size: 4 	offset:   0x4(4) 	[i]
+# 	symbol_2 	size: 4 	offset:   0x8(8) 	[j]
+# 	symbol_3 	size: 4 	offset:   0xc(12) 	[k]
+# 	symbol_4 	size: 4004 	offset:  0x10(16) 	[a]  
+\end{Verbatim}
+
+\paragraph*{実行後の変数メモリ}
+出力されたメモリ領域が大きいため，省略した冒頭の一部を示す．
+
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+  # tag=256 index=4
+10004000: 000003e8 000001f5 00000003 000003e8
+10004010: 00000000 00000001 00000001 00000001
+10004020: 00000000 00000001 00000000 00000001
+10004030: 00000000 00000000 00000000 00000001
+10004040: 00000000 00000001 00000000 00000000
+10004050: 00000000 00000001 00000000 00000001
+10004060: 00000000 00000000 00000000 00000001
+\end{Verbatim}
+
+\subsection{課題5 2つの$2 \times 2$行列の積の計算}
+\paragraph*{ソースコード}
+
+\begin{Verbatim}[numbers=left, xleftmargin=10mm, numbersep=6pt, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+array matrix1[2][2];
+array matrix2[2][2];
+array matrix3[2][2];
+define i, j, k;
+matrix1[0][0] = 1;
+matrix1[0][1] = 2;
+matrix1[1][0] = 3;
+matrix1[1][1] = 4;
+matrix2[0][0] = 5;
+matrix2[0][1] = 6;
+matrix2[1][0] = 7;
+matrix2[1][1] = 8;
+for(i=0;i<2;i++){
+  for(j=0;j<2;j++){
+   matrix3[i][j] = 0;
+  }
+}
+for(i=0;i<2;i++){
+  for(j=0;j<2;j++){
+    for(k=0;k<2;k++){
+      matrix3[i][j] = matrix3[i][j] + matrix1[i][k] * matrix2[k][j];
+    }
+  }
+}
+\end{Verbatim}
+
+\subsubsection{実行・出力結果}
+実装した2次元配列では，
+1次元の配列が順に行数文メモリに格納される仕様であり，
+例として2次元配列\verb|a[3][2]|が格納されるメモリ領域では，
+先頭から\verb|a[0][0]|，\verb|a[0][1]|，\verb|a[1][0]|，\verb|a[1][1]|...
+の順に要素が並ぶ．
+
+このプログラムで計算する行列の積は，
+\begin{equation*}
+  \begin{pmatrix}
+    1 & 2 \\
+    3 & 4 \\
+  \end{pmatrix}
+  \begin{pmatrix}
+    5 & 6 \\
+    7 & 8 \\
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    19 & 22 \\
+    43 & 50 \\
+  \end{pmatrix}
+\end{equation*}
+であり，実行後の変数メモリで積の値が格納される
+\verb|matrix3|に該当する\verb|0x10004020|からはじまる16バイトの
+領域において
+\begin{description}
+  \item[第(1, 1)要素(\texttt{a[0][0]})] $\verb|13|_{(16)} = 19$  
+  \item[第(1, 2)要素(\texttt{a[0][1]})] $\verb|16|_{(16)} = 22$  
+  \item[第(2, 1)要素(\texttt{a[1][0]})] $\verb|2b|_{(16)} = 43$  
+  \item[第(2, 2)要素(\texttt{a[1][1]})] $\verb|32|_{(16)} = 50$  
+\end{description}
+となっており，正しく行列の積が計算されたことが確認できる．
+
+\paragraph*{実行時の命令・サイクル数}
+\begin{Verbatim}[numbers=none, frame=single,
+fontsize=\small, baselinestretch=0.8]
+*** multicycle statistics ***
+*** total inst. count:         1097
+*** total cycle count:         4450
+***               IPC:   0.247 (inst/cycle)
+***               CPI:   4.054 (cycle/inst)
+\end{Verbatim}
+
+\paragraph*{使用した変数の情報}
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# ------ [ Symbols ] ------
+# 	symbol_0 	size: 16 	offset:     0(0) 	[matrix1]
+# 	symbol_1 	size: 16 	offset:  0x10(16) 	[matrix2]
+# 	symbol_2 	size: 16 	offset:  0x20(32) 	[matrix3]
+# 	symbol_3 	size: 4 	offset:  0x30(48) 	[i]
+# 	symbol_4 	size: 4 	offset:  0x34(52) 	[j]
+# 	symbol_5 	size: 4 	offset:  0x38(56) 	[k]  
+\end{Verbatim}
+
+\paragraph*{実行後の変数メモリ}
+出力されたメモリ領域が大きいため，省略した冒頭の一部を示す．
+
+\begin{Verbatim}[numbers=none, frame=single,
+  fontsize=\small, baselinestretch=0.8]
+# tag=256 index=4
+10004000: 00000001 00000002 00000003 00000004
+10004010: 00000005 00000006 00000007 00000008
+10004020: 00000013 00000016 0000002b 00000032
+10004030: 00000002 00000002 00000002 00000000
+\end{Verbatim}
 
 
 %--------------------------------------------------------------------%
