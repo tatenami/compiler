@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.euc) (TeX Live 2023/Debian) (preloaded format=platex 2025.1.13)  2 FEB 2025 23:16
+This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.euc) (TeX Live 2023/Debian) (preloaded format=platex 2025.1.13)  3 FEB 2025 22:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -341,7 +341,7 @@ LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
 (Font)              scaled to size 6.7271pt on input line 468.
 LaTeX Font Info:    Font shape `JY1/mc/m/n' will be
 (Font)              scaled to size 4.80507pt on input line 468.
- [8] [9] [10] [11] [12] [13] [14] [15] [16]
+ [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
 (./rep.aux)
  ***********
 pLaTeX2e <2023-02-14>+1, based on
@@ -350,12 +350,12 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 5327 strings out of 475989
- 87220 string characters out of 5789699
- 1931820 words of memory out of 5000000
- 27462 multiletter control sequences out of 15000+600000
- 571560 words of font info for 101 fonts, out of 8000000 for 9000
+ 5329 strings out of 475989
+ 87244 string characters out of 5789699
+ 1929820 words of memory out of 5000000
+ 27463 multiletter control sequences out of 15000+600000
+ 571729 words of font info for 102 fonts, out of 8000000 for 9000
  269 hyphenation exceptions out of 8191
  61i,9n,65p,237b,501s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on rep.dvi (16 pages, 62972 bytes).
+Output written on rep.dvi (17 pages, 70932 bytes).

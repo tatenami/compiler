@@ -535,12 +535,10 @@ void gen_code_expression(Node *n, char *reg) {
   // struct ThreeAddrCode *exps = (struct ThreeAddrCode *)malloc();
   int b_unary_flag = 0;
 
-  #if OPT2
   int val_nop = nop;
   if (strcmp(reg, reg_op2) == 0) {
     val_nop = no_nop;
   }
-  #endif
 
   #if !OPT3
   if (n->type == IDENT_AST) {
